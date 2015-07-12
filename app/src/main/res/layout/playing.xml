@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+  	xmlns:android="http://schemas.android.com/apk/res/android"
+  	android:layout_width="fill_parent"
+  	android:layout_height="fill_parent"
+	android:background = "@drawable/table" 
+	android:orientation="horizontal" >
+
+	<TextView
+		android:layout_width="100dp"
+		android:layout_height="wrap_content"
+		android:text="0"
+		android:background="@drawable/bg_white"
+		android:id="@+id/playerCash"
+		android:layout_alignParentTop="true"
+		android:layout_alignParentLeft="true" />
+
+	<TextView
+		android:layout_width="100dp"
+		android:layout_height="wrap_content"
+		android:text="0"
+		android:background="@drawable/bg_white"
+		android:id="@+id/dealerCash"
+		android:layout_alignParentTop="true"
+		android:layout_toRightOf="@+id/playerCash" />
+
+	<LinearLayout
+		android:id="@+id/standhit"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+		android:layout_marginBottom="10dp"
+		android:layout_centerHorizontal="true"
+		android:layout_alignParentBottom="true">
+
+		<Button
+			android:layout_height="50dp"
+			android:layout_width="100dp"
+			android:layout_marginRight="30dp"
+			android:id="@+id/standButton"
+			android:text="stand"
+			android:textColor="#ffffffff"
+			android:textSize="24sp"
+			android:background="@drawable/bg_orange" />
+
+		<Button
+			android:layout_height="50dp"
+			android:layout_width="100dp"
+			android:id="@+id/hitButton"
+			android:text="hit"
+			android:textColor="#ffffffff"
+			android:textSize="24sp"
+			android:background="@drawable/bg_orange" />
+	</LinearLayout>
+
+	<LinearLayout
+		android:id="@+id/splitdd"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+		android:layout_marginBottom="10dp"
+		android:layout_centerHorizontal="true"
+		android:layout_above="@+id/standhit">
+
+		<Button
+			android:layout_height="50dp"
+			android:layout_width="100dp"
+			android:layout_marginRight="30dp"
+			android:id="@+id/splitButton"
+			android:text="split"
+			android:textColor="#ffffffff"
+			android:textSize="24sp"
+			android:background="@drawable/bg_turquoiseblue" />
+
+		<Button
+			android:layout_height="50dp"
+			android:layout_width="100dp"
+			android:id="@+id/ddButton"
+			android:text="double"
+			android:textColor="#ffffffff"
+			android:textSize="24sp"
+			android:background="@drawable/bg_turquoiseblue" />
+
+	</LinearLayout>
+
+	<LinearLayout
+		android:id="@+id/playerHand"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+		android:layout_marginBottom="10dp"
+		android:gravity="center"
+		android:layout_centerHorizontal="true"
+		android:layout_alignParentBottom="true">
+
+		<LinearLayout
+			android:id="@+id/playerInfo1"
+			android:layout_width="100dp"
+			android:layout_height="370dp"
+			android:orientation="vertical"
+			android:layout_marginRight="5dp"
+			android:layout_marginLeft="5dp">
+
+			<RelativeLayout
+				android:id="@+id/playerHand1"
+				android:layout_width="match_parent"
+				android:layout_height="200dp"
+				android:gravity="bottom">
+
+				<!--  Container for Player's main Hand -->
+				<LinearLayout
+					android:id="@+id/playerCard1"
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:orientation="horizontal"
+					android:gravity="bottom|left"
+					android:layout_alignParentBottom="true">
+				</LinearLayout>
+
+				<TextView
+					android:layout_width="50dp"
+					android:layout_height="wrap_content"
+					android:layout_marginLeft="10dp"
+					android:gravity="center"
+					android:layout_alignParentRight="true"
+					android:layout_alignParentBottom="true"
+					android:background="@drawable/bg_gray"
+					android:visibility="invisible"
+					/>
+			</RelativeLayout>
+
+			<LinearLayout
+				android:id="@+id/playerBet1"
+				android:layout_width="match_parent"
+				android:layout_height="170dp"
+				android:orientation="horizontal">
+
+				<LinearLayout
+					android:layout_width="40dp"
+					android:layout_height="match_parent"
+					android:layout_marginTop="10dp"
+					android:layout_marginRight="5dp"
+					android:layout_marginLeft="5dp"
+					android:orientation="horizontal"/>
+
+				<LinearLayout
+					android:layout_width="40dp"
+					android:layout_height="match_parent"
+					android:layout_marginTop="10dp"
+					android:layout_marginRight="5dp"
+					android:layout_marginLeft="5dp"
+					android:orientation="horizontal"/>
+			</LinearLayout>
+
+			<TextView
+				android:id="@+id/playerBetNum1"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:layout_marginTop="-145dp"
+				android:layout_marginBottom="115dp"
+				android:gravity="center" />
+		</LinearLayout>
+
+		<LinearLayout
+			android:id="@+id/playerInfo2"
+			android:layout_width="100dp"
+			android:layout_height="370dp"
+			android:orientation="vertical"
+			android:layout_marginRight="5dp"
+			android:layout_marginLeft="5dp"
+			android:visibility="gone">
+
+			<RelativeLayout
+				android:id="@+id/playerHand2"
+				android:layout_width="match_parent"
+				android:layout_height="200dp"
+				android:gravity="bottom">
+
+				<!--  Container for Player's main Hand -->
+				<LinearLayout
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:orientation="horizontal"
+					android:gravity="bottom|left"
+					android:layout_alignParentBottom="true">
+				</LinearLayout>
+
+				<TextView
+					android:layout_width="50dp"
+					android:layout_height="wrap_content"
+					android:layout_marginLeft="10dp"
+					android:gravity="center"
+					android:layout_alignParentRight="true"
+					android:layout_alignParentBottom="true"
+					android:background="@drawable/bg_gray"
+					/>
+			</RelativeLayout>
+
+			<LinearLayout
+				android:id="@+id/playerBet2"
+				android:layout_width="match_parent"
+				android:layout_height="170dp"
+				android:orientation="horizontal">
+
+				<LinearLayout
+					android:layout_width="40dp"
+					android:layout_height="match_parent"
+					android:layout_marginTop="10dp"
+					android:layout_marginRight="5dp"
+					android:layout_marginLeft="5dp"
+					android:orientation="horizontal"/>
+
+				<LinearLayout
+					android:layout_width="40dp"
+					android:layout_height="match_parent"
+					android:layout_marginTop="10dp"
+					android:layout_marginRight="5dp"
+					android:layout_marginLeft="5dp"
+					android:orientation="horizontal"/>
+			</LinearLayout>
+
+			<TextView
+				android:id="@+id/playerBetNum2"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:layout_marginTop="-145dp"
+				android:layout_marginBottom="115dp"
+				android:gravity="center" />
+		</LinearLayout>
+
+			<!--  Container for another of possible Split hands -->
+			<RelativeLayout
+				android:id="@+id/playerHand3"
+				android:layout_width="90dp"
+				android:layout_height="match_parent"
+				android:gravity="bottom"
+				android:visibility="gone">
+				<LinearLayout
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:gravity="bottom|left"
+					android:layout_alignParentBottom="true"/>
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginLeft="10dp"
+					android:layout_alignParentRight="true"
+					android:layout_alignParentBottom="true"
+					/>
+			</RelativeLayout>
+		</LinearLayout>
+
+	<!--  Play Again Button -->
+    <Button
+    	android:layout_height="wrap_content" 
+    	android:layout_width="wrap_content"
+    	android:layout_centerHorizontal="true"
+    	android:layout_alignParentBottom="true"
+    	android:id="@+id/playAgainButton"
+    	android:text="Play Again?"
+    	android:visibility="gone"/>
+    	
+    <!--  Container for Dealer's Hand -->
+    <RelativeLayout
+    	android:id="@+id/dealerHand"
+    	android:layout_width="wrap_content" 
+   		android:layout_height="wrap_content"
+		android:paddingLeft="25dp"
+		android:layout_centerHorizontal="true"
+		android:layout_below="@+id/playerResult">
+    	<LinearLayout 
+    		android:layout_width="wrap_content" 
+    		android:layout_height="wrap_content"/>
+    	<TextView 
+			android:layout_width="wrap_content"	
+        	android:layout_height="wrap_content"
+        	android:layout_marginLeft="10dp"
+			android:layout_alignParentRight="true"
+			android:layout_alignParentBottom="true"
+			/>
+    </RelativeLayout>
+
+   	<!--  Container for Player's result (win/lose) -->
+   	<TextView 
+   		android:id="@+id/playerResult"
+		android:layout_width="wrap_content"	
+        android:layout_height="wrap_content"
+       	android:layout_alignParentRight="true"
+        android:layout_marginTop="40dp"
+        android:layout_marginRight="14dp"/>
+<!--
+	<Button
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:id="@+id/surrenderButton"
+		android:background="@drawable/surrender"
+		android:layout_alignParentBottom="true"
+		android:layout_toLeftOf="@+id/dealerCash" />
+-->
+</RelativeLayout>

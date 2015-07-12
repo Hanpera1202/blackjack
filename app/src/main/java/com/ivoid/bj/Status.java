@@ -1,0 +1,6 @@
+package com.ivoid.bj;
+
+enum Status
+{
+	PLAYING, PUSH, WON, LOST, SURRENDERED, INSURANCEWON, INSURANCELOST;
+}
