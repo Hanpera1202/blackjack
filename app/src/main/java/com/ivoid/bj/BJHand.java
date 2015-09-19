@@ -1,9 +1,10 @@
 package com.ivoid.bj;
 
-class BJHand extends Hand 
+class BJHand extends Hand
 {
 	private boolean busted = false, // Did the hand bust?
 					hasBJ  = false, // Does the hand have blackjack?
+					has21  = false, // Does the hand have 21?
 					didDD  = false; // Did the hand double down?
 	
 	private byte hardValue, softValue; // Hand's hard and soft BJ values.
@@ -21,6 +22,7 @@ class BJHand extends Hand
 		
 		busted = false;
 		hasBJ  = false;
+		has21  = false;
 		didDD  = false;
 		hasAce = false;
 		
@@ -39,10 +41,16 @@ class BJHand extends Hand
 	
     void checkIfHasBJ()
 	{
-		if (hardValue == 21)		
+		if (hardValue == 21 && getCardCount() == 2)
 			hasBJ = true;
 	}
-	
+
+	void checkIfHas21()
+	{
+		if (hardValue == 21 || softValue == 21)
+			has21 = true;
+	}
+
 	boolean splitable(boolean aceResplit)
     { 
 		if (getCardCount() > 2)		return false;
@@ -77,7 +85,7 @@ class BJHand extends Hand
 		 {
 			 int cardValue = card.getValue();  // The normal (index) value, 1 to 13.
 			 
-			 if (cardValue > 10) 
+			 if (cardValue >= 10)
 			 {
 				 face = true;
 				 cardValue = 10;   // For a Jack, Queen, or King. 
@@ -92,7 +100,10 @@ class BJHand extends Hand
 		 if ( hasAce && hardValue<=11 )	 
 		 {	
 			 softValue = (byte)(hardValue + 10);
-			 if (face)	hardValue=softValue;		 
+			 if (face)	{
+				 hardValue=softValue;
+				 softValue=0;
+			 }
 		 }
 		 else	softValue = 0;
 	}
@@ -100,12 +111,24 @@ class BJHand extends Hand
 	//Accessors
 	boolean hasBJ()
 	{ return hasBJ; }
-	
+
+	boolean has21()
+	{ return has21; }
+
 	boolean didBust()
 	{ return busted; }
 	
 	boolean didDD()
 	{ return didDD; }
+
+	byte getBJValue()
+	{
+		if(hardValue > softValue){
+			return hardValue;
+		}else{
+			return softValue;
+		}
+	}
 		
 	byte getHardBJValue()
 	{ return hardValue; }

@@ -1,5 +1,6 @@
 package com.ivoid.bj;
 
+import android.content.Context;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -15,15 +16,23 @@ class Player
 	 private boolean playing; // all players are either playing or not (if not, they are removed from the Game list of players)
 	 private float rebet=0f; // Saved last bet 	 
 	
-	 Player(String name, float initCurrency)
+	 Player(Context context, String name, float initCurrency)
 	 {
 		 this.name=name;
-		 wallet=new Wallet(initCurrency);
+		 wallet=new Wallet(context, initCurrency);
 		 playing = true;
 		 addHand(new BJHand(name));
 	 }
 
-	 void setPlaying(boolean b)
+	 Player(Context context, String name)
+	 {
+		 this.name=name;
+		 wallet=new Wallet(context);
+		 playing = true;
+		 addHand(new BJHand(name));
+	 }
+
+	void setPlaying(boolean b)
 	 { playing = b; }
 
 	 void update()
