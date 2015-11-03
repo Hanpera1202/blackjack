@@ -1,8 +1,10 @@
 package com.ivoid.bj;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
@@ -12,7 +14,7 @@ import com.bj.R;
 public class MyData extends Activity implements OnClickListener
 {
 	private SharedPreferences preference;
-
+    private Player player;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -21,7 +23,14 @@ public class MyData extends Activity implements OnClickListener
 
 		setContentView(R.layout.mydata);
 
+        findViewById(R.id.game).setOnClickListener(this);
+        findViewById(R.id.competition).setOnClickListener(this);
+        findViewById(R.id.result).setOnClickListener(this);
+
 		preference = getSharedPreferences("user_data", MODE_PRIVATE);
+
+        player = new Player(getApplicationContext(), "Richard");
+        ((TextView)findViewById(R.id.playerCash)).setText(String.valueOf((int)player.getBalance()));
 
         float plays = preference.getInt("plays", 0);
         float wins = preference.getInt("wins", 0);
@@ -30,7 +39,6 @@ public class MyData extends Activity implements OnClickListener
         float doubles = preference.getInt("doubles", 0);
         float doublewins = preference.getInt("doublewins", 0);
 
-        (findViewById(R.id.close_button)).setOnClickListener(this);
         ((TextView)findViewById(R.id.plays)).setText(String.valueOf((int)plays));
         ((TextView)findViewById(R.id.wins)).setText(String.valueOf((int)wins + "(" + (int)(wins/plays*100) + "%)"));
         ((TextView)findViewById(R.id.blackjacks)).setText(String.valueOf((int)blackjacks + "(" + (int)(blackjacks/plays*100) + "%)"));
@@ -41,8 +49,39 @@ public class MyData extends Activity implements OnClickListener
 	}
 
 	@Override
-	public void onClick(View v) {
-		finish();
+	public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.game: {
+                Intent intent = new Intent(this, Dealer.class);
+                startActivity(intent);
+                finish();
+                overridePendingTransition(0, 0);
+                break;
+            }
+            case R.id.competition: {
+                Intent intent = new Intent(this, Competition.class);
+                startActivity(intent);
+                finish();
+                overridePendingTransition(0, 0);
+                break;
+            }
+            case R.id.result: {
+                Intent intent = new Intent(this, Result.class);
+                startActivity(intent);
+                finish();
+                overridePendingTransition(0, 0);
+                break;
+            }
+        }
 	}
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event){
+        if (keyCode == KeyEvent.KEYCODE_BACK){
+            moveTaskToBack(true);
+            return true;
+        }
+        return false;
+    }
 
 }

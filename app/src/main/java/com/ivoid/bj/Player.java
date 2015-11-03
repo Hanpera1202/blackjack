@@ -13,6 +13,7 @@ class Player
 	 private ArrayList<BJHand> hands=new ArrayList<BJHand>();
 	 
 	 private boolean insurance = false; //did the player make an insurance bet?
+	 private float insuranceBetValue = 0f; //did the player make an insurance bet?
 	 private boolean playing; // all players are either playing or not (if not, they are removed from the Game list of players)
 	 private float rebet=0f; // Saved last bet 	 
 	
@@ -37,8 +38,8 @@ class Player
 
 	 void update()
 	 {
-
-		 insurance=false;
+		 insurance = false;
+		 insuranceBetValue = 0f;
 		 BJHand firstHand = hands.get(0);
 		 rebet = firstHand.getBet().getValue();
 		 
@@ -60,8 +61,11 @@ class Player
 	 void addHand( BJHand hand )
 	 { hands.add(hand); }
 
-	 void takeInsurance()
-	 { insurance=true; }
+	 void takeInsurance(float amount)
+	 {
+         insuranceBetValue = amount;
+		 insurance=true;
+	 }
 	
 	 //Accessors
 	 String getName()
@@ -69,10 +73,13 @@ class Player
 	
 	 float getBalance()
 	 { return wallet.getBalance(); }
-	
+
+	 float getInsuranceBetValue()
+	 { return insuranceBetValue; }
+
 	 boolean tookInsurance()
 	 { return insurance; }
-	
+
 	 float getRebet()
 	 { return rebet; }
 	 

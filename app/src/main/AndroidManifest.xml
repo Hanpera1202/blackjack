@@ -14,25 +14,50 @@
         <!--This meta-data tag is required to use Google Play Services.-->
         <meta-data android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-        <activity android:name="com.ivoid.bj.Dealer"
-                  android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-                  android:screenOrientation="portrait"
-                  android:configChanges="orientation|keyboardHidden">
-        	<intent-filter>
+        <activity
+            android:name="com.ivoid.bj.Dealer"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask">
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.ivoid.bj.Bonus"
-                  android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-                  android:screenOrientation="portrait"
-                  android:configChanges="orientation|keyboardHidden">
+        <activity
+            android:name="com.ivoid.bj.Title"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask">
+        </activity>
+        <activity
+            android:name="com.ivoid.bj.Bonus"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask">
+        </activity>
+        <activity android:name="com.ivoid.bj.Competition"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask">
+        </activity>
+        <activity android:name="com.ivoid.bj.Result"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask">
         </activity>
         <activity android:name="com.ivoid.bj.MyData"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:screenOrientation="portrait"
-            android:configChanges="orientation|keyboardHidden">
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask">
         </activity>
+
         <!--Include the AdActivity configChanges and theme. -->
         <activity android:name="com.google.android.gms.ads.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"

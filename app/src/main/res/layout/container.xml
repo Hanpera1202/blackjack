@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background = "@drawable/bg">
+<!--
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/listView" />
+
+    <LinearLayout
+        android:id="@+id/playerCashView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:background="@drawable/bg_playercash">
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/chip"/>
+
+        <TextView
+            android:id="@+id/playerCash"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textColor="#ffffffff"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_gravity="center"/>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/checkMyData"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/mydata"
+        android:layout_alignParentRight="true"/>
+-->
+    <!--
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/checkMyData"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/banner_ad_unit_id"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="3dp">
+    </com.google.android.gms.ads.AdView>
+    -->
+
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+    </FrameLayout>
+
+</RelativeLayout>

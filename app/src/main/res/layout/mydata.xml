@@ -1,179 +1,239 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:padding="20dp"
-    android:gravity="center|top"
-    android:background="@android:color/black">
+    android:background = "@drawable/bg">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="30sp"
-        android:text="My Data"
-        android:gravity="center" />
+    <RelativeLayout
+        android:id="@+id/header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/playerCashView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:background="@drawable/bg_playercash">
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/chip"/>
+
+            <TextView
+                android:id="@+id/playerCash"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textColor="#ffffffff"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_gravity="center"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/bg_playercash">
+
+            <Button
+                android:id="@+id/game"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/mydata" />
+
+            <Button
+                android:id="@+id/competition"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/mydata" />
+
+            <Button
+                android:id="@+id/result"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/mydata" />
+
+            <Button
+                android:id="@+id/checkMyData"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/mydata" />
+
+        </LinearLayout>
+    </RelativeLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="10dp">
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:padding="20dp"
+        android:gravity="center|top"
+        android:layout_below="@+id/header">
 
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textSize="25sp"
-            android:text="Play counts"
-            android:gravity="left" />
+            android:textSize="30sp"
+            android:text="My Data"
+            android:gravity="center" />
 
-        <TextView
-            android:id="@+id/plays"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textSize="25sp"
-            android:text="0"
-            android:gravity="right" />
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
 
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="25sp"
+                android:text="Play counts"
+                android:gravity="left" />
+
+            <TextView
+                android:id="@+id/plays"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="25sp"
+                android:text="0"
+                android:gravity="right" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="25sp"
+                android:text="Wins"
+                android:gravity="left" />
+
+            <TextView
+                android:id="@+id/wins"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="25sp"
+                android:text="0"
+                android:gravity="right" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="25sp"
+                android:text="Blackjacks"
+                android:gravity="left" />
+
+            <TextView
+                android:id="@+id/blackjacks"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="25sp"
+                android:text="0"
+                android:gravity="right" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="25sp"
+                android:text="Splits"
+                android:gravity="left" />
+
+            <TextView
+                android:id="@+id/splits"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="25sp"
+                android:text="0"
+                android:gravity="right" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="25sp"
+                android:text="Doubles"
+                android:gravity="left" />
+
+            <TextView
+                android:id="@+id/doubles"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="25sp"
+                android:text="0"
+                android:gravity="right" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="25sp"
+                android:text="Double wins"
+                android:gravity="left" />
+
+            <TextView
+                android:id="@+id/doublewins"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="25sp"
+                android:text="0"
+                android:gravity="right" />
+
+        </LinearLayout>
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="10dp">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textSize="25sp"
-            android:text="Wins"
-            android:gravity="left" />
-
-        <TextView
-            android:id="@+id/wins"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textSize="25sp"
-            android:text="0"
-            android:gravity="right" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="10dp">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textSize="25sp"
-            android:text="Blackjacks"
-            android:gravity="left" />
-
-        <TextView
-            android:id="@+id/blackjacks"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textSize="25sp"
-            android:text="0"
-            android:gravity="right" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="10dp">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textSize="25sp"
-            android:text="Splits"
-            android:gravity="left" />
-
-        <TextView
-            android:id="@+id/splits"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textSize="25sp"
-            android:text="0"
-            android:gravity="right" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="10dp">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textSize="25sp"
-            android:text="Doubles"
-            android:gravity="left" />
-
-        <TextView
-            android:id="@+id/doubles"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textSize="25sp"
-            android:text="0"
-            android:gravity="right" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="10dp">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textSize="25sp"
-            android:text="Double wins"
-            android:gravity="left" />
-
-        <TextView
-            android:id="@+id/doublewins"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textSize="25sp"
-            android:text="0"
-            android:gravity="right" />
-
-    </LinearLayout>
-
-    <Button
-        android:layout_height="50dp"
-        android:layout_width="110dp"
-        android:id="@+id/close_button"
-        android:text="RETURN"
-        android:textColor="#ffffffff"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:background="@drawable/bg_return"
-        android:layout_marginTop="20dp"/>
-</LinearLayout>
+</RelativeLayout>

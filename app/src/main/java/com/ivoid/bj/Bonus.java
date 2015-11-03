@@ -149,9 +149,10 @@ public class Bonus extends Activity implements OnClickListener
 
 					handler.postDelayed(new Runnable() {
 						public void run() {
-							findViewById(R.id.close_button).setVisibility(Button.VISIBLE);
+							//findViewById(R.id.close_button).setVisibility(Button.VISIBLE);
+							finish();
 						}
-					}, 1500);
+					}, 1600);
 				}
 		}
 	}

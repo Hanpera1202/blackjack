@@ -142,7 +142,12 @@ class Card
 	{ return suit; }
 	
 	byte getValue()
-	{ return value; }
+	{
+		if (flippedUp){
+			return value;
+		}
+		return 0;
+	}
 	
 	boolean getFlippedUp()
 	{ return flippedUp; }
