@@ -2,15 +2,15 @@ package com.ivoid.bj;
 
 import com.bj.R;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import android.os.Handler;
-import android.view.Gravity;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +20,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,7 +35,7 @@ import java.util.Date;
 /**
  * Created by nakazato on 2015/10/27.
  */
-public class Competition extends Activity implements View.OnClickListener {
+public class Competition extends FragmentActivity implements View.OnClickListener {
 
     private final String getActiveUrl = "http://blackjack.uh-oh.jp/active/%s";
     private final String applyUrl = "http://blackjack.uh-oh.jp/apply/%s/%s";
@@ -51,7 +50,7 @@ public class Competition extends Activity implements View.OnClickListener {
     private List<String> myApplyNums = new ArrayList<String>();
     private BaseAdapter adapter;
 
-    private AlertDialog alertDialog;
+    private DialogFragment alertDialog;
 
     private Player player;
     private TextView playerCash;
@@ -240,9 +239,8 @@ public class Competition extends Activity implements View.OnClickListener {
                     if(!decrease_point.equals("false")) {
                         player.withdraw(Integer.parseInt(decrease_point));
                         updatePlayerCashlbl();
-                        alertDialog("Applicants completed");
+                        showAlertDialog();
                     }
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                     return false;
@@ -252,9 +250,11 @@ public class Competition extends Activity implements View.OnClickListener {
         },"Applying");
         // 処理を実行
         if(player.getBalance() >= point) {
+            createAlertDialog("Applicants completed");
             asyncJsonLoader.execute(String.format(applyUrl, user_id, applicaiton_id));
         }else{
-            alertDialog("Your point is not enough");
+            createAlertDialog("Your point is not enough");
+            showAlertDialog();
         }
     }
 
@@ -292,29 +292,28 @@ public class Competition extends Activity implements View.OnClickListener {
         }
     }
 
-    // アラートダイアログ表示
-    private void alertDialog(String message) {
-        AlertDialog.Builder AlertDialogBuilder = new AlertDialog.Builder(this);
-        AlertDialogBuilder.setMessage(message)
-                          .setPositiveButton("OK", null);
-        alertDialog = AlertDialogBuilder.create();
-        alertDialog.show();
+    // アラートダイアログ作成
+    private void createAlertDialog(String message){
+        alertDialog = AlertDialogFragment.newInstance(message);
+    }
 
+    // アラートダイアログ表示
+    private void showAlertDialog() {
+        if(alertDialog != null) {
+            alertDialog.show(getSupportFragmentManager(), "alertDialog");
+        }
     }
 
     // アラートダイアログ非表示
     private void dismissAalertDialog() {
         if (alertDialog !=  null) {
-            alertDialog.dismiss();
+            Fragment prev = getSupportFragmentManager().findFragmentByTag("alertDialog");
+            if (prev != null) {
+                DialogFragment df = (DialogFragment) prev;
+                df.dismiss();
+            }
         }
         alertDialog = null;
-    }
-
-    // 応募完了メッセージ表示
-    private void showApplyComplete() {
-        Toast toast = Toast.makeText(this, "Applicants completed", Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.CENTER, 0, 0);
-        toast.show();
     }
 
     public void onClick(final View view)

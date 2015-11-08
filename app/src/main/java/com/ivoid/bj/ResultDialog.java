@@ -1,18 +1,15 @@
 package com.ivoid.bj;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Base64;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,7 +19,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 
 /**
  * Created by nakazato on 2015/10/27.
@@ -40,8 +36,8 @@ public class ResultDialog extends FragmentActivity implements View.OnClickListen
     private String myApplyNum;
     private String result;
 
-    private AlertDialog registMailDialog;
-    private AlertDialog CompRegistMailDialog;
+    private DialogFragment registMailDialog;
+    private DialogFragment CompRegistMailDialog;
 
     private SharedPreferences preference;
     private SharedPreferences.Editor editor;
@@ -127,15 +123,8 @@ public class ResultDialog extends FragmentActivity implements View.OnClickListen
     {
         switch (view.getId()) {
             case R.id.positive_button: {
-                /*
-                DialogFragment regitMailfragment = new RegistMailDialog();
-                Bundle args = new Bundle();
-                args.putString("user_id", user_id);
-                regitMailfragment.setArguments(args);
-                regitMailfragment.show(getSupportFragmentManager(), "registmail");
-                */
-                RegistMailDialog();
-
+                createRegistMailDialog();
+                showRegistMailDialog();
                 break;
             }
             case R.id.close_button: {
@@ -145,35 +134,7 @@ public class ResultDialog extends FragmentActivity implements View.OnClickListen
         }
     }
 
-    private void RegistMailDialog() {
-        //テキスト入力を受け付けるビューを作成します。
-        final EditText editView = new EditText(this);
-
-        String message;
-        if(mail_address == ""){
-            message = "Please input your mail address";
-        }else{
-            editView.setText(mail_address);
-            message = "Is it correct in the e-mail address is " + mail_address + "?\n" +
-                    "If correct, Please press the OK button.\n" +
-                    "If wrong, please fix and press the OK button.";
-        }
-
-        AlertDialog.Builder AlertDialogBuilder = new AlertDialog.Builder(this);
-        AlertDialogBuilder.setView(editView)
-                .setMessage(message)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        String inputMailAddress = editView.getText().toString();
-                        registMailAddress(inputMailAddress);
-                    }
-                })
-                .setNegativeButton("CANCEL", null);
-        registMailDialog = AlertDialogBuilder.create();
-        registMailDialog.show();
-    }
-
-    private void registMailAddress(String inputMailAddress){
+    public void registMailAddress(String inputMailAddress){
         mail_address = inputMailAddress;
         editor.putString("mail_address", mail_address);
         editor.commit();
@@ -182,15 +143,16 @@ public class ResultDialog extends FragmentActivity implements View.OnClickListen
             public boolean postExecute(JSONObject apiresult) {
                 try {
                     result = apiresult.getString("result");
-                    CompRegistMailDialog();
+                    showCompRegistMailDialog();
                 } catch (JSONException e) {
                     e.printStackTrace();
                     return false;
                 }
                 return true;
             }
-        });
+        },"Registing");
 
+        createCompRegistMailDialog();
         try {
             byte[] data = mail_address.getBytes("UTF-8");
             String base64_mail_address = Base64.encodeToString(data, android.util.Base64.URL_SAFE | android.util.Base64.NO_WRAP);
@@ -200,29 +162,61 @@ public class ResultDialog extends FragmentActivity implements View.OnClickListen
         }
     }
 
+    private void createRegistMailDialog() {
+        String message;
+        if(mail_address == ""){
+            message = "Please input your mail address";
+        }else{
+            message = "Is it correct in the e-mail address is " + mail_address + "?\n" +
+                    "If correct, Please press the OK button.\n" +
+                    "If wrong, please fix and press the OK button.";
+        }
+        registMailDialog = RegistMailDialogFragment.newInstance(message, mail_address);
+    }
+
+    private void showRegistMailDialog() {
+        if(registMailDialog != null) {
+            registMailDialog.show(getSupportFragmentManager(), "registMailDialog");
+        }
+    }
+
     // アラートダイアログ非表示
     private void dismissRegistMailDialog() {
         if (registMailDialog !=  null) {
             registMailDialog.dismiss();
+            Fragment prev = getSupportFragmentManager().findFragmentByTag("registMailDialog");
+            if (prev != null) {
+                DialogFragment df = (DialogFragment) prev;
+                df.dismiss();
+            }
         }
         registMailDialog = null;
     }
 
-    // 登録完了ダイアログ表示
-    private void CompRegistMailDialog() {
-        AlertDialog.Builder AlertDialogBuilder = new AlertDialog.Builder(this);
-        AlertDialogBuilder.setMessage("You completed the registration of the mail address.\n" +
-                "Please wait for the reply.")
-                .setPositiveButton("OK", null);
-        CompRegistMailDialog = AlertDialogBuilder.create();
-        CompRegistMailDialog.show();
+    // 登録完了ダイアログ作成
+    private void createCompRegistMailDialog() {
+        String message = "You completed the registration of the mail address.\n" +
+                "Please wait for the reply.";
 
+        CompRegistMailDialog = AlertDialogFragment.newInstance(message);
+
+    }
+
+    // 登録完了ダイアログ表示
+    private void showCompRegistMailDialog() {
+        if(CompRegistMailDialog != null) {
+            CompRegistMailDialog.show(getSupportFragmentManager(), "compRegistMailDialog");
+        }
     }
 
     // 登録完了ダイアログ非表示
     private void dismissCompRegistMailDialog() {
         if (CompRegistMailDialog !=  null) {
-            CompRegistMailDialog.dismiss();
+            Fragment prev = getSupportFragmentManager().findFragmentByTag("compRegistMailDialog");
+            if (prev != null) {
+                DialogFragment df = (DialogFragment) prev;
+                df.dismiss();
+            }
         }
         CompRegistMailDialog = null;
     }
