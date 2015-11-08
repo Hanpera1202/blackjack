@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    android:background="#ffffffff">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="top|center">
+
+        <ImageView
+            android:id="@+id/result"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_margin="15dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/blackjack"/>
+
+        <TextView
+            android:id="@+id/resultMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="You got the prize."
+            android:textSize="20sp"
+            android:textColor="#ff000000"/>
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:textColor="#ff000000" />
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_margin="20dp"
+            android:scaleType="centerInside"/>
+
+        <Button
+            android:id="@+id/positive_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="RECIEVE THE PRIZE"
+            android:textColor="@android:color/white"/>
+
+        <TextView
+            android:id="@+id/winNum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:textSize="20sp"
+            android:textColor="#ff000000"/>
+
+        <TextView
+            android:id="@+id/applyNum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:textSize="20sp"
+            android:textColor="#ff000000"/>
+
+        <TextView
+            android:id="@+id/myApplyNum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:textSize="20sp"
+            android:textColor="#ff000000"/>
+
+    </LinearLayout>
+
+    <!-- コンテンツ -->
+    <!--
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="6dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:paddingBottom="20dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="Win"
+            android:textSize="18sp"
+            android:textColor="@android:color/white"
+            />
+
+        <TextView
+            android:id="@+id/message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:lineSpacingExtra="6dp"
+            android:text="MessageMessageMessageMessageMessageMessageMessageMessageMessage"
+            android:textSize="16sp"
+            android:textColor="#333333"
+            />
+
+    </LinearLayout>
+    -->
+
+</RelativeLayout>

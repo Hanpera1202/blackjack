@@ -109,7 +109,6 @@ public class Dealer extends Activity implements OnClickListener
 	{
 		super.onCreate(savedInstanceState);
 
-
         adRequest = new AdRequest.Builder().build();
 
         //プリファレンスの準備
@@ -192,11 +191,19 @@ public class Dealer extends Activity implements OnClickListener
                 bonus.setVisibility(Button.INVISIBLE);
                 initUI();
             }
+        }else{
+            playerCash.setText(String.valueOf((int) player.getBalance()));
+            if (betting) {
+                //playerBet の再表示
+                float beforeBet = player.getInitBet();
+                clearBet();
+                collectBet(beforeBet);
+            }else{
+                //insurance split double のボタン判定
+            }
         }
 
-
         //Titleが起動していなかったらTitleを起動
-        Log.d("TitleLaunched", String.valueOf(preference.getBoolean("TitleLaunched", false)));
         if (preference.getBoolean("TitleLaunched", false)==false) {
             //TitleLaunchedフラグをオンにする
             editor.putBoolean("TitleLaunched", true);
@@ -204,7 +211,7 @@ public class Dealer extends Activity implements OnClickListener
             //TitleActivityを起動
             Intent intent = new Intent(this, Title.class);
             startActivity(intent);
-                overridePendingTransition(0, 0);
+            overridePendingTransition(0, 0);
         }
     }
 
@@ -298,9 +305,6 @@ public class Dealer extends Activity implements OnClickListener
                 bonus.startAnimation(buttonanim);
                 buttons.put(R.id.bonus, Action.BONUS);
             }
-
-            //editor.putFloat("Balance", player.getBalance());
-            //editor.commit();
 
             collectBet(player.getRebet());
 
@@ -467,7 +471,7 @@ public class Dealer extends Activity implements OnClickListener
 	void clearBet()
 	{
 		BJHand hand = player.getHand((byte) 0);
-		float betValue=hand.getBet().getValue();
+		//float betValue=hand.getBet().getValue();
         hand.clearBet(); //remove the bet from the table
         //player.deposit(betValue); //put bet back into player's wallet
         updatePlayerBetlbl();
@@ -1015,6 +1019,7 @@ public class Dealer extends Activity implements OnClickListener
     {
         int beforeCash = Integer.parseInt(String.valueOf(playerCash.getText()));
         int afterCash = (int) player.getBalance();
+
         int loopCnt;
         int countCash;
         int sign = 1;
@@ -1385,9 +1390,7 @@ public class Dealer extends Activity implements OnClickListener
     }
 
     void beginBonusGame(){
-        // 遷移先のActivityを指定して、Intentを作成する
         Intent intent = new Intent(this, Bonus.class);
-        // 遷移先のアクティビティを起動させる
         startActivity(intent);
     }
 

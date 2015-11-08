@@ -1,13 +1,18 @@
 package com.ivoid.bj;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.Gravity;
+import android.widget.Toast;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -15,41 +20,58 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 public class AsyncJsonLoader extends AsyncTask<String, Integer, JSONObject> {
+
+    private boolean isInProgress = false;
+    private String dialogMessage;
+    private ProgressDialog mDialog = null;
+    private Context mContext = null;
+
     public interface AsyncCallback {
-        void preExecute();
-        void postExecute(JSONObject result);
-        void progressUpdate(int progress);
-        void cancel();
+        boolean postExecute(JSONObject result);
     }
 
     private AsyncCallback mAsyncCallback = null;
 
-    public AsyncJsonLoader(AsyncCallback _asyncCallback) {
+    public AsyncJsonLoader(Context context, AsyncCallback _asyncCallback) {
+        mContext = context;
         mAsyncCallback = _asyncCallback;
+        dialogMessage = "Loading";
+    }
+    public AsyncJsonLoader(Context context, AsyncCallback _asyncCallback, String message) {
+        mContext = context;
+        mAsyncCallback = _asyncCallback;
+        dialogMessage = message;
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        mAsyncCallback.preExecute();
+        isInProgress = true;
+        showDialog();
     }
 
     @Override
     protected void onProgressUpdate(Integer... _progress) {
         super.onProgressUpdate(_progress);
-        mAsyncCallback.progressUpdate(_progress[0]);
     }
 
     @Override
     protected void onPostExecute(JSONObject _result) {
         super.onPostExecute(_result);
-        mAsyncCallback.postExecute(_result);
+        dismissDialog();
+        isInProgress = false;
+        if (_result == null) {
+            showLoadError();
+            return;
+        }
+        if(!mAsyncCallback.postExecute(_result)){
+            showLoadError();
+        }
     }
 
     @Override
     protected void onCancelled() {
         super.onCancelled();
-        mAsyncCallback.cancel();
     }
 
     @Override
@@ -75,4 +97,33 @@ public class AsyncJsonLoader extends AsyncTask<String, Integer, JSONObject> {
         }
         return null;
     }
+
+    // ダイアログ表示
+    public void showDialog() {
+        if(mDialog == null) {
+            mDialog = new ProgressDialog(mContext);
+            mDialog.setMessage(dialogMessage);
+            mDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            mDialog.setCancelable(false);
+            mDialog.show();
+        }
+    }
+
+    // ロード中ダイアログ非表示
+    public void dismissDialog() {
+        if (mDialog !=  null) {
+            Log.d("dialog","dismissDialog");
+            mDialog.dismiss();
+        }
+        mDialog = null;
+    }
+
+    // エラーメッセージ表示
+    private void showLoadError() {
+        Toast toast = Toast.makeText(mContext, "I could not get the data.", Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.show();
+    }
+
+    public synchronized boolean isInProcess() { return isInProgress; }
 }

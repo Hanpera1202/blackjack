@@ -151,6 +151,7 @@ public class Bonus extends Activity implements OnClickListener
 						public void run() {
 							//findViewById(R.id.close_button).setVisibility(Button.VISIBLE);
 							finish();
+							overridePendingTransition(0, 0);
 						}
 					}, 1600);
 				}

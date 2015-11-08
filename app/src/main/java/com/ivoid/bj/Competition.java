@@ -1,16 +1,15 @@
 package com.ivoid.bj;
 
 import com.bj.R;
-import com.google.android.gms.ads.AdListener;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import android.util.Log;
+import android.os.Handler;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -19,9 +18,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,13 +51,18 @@ public class Competition extends Activity implements View.OnClickListener {
     private List<String> myApplyNums = new ArrayList<String>();
     private BaseAdapter adapter;
 
-    private ProgressDialog progressDialog;
+    private AlertDialog alertDialog;
 
     private Player player;
+    private TextView playerCash;
+
+    private int waittime;
+    private final Handler handler = new Handler();
 
     private SharedPreferences preference;
-    private SharedPreferences.Editor editor;
     private String user_id;
+
+    AsyncJsonLoader asyncJsonLoader;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -71,27 +73,17 @@ public class Competition extends Activity implements View.OnClickListener {
         findViewById(R.id.result).setOnClickListener(this);
         findViewById(R.id.checkMyData).setOnClickListener(this);
 
-        progressDialog = new ProgressDialog(this);
-
         //プリファレンスの準備
         preference = getSharedPreferences("user_data", MODE_PRIVATE);
         user_id = preference.getString("user_id", "");
 
         player = new Player(getApplicationContext(), "Richard");
-        ((TextView)findViewById(R.id.playerCash)).setText(String.valueOf((int)player.getBalance()));;
+        playerCash=(TextView)findViewById(R.id.playerCash);
+        playerCash.setText(String.valueOf((int) player.getBalance()));
 
-        AsyncJsonLoader asyncJsonLoader = new AsyncJsonLoader(new AsyncJsonLoader.AsyncCallback() {
-            // 実行前
-            public void preExecute() {
-                showLoading();
-            }
+        asyncJsonLoader = new AsyncJsonLoader(this, new AsyncJsonLoader.AsyncCallback() {
             // 実行後
-            public void postExecute(JSONObject result) {
-                removeProgressDialog();
-                if (result == null) {
-                    showLoadError(); // エラーメッセージを表示
-                    return;
-                }
+            public boolean postExecute(JSONObject result) {
                 try {
                     // 各 ATND イベントのタイトルを配列へ格納
                     JSONArray competitionArray = result.getJSONArray("competitions");
@@ -105,25 +97,27 @@ public class Competition extends Activity implements View.OnClickListener {
                         applyNums.add(competition.getString("apply_num"));
                         myApplyNums.add(competition.getString("my_apply_num"));
                         points.add(competition.getString("point"));
-
                     }
-
                     setAdapter();
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    showLoadError(); // エラーメッセージを表示
+                    return false;
                 }
-            }
-            // 実行中
-            public void progressUpdate(int progress) {
-            }
-            // キャンセル
-            public void cancel() {
+                return true;
             }
         });
         // 処理を実行
         asyncJsonLoader.execute(String.format(getActiveUrl, user_id));
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        // ダイアログの再表示
+        if (asyncJsonLoader.isInProcess()) {
+            asyncJsonLoader.showDialog();
+        }
     }
 
     public void setAdapter(){
@@ -181,7 +175,6 @@ public class Competition extends Activity implements View.OnClickListener {
                 holder.apply = (Button)convertView.findViewById(R.id.apply);
                 holder.apply.setOnClickListener(this);
                 convertView.setTag(holder);
-
             }
             // holder を使って再利用
             else {
@@ -233,70 +226,88 @@ public class Competition extends Activity implements View.OnClickListener {
          */
         public void onClick(View view) {
             String applicaiton_id = (String) view.getTag();
-
-            AsyncJsonLoader asyncJsonLoader = new AsyncJsonLoader(new AsyncJsonLoader.AsyncCallback() {
-                // 実行前
-                public void preExecute() {
-                    showApplying();
-                }
-                // 実行後
-                public void postExecute(JSONObject result) {
-                    removeProgressDialog();
-                    if (result == null) {
-                        showLoadError(); // エラーメッセージを表示
-                        return;
-                    }
-                    try {
-                        String resultString= result.getString("result");
-                        if(resultString.equals("success")) {
-                            showApplyComplete();
-                        }else{
-                            showLoadError();
-                        }
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        showLoadError(); // エラーメッセージを表示
-                    }
-                }
-                // 実行中
-                public void progressUpdate(int progress) {
-                }
-                // キャンセル
-                public void cancel() {
-                }
-            });
-            // 処理を実行
-            asyncJsonLoader.execute(String.format(applyUrl, user_id, applicaiton_id));
+            applyCompetition(applicaiton_id);
         }
     }
 
-    // ロード中ダイアログ表示
-    private void showLoading() {
-        progressDialog.setMessage("Loading");
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setCancelable(false);
-        progressDialog.show();
+    void applyCompetition(String applicaiton_id){
+        Integer point = Integer.parseInt(points.get(ids.indexOf(applicaiton_id)));
+        AsyncJsonLoader asyncJsonLoader = new AsyncJsonLoader(this,new AsyncJsonLoader.AsyncCallback() {
+            // 実行後
+            public boolean postExecute(JSONObject result) {
+                try {
+                    String decrease_point = result.getString("decrease_point");
+                    if(!decrease_point.equals("false")) {
+                        player.withdraw(Integer.parseInt(decrease_point));
+                        updatePlayerCashlbl();
+                        alertDialog("Applicants completed");
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    return false;
+                }
+                return true;
+            }
+        },"Applying");
+        // 処理を実行
+        if(player.getBalance() >= point) {
+            asyncJsonLoader.execute(String.format(applyUrl, user_id, applicaiton_id));
+        }else{
+            alertDialog("Your point is not enough");
+        }
     }
 
-    // 応募中ダイアログ表示
-    private void showApplying() {
-        progressDialog.setMessage("Applying");
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setCancelable(false);
-        progressDialog.show();
+    int countUpNum;
+    void updatePlayerCashlbl()
+    {
+        int beforeCash = Integer.parseInt(String.valueOf(playerCash.getText()));
+        int afterCash = (int) player.getBalance();
+        int loopCnt;
+        int countCash;
+        int sign = 1;
+        if(afterCash - beforeCash < 0){
+            sign = -1;
+        }
+
+        if((afterCash - beforeCash) * sign < 10){
+            countCash = sign;
+            loopCnt = (afterCash - beforeCash) * sign;
+        }else{
+            countCash = (afterCash - beforeCash) / 10;
+            loopCnt = 10;
+        }
+        for (int i = 1; i <= loopCnt; i++) {
+            if (i == loopCnt) {
+                countUpNum = (int) player.getBalance();
+            } else {
+                countUpNum = beforeCash + (countCash * i);
+            }
+            handler.postDelayed(new Runnable() {
+                int updateCash = countUpNum;
+                public void run() {
+                    playerCash.setText(String.valueOf(updateCash));
+                }
+            }, waittime + (i * 50));
+        }
     }
 
-    // ロード中ダイアログ非表示
-    private void removeProgressDialog() {
-        progressDialog.dismiss();
+    // アラートダイアログ表示
+    private void alertDialog(String message) {
+        AlertDialog.Builder AlertDialogBuilder = new AlertDialog.Builder(this);
+        AlertDialogBuilder.setMessage(message)
+                          .setPositiveButton("OK", null);
+        alertDialog = AlertDialogBuilder.create();
+        alertDialog.show();
+
     }
 
-    // エラーメッセージ表示
-    private void showLoadError() {
-        Toast toast = Toast.makeText(this, "I could not get the data.", Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.CENTER, 0, 0);
-        toast.show();
+    // アラートダイアログ非表示
+    private void dismissAalertDialog() {
+        if (alertDialog !=  null) {
+            alertDialog.dismiss();
+        }
+        alertDialog = null;
     }
 
     // 応募完了メッセージ表示
@@ -342,4 +353,12 @@ public class Competition extends Activity implements View.OnClickListener {
         return false;
     }
 
+    @Override
+    public void onUserLeaveHint() {
+        if (asyncJsonLoader != null) {
+            // ダイアログを閉じる（2重表示防止）
+            asyncJsonLoader.dismissDialog();
+            dismissAalertDialog();
+        }
+    }
 }

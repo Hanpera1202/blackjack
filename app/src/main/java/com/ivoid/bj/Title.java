@@ -23,7 +23,7 @@ public class Title extends Activity implements OnClickListener
 
     private final String registUrl = "http://blackjack.uh-oh.jp/user/regist/%s";
 
-    private ProgressDialog progressDialog;
+    //private ProgressDialog progressDialog;
 
     private SharedPreferences preference;
     private SharedPreferences.Editor editor;
@@ -35,24 +35,28 @@ public class Title extends Activity implements OnClickListener
 
         Log.d("Activity", "Title->onCreate");
 
-        progressDialog = new ProgressDialog(this);
+        //progressDialog = new ProgressDialog(this);
         //プリファレンスの準備
         preference = getSharedPreferences("user_data", MODE_PRIVATE);
         editor = preference.edit();
 
         setContentView(R.layout.title);
 
-        AsyncJsonLoader asyncJsonLoader = new AsyncJsonLoader(new AsyncJsonLoader.AsyncCallback() {
+        AsyncJsonLoader asyncJsonLoader = new AsyncJsonLoader(this, new AsyncJsonLoader.AsyncCallback() {
+            /*
             // 実行前
             public void preExecute() {
                 showLoading();
             }
+            */
             // 実行後
-            public void postExecute(JSONObject result) {
+            public boolean postExecute(JSONObject result) {
+                /*
                 removeProgressDialog();
                 if (result == null) {
                     return;
                 }
+                */
                 try {
                     String user_id= result.getString("user_id");
                     Log.d("user_id", user_id);
@@ -63,9 +67,12 @@ public class Title extends Activity implements OnClickListener
                     showActionButton();
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    showLoadError(); // エラーメッセージを表示
+                    return false;
+                    //showLoadError(); // エラーメッセージを表示
                 }
+                return true;
             }
+            /*
             // 実行中
             public void progressUpdate(int progress) {
             }
@@ -73,6 +80,7 @@ public class Title extends Activity implements OnClickListener
             // キャンセル
             public void cancel() {
             }
+            */
         });
         // 処理を実行
         if (preference.getString("user_id", "") == "") {
@@ -115,6 +123,7 @@ public class Title extends Activity implements OnClickListener
         }
     }
 
+    /*
     // ロード中ダイアログ表示
     private void showLoading() {
         progressDialog.setMessage("Registing");
@@ -134,6 +143,7 @@ public class Title extends Activity implements OnClickListener
     private void removeProgressDialog() {
         progressDialog.dismiss();
     }
+    */
 
     void showActionButton(){
 

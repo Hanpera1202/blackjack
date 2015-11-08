@@ -1,12 +1,11 @@
 package com.ivoid.bj;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.Gravity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,7 +35,7 @@ import java.util.TimeZone;
  */
 public class Result extends Activity implements View.OnClickListener {
 
-    private final String getResultUrl = "http://blackjack.uh-oh.jp/active/%s";
+    private final String getResultsUrl = "http://blackjack.uh-oh.jp/results/%s";
 
     private List<String> ids = new ArrayList<String>();
     private List<String> names = new ArrayList<String>();
@@ -44,17 +43,18 @@ public class Result extends Activity implements View.OnClickListener {
     private List<String> winNums = new ArrayList<String>();
     private List<String> endDates = new ArrayList<String>();
     private List<String> applyNums = new ArrayList<String>();
-    private List<String> points = new ArrayList<String>();
     private List<String> myApplyNums = new ArrayList<String>();
+    private List<String> progresses = new ArrayList<String>();
+    private List<String> results = new ArrayList<String>();
     private BaseAdapter adapter;
-
-    private ProgressDialog progressDialog;
 
     private Player player;
 
     private SharedPreferences preference;
     private SharedPreferences.Editor editor;
     private String user_id;
+
+    AsyncJsonLoader asyncJsonLoader;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -65,8 +65,6 @@ public class Result extends Activity implements View.OnClickListener {
         findViewById(R.id.competition).setOnClickListener(this);
         findViewById(R.id.checkMyData).setOnClickListener(this);
 
-        progressDialog = new ProgressDialog(this);
-
         //プリファレンスの準備
         preference = getSharedPreferences("user_data", MODE_PRIVATE);
         user_id = preference.getString("user_id", "");
@@ -74,23 +72,14 @@ public class Result extends Activity implements View.OnClickListener {
         player = new Player(getApplicationContext(), "Richard");
         ((TextView)findViewById(R.id.playerCash)).setText(String.valueOf((int)player.getBalance()));
 
-        AsyncJsonLoader asyncJsonLoader = new AsyncJsonLoader(new AsyncJsonLoader.AsyncCallback() {
-            // 実行前
-            public void preExecute() {
-                showLoading();
-            }
+        asyncJsonLoader = new AsyncJsonLoader(this, new AsyncJsonLoader.AsyncCallback() {
             // 実行後
-            public void postExecute(JSONObject result) {
-                removeProgressDialog();
-                if (result == null) {
-                    showLoadError(); // エラーメッセージを表示
-                    return;
-                }
+            public boolean postExecute(JSONObject result) {
                 try {
                     // 各 ATND イベントのタイトルを配列へ格納
-                    JSONArray competitionArray = result.getJSONArray("competitions");
-                    for (int i = 0; i < competitionArray.length(); i++) {
-                        JSONObject competition = competitionArray.getJSONObject(i);
+                    JSONArray resultArray = result.getJSONArray("results");
+                    for (int i = 0; i < resultArray.length(); i++) {
+                        JSONObject competition = resultArray.getJSONObject(i);
                         ids.add(competition.getString("id"));
                         names.add(competition.getString("name"));
                         imageUrls.add(competition.getString("image_url"));
@@ -98,26 +87,30 @@ public class Result extends Activity implements View.OnClickListener {
                         endDates.add(competition.getString("end_date"));
                         applyNums.add(competition.getString("apply_num"));
                         myApplyNums.add(competition.getString("my_apply_num"));
-                        points.add(competition.getString("point"));
-
+                        progresses.add(competition.getString("progress"));
+                        results.add(competition.getString("result"));
                     }
 
                     setAdapter();
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    showLoadError(); // エラーメッセージを表示
+                    return false;
                 }
-            }
-            // 実行中
-            public void progressUpdate(int progress) {
-            }
-            // キャンセル
-            public void cancel() {
+                return true;
             }
         });
         // 処理を実行
-        asyncJsonLoader.execute(String.format(getResultUrl, user_id));
+        asyncJsonLoader.execute(String.format(getResultsUrl, user_id));
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        // ダイアログの再表示
+        if (asyncJsonLoader.isInProcess()) {
+            asyncJsonLoader.showDialog();
+        }
     }
 
     public void setAdapter(){
@@ -126,7 +119,7 @@ public class Result extends Activity implements View.OnClickListener {
 
         // BaseAdapter を継承したadapterのインスタンスを生成
         // 子要素のレイアウトファイル competition_list_items.xml を activity_main.xml に inflate するためにadapterに引数として渡す
-        adapter = new ListViewAdapter(getApplicationContext(),R.layout.competition_list_items);
+        adapter = new ListViewAdapter(getApplicationContext(),R.layout.result_list_items);
 
         // ListViewにadapterをセット
         listView.setAdapter(adapter);
@@ -141,11 +134,11 @@ public class Result extends Activity implements View.OnClickListener {
         TextView endDate;
         TextView applyNum;
         TextView myApplyNum;
-        TextView point;
-        Button apply;
+        TextView progress;
+        Button checkResult;
     }
 
-    class ListViewAdapter extends BaseAdapter implements View.OnClickListener {
+    class ListViewAdapter extends BaseAdapter implements View.OnClickListener{
         private LayoutInflater inflater;
         private int itemLayoutId;
 
@@ -171,9 +164,9 @@ public class Result extends Activity implements View.OnClickListener {
                 holder.endDate = (TextView) convertView.findViewById(R.id.endDate);
                 holder.applyNum = (TextView) convertView.findViewById(R.id.applyNum);
                 holder.myApplyNum = (TextView) convertView.findViewById(R.id.myApplyNum);
-                holder.point = (TextView) convertView.findViewById(R.id.point);
-                holder.apply = (Button)convertView.findViewById(R.id.apply);
-                holder.apply.setOnClickListener(this);
+                holder.progress = (TextView) convertView.findViewById(R.id.progress);
+                holder.checkResult = (Button)convertView.findViewById(R.id.checkResult);
+                holder.checkResult.setOnClickListener(this);
                 convertView.setTag(holder);
 
             }
@@ -187,21 +180,34 @@ public class Result extends Activity implements View.OnClickListener {
             AsyncImageLoader asyncImageLoader = new AsyncImageLoader(holder.image);
             asyncImageLoader.execute(imageUrls.get(position));
             holder.winNum.setText("Total " + winNums.get(position) + " winners");
-
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-            try {
-                Date date = sdf.parse(endDates.get(position));
-                SimpleDateFormat convertFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                convertFormat.setTimeZone(TimeZone.getDefault());
-                holder.endDate.setText("Closing Time:" + convertFormat.format(date));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
             holder.applyNum.setText("Apply Num:" + applyNums.get(position));
-            holder.myApplyNum.setText("My Apply Num:" + myApplyNums.get(position));
-            holder.point.setText("Use Point:" + points.get(position));
-            holder.apply.setTag(ids.get(position));
+            holder.myApplyNum.setText("Your Apply Num:" + myApplyNums.get(position));
+            switch(progresses.get(position)){
+                case "1":
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+                    try {
+                        Date date = sdf.parse(endDates.get(position));
+                        SimpleDateFormat convertFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        convertFormat.setTimeZone(TimeZone.getDefault());
+                        holder.progress.setText("Closing Time:" + convertFormat.format(date));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    holder.checkResult.setVisibility(Button.GONE);
+                    holder.checkResult.setTag(ids.get(position));
+                    break;
+                case "2":
+                    holder.progress.setText("Currently in lottery");
+                    holder.checkResult.setVisibility(Button.GONE);
+                    holder.checkResult.setTag(ids.get(position));
+                    break;
+                case "3":
+                    holder.progress.setText("Result announcement");
+                    holder.checkResult.setVisibility(Button.VISIBLE);
+                    holder.checkResult.setTag(ids.get(position));
+                    break;
+            }
 
             return convertView;
         }
@@ -226,43 +232,13 @@ public class Result extends Activity implements View.OnClickListener {
          * リスト内のボタンがクリックされたら呼ばれる
          */
         public void onClick(View view) {
-            String applicaiton_id = (String) view.getTag();
+            String competition_id = (String) view.getTag();
+            Intent intent = new Intent(getApplicationContext(), ResultDialog.class);
+            intent.putExtra("competition_id", competition_id);
+            startActivity(intent);
+            overridePendingTransition(0, 0);
         }
-    }
 
-    // ロード中ダイアログ表示
-    private void showLoading() {
-        progressDialog.setMessage("Loading");
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setCancelable(false);
-        progressDialog.show();
-    }
-
-    // 応募中ダイアログ表示
-    private void showApplying() {
-        progressDialog.setMessage("Applying");
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setCancelable(false);
-        progressDialog.show();
-    }
-
-    // ロード中ダイアログ非表示
-    private void removeProgressDialog() {
-        progressDialog.dismiss();
-    }
-
-    // エラーメッセージ表示
-    private void showLoadError() {
-        Toast toast = Toast.makeText(this, "I could not get the data.", Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.CENTER, 0, 0);
-        toast.show();
-    }
-
-    // 応募完了メッセージ表示
-    private void showApplyComplete() {
-        Toast toast = Toast.makeText(this, "Applicants completed", Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.CENTER, 0, 0);
-        toast.show();
     }
 
     public void onClick(final View view)
@@ -301,4 +277,11 @@ public class Result extends Activity implements View.OnClickListener {
         return false;
     }
 
+    @Override
+    public void onUserLeaveHint() {
+        if (asyncJsonLoader != null) {
+            // ダイアログを閉じる（2重表示防止）
+            asyncJsonLoader.dismissDialog();
+        }
+    }
 }
