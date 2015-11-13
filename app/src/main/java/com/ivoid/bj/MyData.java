@@ -11,8 +11,8 @@ import android.widget.TextView;
 
 import com.bj.R;
 
-public class MyData extends Activity implements OnClickListener
-{
+public class MyData extends Activity {
+
 	private SharedPreferences preference;
     private Player player;
 
@@ -22,10 +22,6 @@ public class MyData extends Activity implements OnClickListener
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.mydata);
-
-        findViewById(R.id.game).setOnClickListener(this);
-        findViewById(R.id.competition).setOnClickListener(this);
-        findViewById(R.id.result).setOnClickListener(this);
 
 		preference = getSharedPreferences("user_data", MODE_PRIVATE);
 
@@ -48,8 +44,7 @@ public class MyData extends Activity implements OnClickListener
 
 	}
 
-	@Override
-	public void onClick(View view) {
+	public void onClickHeader(View view) {
         switch (view.getId()) {
             case R.id.game: {
                 Intent intent = new Intent(this, Dealer.class);
@@ -67,6 +62,13 @@ public class MyData extends Activity implements OnClickListener
             }
             case R.id.result: {
                 Intent intent = new Intent(this, Result.class);
+                startActivity(intent);
+                finish();
+                overridePendingTransition(0, 0);
+                break;
+            }
+            case R.id.setting: {
+                Intent intent = new Intent(this, Setting.class);
                 startActivity(intent);
                 finish();
                 overridePendingTransition(0, 0);

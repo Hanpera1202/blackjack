@@ -48,24 +48,35 @@
                 android:id="@+id/game"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
+                android:onClick="onClickHeader"
                 android:background="@drawable/mydata" />
 
             <Button
                 android:id="@+id/competition"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
+                android:onClick="onClickHeader"
                 android:background="@drawable/mydata" />
 
             <Button
                 android:id="@+id/result"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
+                android:onClick="onClickHeader"
                 android:background="@drawable/mydata" />
 
             <Button
                 android:id="@+id/checkMyData"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
+                android:onClick="onClickHeader"
+                android:background="@drawable/mydata" />
+
+            <Button
+                android:id="@+id/setting"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:onClick="onClickHeader"
                 android:background="@drawable/mydata" />
 
         </LinearLayout>

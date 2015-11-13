@@ -31,7 +31,7 @@ import java.util.TimeZone;
 /**
  * Created by nakazato on 2015/10/27.
  */
-public class Result extends Activity implements View.OnClickListener {
+public class Result extends Activity {
 
     private final String getResultsUrl = "http://blackjack.uh-oh.jp/results/%s";
 
@@ -58,10 +58,6 @@ public class Result extends Activity implements View.OnClickListener {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.result);
-
-        findViewById(R.id.game).setOnClickListener(this);
-        findViewById(R.id.competition).setOnClickListener(this);
-        findViewById(R.id.checkMyData).setOnClickListener(this);
 
         //プリファレンスの準備
         preference = getSharedPreferences("user_data", MODE_PRIVATE);
@@ -239,7 +235,7 @@ public class Result extends Activity implements View.OnClickListener {
 
     }
 
-    public void onClick(final View view)
+    public void onClickHeader(final View view)
     {
         switch (view.getId()) {
             case R.id.game: {
@@ -258,6 +254,13 @@ public class Result extends Activity implements View.OnClickListener {
             }
             case R.id.checkMyData: {
                 Intent intent = new Intent(this, MyData.class);
+                startActivity(intent);
+                finish();
+                overridePendingTransition(0, 0);
+                break;
+            }
+            case R.id.setting: {
+                Intent intent = new Intent(this, Setting.class);
                 startActivity(intent);
                 finish();
                 overridePendingTransition(0, 0);

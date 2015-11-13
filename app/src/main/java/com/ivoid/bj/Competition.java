@@ -35,7 +35,7 @@ import java.util.Date;
 /**
  * Created by nakazato on 2015/10/27.
  */
-public class Competition extends FragmentActivity implements View.OnClickListener {
+public class Competition extends FragmentActivity {
 
     private final String getActiveUrl = "http://blackjack.uh-oh.jp/active/%s";
     private final String applyUrl = "http://blackjack.uh-oh.jp/apply/%s/%s";
@@ -67,10 +67,6 @@ public class Competition extends FragmentActivity implements View.OnClickListene
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.competition);
-
-        findViewById(R.id.game).setOnClickListener(this);
-        findViewById(R.id.result).setOnClickListener(this);
-        findViewById(R.id.checkMyData).setOnClickListener(this);
 
         //プリファレンスの準備
         preference = getSharedPreferences("user_data", MODE_PRIVATE);
@@ -316,7 +312,7 @@ public class Competition extends FragmentActivity implements View.OnClickListene
         alertDialog = null;
     }
 
-    public void onClick(final View view)
+    public void onClickHeader(final View view)
     {
         switch (view.getId()) {
             case R.id.game: {
@@ -335,6 +331,13 @@ public class Competition extends FragmentActivity implements View.OnClickListene
             }
             case R.id.checkMyData: {
                 Intent intent = new Intent(this, MyData.class);
+                startActivity(intent);
+                finish();
+                overridePendingTransition(0, 0);
+                break;
+            }
+            case R.id.setting: {
+                Intent intent = new Intent(this, Setting.class);
                 startActivity(intent);
                 finish();
                 overridePendingTransition(0, 0);

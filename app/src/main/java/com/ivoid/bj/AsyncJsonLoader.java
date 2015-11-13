@@ -61,11 +61,11 @@ public class AsyncJsonLoader extends AsyncTask<String, Integer, JSONObject> {
         dismissDialog();
         isInProgress = false;
         if (_result == null) {
-            showLoadError();
+            showConnectError();
             return;
         }
         if(!mAsyncCallback.postExecute(_result)){
-            showLoadError();
+            showConnectError();
         }
     }
 
@@ -79,7 +79,6 @@ public class AsyncJsonLoader extends AsyncTask<String, Integer, JSONObject> {
         HttpClient httpClient = new DefaultHttpClient();
         HttpGet httpGet = new HttpGet(_uri[0]);
         try {
-            Log.d("AsyncJsonLoader","doInBackground");
             HttpResponse httpResponse = httpClient.execute(httpGet);
             if (httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -100,7 +99,7 @@ public class AsyncJsonLoader extends AsyncTask<String, Integer, JSONObject> {
 
     // ダイアログ表示
     public void showDialog() {
-        if(mDialog == null) {
+        if(mDialog == null && dialogMessage!= null) {
             mDialog = new ProgressDialog(mContext);
             mDialog.setMessage(dialogMessage);
             mDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -112,15 +111,15 @@ public class AsyncJsonLoader extends AsyncTask<String, Integer, JSONObject> {
     // ロード中ダイアログ非表示
     public void dismissDialog() {
         if (mDialog !=  null) {
-            Log.d("dialog","dismissDialog");
             mDialog.dismiss();
         }
         mDialog = null;
     }
 
     // エラーメッセージ表示
-    private void showLoadError() {
-        Toast toast = Toast.makeText(mContext, "I could not get the data.", Toast.LENGTH_SHORT);
+    private void showConnectError() {
+        Toast toast = Toast.makeText(mContext, "Connection error has occurred.\n" +
+                "Please check your Internet connection.", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
     }

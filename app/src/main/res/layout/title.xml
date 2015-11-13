@@ -12,7 +12,8 @@
         android:layout_height="40dp"
         android:text="play"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,13 +26,15 @@
             android:id="@+id/apply"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
-            android:text="apply" />
+            android:text="apply"
+            android:visibility="invisible"/>
 
         <Button
             android:id="@+id/result"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
-            android:text="result" />
+            android:text="result"
+            android:visibility="invisible"/>
 
     </LinearLayout>
 

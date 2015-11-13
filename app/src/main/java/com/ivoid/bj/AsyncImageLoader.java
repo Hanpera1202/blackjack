@@ -17,9 +17,6 @@ public class AsyncImageLoader extends AsyncTask<String, Integer, Bitmap> {
     private ImageView image;
     private String tag;
 
-    private HttpClient hClient;
-    private HttpGet hGetMethod;
-
     public AsyncImageLoader(ImageView _image) {
         image = _image;
         tag = image.getTag().toString();
@@ -61,21 +58,17 @@ public class AsyncImageLoader extends AsyncTask<String, Integer, Bitmap> {
     private Bitmap downloadImage(String uri) {
         Bitmap image = ImageCache.getImage(uri);
         if (image == null) {
-            Log.d("downloadImage", "uri=" + uri);
             HttpClient httpClient = new DefaultHttpClient();
             HttpGet httpGet = new HttpGet(uri);
             try {
                 HttpResponse resp = httpClient.execute(httpGet);
-                Log.d("downloadImage", "statusCode=" + resp.getStatusLine().getStatusCode());
                 if (resp.getStatusLine().getStatusCode() < 400) {
-                    Log.d("downloadImage", "try");
                     InputStream is = resp.getEntity().getContent();
                     image = BitmapFactory.decodeStream(is);
                     ImageCache.setImage(uri, image);
                     is.close();
                 }
             } catch (Exception e) {
-                Log.d("downloadImage", "error");
                 e.printStackTrace();
             }
         }

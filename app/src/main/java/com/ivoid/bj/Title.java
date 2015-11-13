@@ -1,96 +1,96 @@
 package com.ivoid.bj;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.Toast;
 
+import com.bj.BuildConfig;
 import com.bj.R;
+import com.growthpush.GrowthPush;
+import com.growthpush.handler.BaseReceiveHandler;
+import com.growthpush.model.Environment;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
 public class Title extends Activity implements OnClickListener
 {
-
     private final String registUrl = "http://blackjack.uh-oh.jp/user/regist/%s";
-
-    //private ProgressDialog progressDialog;
-
     private SharedPreferences preference;
     private SharedPreferences.Editor editor;
+
+    private String device_id;
+    private String user_id;
 
     @Override
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 
-        Log.d("Activity", "Title->onCreate");
-
-        //progressDialog = new ProgressDialog(this);
         //プリファレンスの準備
         preference = getSharedPreferences("user_data", MODE_PRIVATE);
         editor = preference.edit();
 
+        //GrowthPush.getInstance().initialize(getApplicationContext(), 9252, "eVm8r9Ma42ihP1JRFz1Pa3onKoSxlC57").register("191839645621");
+        GrowthPush.getInstance().initialize(getApplicationContext(), 9252, "eVm8r9Ma42ihP1JRFz1Pa3onKoSxlC57", BuildConfig.DEBUG ? Environment.development : Environment.production, true).register("191839645621");
+
+        GrowthPush.getInstance().setReceiveHandler(new BaseReceiveHandler() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                super.onReceive(context, intent);
+                if (preference.getBoolean("push_on", true)) {
+                    showAlert(context, intent);
+                    addNotification(context, intent);
+                }
+            }
+        });
+
+        GrowthPush.getInstance().trackEvent("Launch");
+        GrowthPush.getInstance().setDeviceTags();
+
+        user_id = preference.getString("user_id", "");
+
         setContentView(R.layout.title);
 
-        AsyncJsonLoader asyncJsonLoader = new AsyncJsonLoader(this, new AsyncJsonLoader.AsyncCallback() {
-            /*
-            // 実行前
-            public void preExecute() {
-                showLoading();
-            }
-            */
-            // 実行後
-            public boolean postExecute(JSONObject result) {
-                /*
-                removeProgressDialog();
-                if (result == null) {
-                    return;
-                }
-                */
-                try {
-                    String user_id= result.getString("user_id");
-                    Log.d("user_id", user_id);
-                    //user_idをセット
-                    editor.putString("user_id", user_id);
-                    editor.commit();
-
-                    showActionButton();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    return false;
-                    //showLoadError(); // エラーメッセージを表示
-                }
-                return true;
-            }
-            /*
-            // 実行中
-            public void progressUpdate(int progress) {
-            }
-
-            // キャンセル
-            public void cancel() {
-            }
-            */
-        });
-        // 処理を実行
-        if (preference.getString("user_id", "") == "") {
-            asyncJsonLoader.execute(String.format(registUrl, "test_device_id"));
-        }else{
-            showActionButton();
-        }
         (findViewById(R.id.play)).setOnClickListener(this);
         (findViewById(R.id.apply)).setOnClickListener(this);
         (findViewById(R.id.result)).setOnClickListener(this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(user_id.equals("")){
+            registUser();
+        }else{
+            showActionButton();
+        }
+    }
+
+    public void registUser(){
+        AsyncJsonLoader asyncJsonLoader = new AsyncJsonLoader(this, new AsyncJsonLoader.AsyncCallback() {
+            // 実行後
+            public boolean postExecute(JSONObject result) {
+                try {
+                    user_id = result.getString("user_id");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    return false;
+                }
+                //user_idをセット
+                editor.putString("user_id", user_id);
+                editor.commit();
+                showActionButton();
+                return true;
+            }
+        }, null);
+        asyncJsonLoader.execute(String.format(registUrl, "test"));
     }
     
 	public void onClick(final View view)
@@ -123,29 +123,18 @@ public class Title extends Activity implements OnClickListener
         }
     }
 
-    /*
-    // ロード中ダイアログ表示
-    private void showLoading() {
-        progressDialog.setMessage("Registing");
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setCancelable(false);
-        progressDialog.show();
-    }
-
-    // エラーメッセージ表示
-    private void showLoadError() {
-        Toast toast = Toast.makeText(this, "I could not get the data.", Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.CENTER, 0, 0);
-        toast.show();
-    }
-
-    // ロード中ダイアログ非表示
-    private void removeProgressDialog() {
-        progressDialog.dismiss();
-    }
-    */
-
     void showActionButton(){
+        (findViewById(R.id.play)).setVisibility(Button.VISIBLE);
+        (findViewById(R.id.apply)).setVisibility(Button.VISIBLE);
+        (findViewById(R.id.result)).setVisibility(Button.VISIBLE);
+    }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event){
+        if (keyCode == KeyEvent.KEYCODE_BACK){
+            moveTaskToBack(true);
+            return true;
+        }
+        return false;
     }
 }
