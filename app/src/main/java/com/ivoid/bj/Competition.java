@@ -37,6 +37,8 @@ import java.util.Date;
  */
 public class Competition extends FragmentActivity {
 
+    Game game;
+
     private final String getActiveUrl = "http://blackjack.uh-oh.jp/active/%s";
     private final String applyUrl = "http://blackjack.uh-oh.jp/apply/%s/%s";
 
@@ -58,19 +60,14 @@ public class Competition extends FragmentActivity {
     private int waittime;
     private final Handler handler = new Handler();
 
-    private SharedPreferences preference;
-    private String user_id;
-
     AsyncJsonLoader asyncJsonLoader;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.competition);
+        game = (Game) this.getApplication();
 
-        //プリファレンスの準備
-        preference = getSharedPreferences("user_data", MODE_PRIVATE);
-        user_id = preference.getString("user_id", "");
+        setContentView(R.layout.competition);
 
         player = new Player(getApplicationContext(), "Richard");
         playerCash=(TextView)findViewById(R.id.playerCash);
@@ -103,13 +100,13 @@ public class Competition extends FragmentActivity {
             }
         });
         // 処理を実行
-        asyncJsonLoader.execute(String.format(getActiveUrl, user_id));
+        asyncJsonLoader.execute(String.format(getActiveUrl, game.getUesrId()));
     }
 
     @Override
     public void onResume(){
         super.onResume();
-        // ダイアログの再表示
+        // Redisplay dialog
         if (asyncJsonLoader.isInProcess()) {
             asyncJsonLoader.showDialog();
         }
@@ -247,7 +244,7 @@ public class Competition extends FragmentActivity {
         // 処理を実行
         if(player.getBalance() >= point) {
             createAlertDialog("Applicants completed");
-            asyncJsonLoader.execute(String.format(applyUrl, user_id, applicaiton_id));
+            asyncJsonLoader.execute(String.format(applyUrl, game.getUesrId(), applicaiton_id));
         }else{
             createAlertDialog("Your point is not enough");
             showAlertDialog();
@@ -312,38 +309,10 @@ public class Competition extends FragmentActivity {
         alertDialog = null;
     }
 
-    public void onClickHeader(final View view)
-    {
-        switch (view.getId()) {
-            case R.id.game: {
-                Intent intent = new Intent(this, Dealer.class);
-                startActivity(intent);
-                finish();
-                overridePendingTransition(0, 0);
-                break;
-            }
-            case R.id.result: {
-                Intent intent = new Intent(this, Result.class);
-                startActivity(intent);
-                finish();
-                overridePendingTransition(0, 0);
-                break;
-            }
-            case R.id.checkMyData: {
-                Intent intent = new Intent(this, MyData.class);
-                startActivity(intent);
-                finish();
-                overridePendingTransition(0, 0);
-                break;
-            }
-            case R.id.setting: {
-                Intent intent = new Intent(this, Setting.class);
-                startActivity(intent);
-                finish();
-                overridePendingTransition(0, 0);
-                break;
-            }
-        }
+    public void onClickHeader(final View view) {
+        startActivity(game.getNewIntent(view));
+        finish();
+        overridePendingTransition(0, 0);
     }
 
     @Override

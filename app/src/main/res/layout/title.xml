@@ -7,10 +7,11 @@
     android:background = "@drawable/bg">
 
     <Button
-        android:id="@+id/play"
+        android:id="@+id/game"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:text="play"
+        android:onClick="onClickHeader"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:visibility="invisible"/>
@@ -20,13 +21,14 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center"
-        android:layout_below="@id/play">
+        android:layout_below="@id/game">
 
         <Button
-            android:id="@+id/apply"
+            android:id="@+id/competition"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:text="apply"
+            android:onClick="onClickHeader"
             android:visibility="invisible"/>
 
         <Button
@@ -34,6 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:text="result"
+            android:onClick="onClickHeader"
             android:visibility="invisible"/>
 
     </LinearLayout>

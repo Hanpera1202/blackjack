@@ -126,7 +126,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Push Notification"
+            android:text="Sound"
             android:textSize="22sp"
             android:gravity="center"
             android:layout_alignParentLeft="true" />

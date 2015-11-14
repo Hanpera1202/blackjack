@@ -47,7 +47,7 @@ import com.google.android.gms.ads.InterstitialAd;
 
 public class Dealer extends Activity implements OnClickListener
 {
-    private String user_id;
+    Game game;
 
 	private Vibrator vibrator;
     private SoundPool mSoundPool;
@@ -110,15 +110,13 @@ public class Dealer extends Activity implements OnClickListener
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+        game = (Game) this.getApplication();
 
         adRequest = new AdRequest.Builder().build();
 
         //プリファレンスの準備
         preference = getSharedPreferences("user_data", MODE_PRIVATE);
         editor = preference.edit();
-
-        editor.putBoolean("TitleLaunched", false);
-        editor.commit();
 
         settings = new GameSettings();
 		shoe = new Deck( (byte)settings.decks,
@@ -142,8 +140,6 @@ public class Dealer extends Activity implements OnClickListener
         setContentView(R.layout.playing);
 
         setViews();
-        //playerCash.setText(String.valueOf((int) player.getBalance()));
-        //initUI();
     }
 
     @Override
@@ -181,40 +177,6 @@ public class Dealer extends Activity implements OnClickListener
         mInsuranceWin = mSoundPool.load(getApplicationContext(), R.raw.insurance_win, 1);
         mInsuranceLose = mSoundPool.load(getApplicationContext(), R.raw.insurance_lose, 1);
 
-/*
-        if (preference.getFloat("gotBonusPoints", 0f) > 0f) {
-            player.deposit(preference.getFloat("gotBonusPoints", 0f));
-            editor.putFloat("gotBonusPoints", 0f);
-            editor.commit();
-            updatePlayerCashlbl();
-            if (player.getBalance() >= 10.0f) {
-                Button bonus = (Button) findViewById(R.id.bonus);
-                bonus.setAnimation(null);
-                bonus.setVisibility(Button.INVISIBLE);
-                initUI();
-            }
-        }else{
-            playerCash.setText(String.valueOf((int) player.getBalance()));
-            if (betting) {
-                //playerBet の再表示
-                float beforeBet = player.getInitBet();
-                clearBet();
-                collectBet(beforeBet);
-            }else{
-                // dd,split,insuranceボタン表示の再判定
-                if(insurancingFlg){
-                    if(!isInsurable()){
-                        endInsurance();
-                    }
-                }else {
-                    checkddbutton();
-                    checksplitbutton();
-                }
-            }
-        }
-        */
-
-
         if (betting){
             playerCash.setText(String.valueOf((int) player.getBalance()));
             if (preference.getFloat("gotBonusPoints", 0f) > 0f) {
@@ -239,18 +201,6 @@ public class Dealer extends Activity implements OnClickListener
                 checkddbutton();
                 checksplitbutton();
             }
-        }
-
-        //Titleが起動していない、user_idがセットされていない場合はTitleを起動
-        if (preference.getBoolean("TitleLaunched", false)==false ||
-                preference.getString("user_id", "").equals("")) {
-            //TitleLaunchedフラグをオンにする
-            editor.putBoolean("TitleLaunched", true);
-            editor.commit();
-            //TitleActivityを起動
-            Intent intent = new Intent(this, Title.class);
-            startActivity(intent);
-            overridePendingTransition(0, 0);
         }
     }
 
@@ -309,14 +259,12 @@ public class Dealer extends Activity implements OnClickListener
 			buttons.put(R.id.clearButton, Action.CLEAR);
 			buttons.put(R.id.dealButton, Action.DEAL);
 
-			//buttons.put(R.id.bet_1, Action.ONE);
 			buttons.put(R.id.bet_10, Action.TEN);
 			buttons.put(R.id.bet_50, Action.FIFTY);
 			buttons.put(R.id.bet_100, Action.ONEHUNDRED);
 			buttons.put(R.id.bet_500, Action.FIVEHUNDRED);
             buttons.put(R.id.bet_all, Action.ALL);
             buttons.put(R.id.rebet, Action.REBET);
-			//buttons.put(R.id.bet_1000, Action.ONETHOUSAND);
 
 			playerBet=(TextView) findViewById(R.id.playerBet);
 
@@ -388,11 +336,6 @@ public class Dealer extends Activity implements OnClickListener
 		
 		player.deposit(reward);
 
-        //updatePlayerCashlblForPlaying();
-    }
-
-    void setPlaying(BJHand hand, boolean b) {
-        hand.setPlaying(b);
     }
 
     void payout ()
@@ -463,9 +406,7 @@ public class Dealer extends Activity implements OnClickListener
                     buttonanim.setDuration(300);
                     findViewById(R.id.insuranceResult).startAnimation(buttonanim);
 
-                    AudioManager audio = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-                    int musicVol = audio.getStreamVolume(AudioManager.STREAM_MUSIC);
-                    mSoundPool.play(mInsuranceWin, (float) musicVol, (float) musicVol, 0, 0, 1.0F);
+                    mSoundPool.play(mInsuranceWin, game.getSoundVol(), game.getSoundVol(), 0, 0, 1.0F);
                 }
             },waittime);
         }
@@ -476,9 +417,7 @@ public class Dealer extends Activity implements OnClickListener
                 public void run() {
                     ((ImageView)findViewById(R.id.insuranceResult)).setImageResource(R.drawable.lose);
                     findViewById(R.id.insuranceResult).setVisibility(ImageView.VISIBLE);
-                    AudioManager audio = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-                    int musicVol = audio.getStreamVolume(AudioManager.STREAM_MUSIC);
-                    mSoundPool.play(mInsuranceLose, (float) musicVol, (float) musicVol, 0, 0, 1.0F);
+                    mSoundPool.play(mInsuranceLose, game.getSoundVol(), game.getSoundVol(), 0, 0, 1.0F);
                 }
             }, waittime);
         }
@@ -492,7 +431,7 @@ public class Dealer extends Activity implements OnClickListener
 		currentPlayerHand=player.getHand((byte) 0);
 		betting=true;
 		getNextAction=false;
-		// update playerBet to 0
+        // update playerBet to 0
         updatePlayerBetlbl();
         initUI();
 	}
@@ -500,11 +439,8 @@ public class Dealer extends Activity implements OnClickListener
 	void clearBet()
 	{
 		BJHand hand = player.getHand((byte) 0);
-		//float betValue=hand.getBet().getValue();
-        hand.clearBet(); //remove the bet from the table
-        //player.deposit(betValue); //put bet back into player's wallet
+		hand.clearBet(); //remove the bet from the table
         updatePlayerBetlbl();
-        //updatePlayerCashlbl();
 	}
 	
 	void collectBet(float stake)
@@ -512,15 +448,13 @@ public class Dealer extends Activity implements OnClickListener
         float betValue=currentPlayerHand.getBet().getValue();
         if( stake > player.getBalance() - betValue ||
                 stake + betValue > settings.tableMax
-        ) {
+                ) {
             return;
 		}
 
 		player.getHand((byte) 0).incrementBet(stake);
 
         updatePlayerBetlbl();
-        //updatePlayerCashlbl();
-        //player.withdraw(stake); //take the bet out of player's wallet
     }
 
 	void checkPlayerHand(BJHand hand)
@@ -540,14 +474,13 @@ public class Dealer extends Activity implements OnClickListener
 		else if(hand.hasBJ() || hand.has21()) {
             hand.setPlaying(false);
         }
-	}
+    }
 
     void surrender(BJHand hand)
     {
         if (hand.getCardCount()==2)
         {
             float betValue = hand.getBet().getValue();
-            //hand.update(); // clear hand
             payTransaction(betValue, settings.surrenderPay); //player gets half his bet back via negative ratio
             hand.setStatus(Status.SURRENDERED);
             hand.setToBePayed(false);
@@ -576,8 +509,7 @@ public class Dealer extends Activity implements OnClickListener
 			
 			player.withdraw(betValue);
 
-			//updatePlayerCashlblForPlaying();
-            updatePlayerCashlbl();
+			updatePlayerCashlbl();
 
             dealCard(hand);
 
@@ -598,13 +530,11 @@ public class Dealer extends Activity implements OnClickListener
 			float betValue=hand.getBet().getValue();
 			Card poppedCard = hand.popCard((byte) 1);
 			((RelativeLayout)(currentPlayerHandView.getChildAt(0))).removeViewAt(1);
-            //playerHandViews.get(0).getChildAt(1).setVisibility(TextView.INVISIBLE);
             playerSumViews.get(0).setVisibility(RelativeLayout.INVISIBLE);
 
 			BJHand splitHand = new BJHand(hand.ownerName, poppedCard, betValue);
             player.addHand(splitHand);
             player.withdraw(betValue);
-            //updatePlayerCashlblForPlaying();
             updatePlayerCashlbl();
 
             hands.put(splitHand, playerHandViews.get(1));
@@ -650,17 +580,6 @@ public class Dealer extends Activity implements OnClickListener
 				for ( byte b=0 ; b < player.howManyHands() ; b++ )
 					player.getHand(b).setPlaying(false);
 			}
-
-            /*
-            else{
-                //waittime += 500;
-                handler.postDelayed(new Runnable() {
-                    public void run() {
-                        playerOverViews.get(currentPlayerIndex).setBackgroundResource(R.drawable.layout_shape);
-                    }
-                }, waittime);
-            }
-            */
 		}
 	}
 
@@ -782,7 +701,6 @@ public class Dealer extends Activity implements OnClickListener
 
 	void firstDeal()
 	{
-		//BJHand hand=player.getHand((byte)0); //the player only has one hand at the beginning of the round
 		dealCard(currentPlayerHand);
 		dealCard(dealerHand, true);
 		dealCard(currentPlayerHand);
@@ -810,24 +728,7 @@ public class Dealer extends Activity implements OnClickListener
             checkPlayerHand(currentPlayerHand);
             if (!currentPlayerHand.isPlaying()) {
                 getNextAction=true;
-                // getNextAction(Action.DEAL);
-                /*
-                handler.postDelayed(new Runnable() {
-                    public void run() {
-                        waittime = 0;
-                        act(true);
-                    }
-                }, waittime + 300);
-                /*
-                byte dealerCardValue = dealerHand.getCard((byte)0).getValue();
-                if(dealerCardValue == 1 || dealerCardValue >= 10) {
-                    faceUpCard(dealerHand, faceDownCard);
-                    dealerHand.checkIfHasBJ();
-                }
-                payout();
-                */
             } else {
-                //waittime += 500;
                 handler.postDelayed(showActionButton, waittime);
             }
         }
@@ -861,10 +762,9 @@ public class Dealer extends Activity implements OnClickListener
         player.withdraw(insuranceBetValue); //withraw the bet from player's wallet
 
         findViewById(R.id.insurance).setVisibility(RelativeLayout.VISIBLE);
-        LinearLayout insuranceBet = (LinearLayout)findViewById(R.id.insuranceBet);
+        LinearLayout insuranceBet = (LinearLayout) findViewById(R.id.insuranceBet);
         setBet(insuranceBet, (int) insuranceBetValue);
-        ((TextView)findViewById(R.id.insuranceBetNum)).setText(String.valueOf((int) insuranceBetValue));
-        //updatePlayerCashlblForPlaying();
+        ((TextView) findViewById(R.id.insuranceBetNum)).setText(String.valueOf((int) insuranceBetValue));
         updatePlayerCashlbl();
         waittime += 300 + (insuranceBet.getChildCount() - 1) * 50;
     }
@@ -888,19 +788,6 @@ public class Dealer extends Activity implements OnClickListener
             checksurrenderbutton();
             checkddbutton();
             checksplitbutton();
-            /*
-            if(dealerHand.getCard((byte)0).getValue() != 1) {
-                findViewById(R.id.surrenderButton).setVisibility(Button.VISIBLE);
-            }
-            if(player.getBalance() >= currentPlayerHand.getBet().getValue()) {
-                findViewById(R.id.ddButton).setVisibility(Button.VISIBLE);
-            }
-			if(currentPlayerHand.splitable(settings.aceResplit) &&
-                    player.getBalance() >= currentPlayerHand.getBet().getValue()){
-                Button splitButton = (Button) findViewById(R.id.splitButton);
-                splitButton.setVisibility(Button.VISIBLE);
-			}
-			*/
 		}
 	};
 
@@ -913,12 +800,6 @@ public class Dealer extends Activity implements OnClickListener
         }else{
             findViewById(R.id.surrenderButton).setVisibility(Button.INVISIBLE);
         }
-        /*
-        if (player.howManyHands() > 1 ||
-                currentPlayerHand.getCardCount() > 2) {
-            findViewById(R.id.surrenderButton).setVisibility(Button.INVISIBLE);
-        }
-        */
     }
 
     void checkddbutton(){
@@ -928,12 +809,6 @@ public class Dealer extends Activity implements OnClickListener
         }else{
             findViewById(R.id.ddButton).setVisibility(Button.INVISIBLE);
         }
-        /*
-        if (currentPlayerHand.getCardCount() > 2 ||
-                player.getBalance() < currentPlayerHand.getBet().getValue()) {
-            findViewById(R.id.ddButton).setVisibility(Button.INVISIBLE);
-        }
-        */
     }
 
     void checksplitbutton(){
@@ -944,15 +819,6 @@ public class Dealer extends Activity implements OnClickListener
         }else{
             findViewById(R.id.splitButton).setVisibility(Button.INVISIBLE);
         }
-
-        /*
-        if (!currentPlayerHand.splitable(settings.aceResplit) ||
-                player.howManyHands() > settings.splits ||
-                player.getBalance() < currentPlayerHand.getBet().getValue()){
-            Button splitButton = (Button) findViewById(R.id.splitButton);
-            splitButton.setVisibility(Button.INVISIBLE);
-        }
-        */
     }
 
     void dealCard(BJHand hand) {
@@ -979,7 +845,7 @@ public class Dealer extends Activity implements OnClickListener
         hand.addCard(card);
 
         ImageView cardImage=new ImageView(this);
-	    cardImage.setImageResource(card.getImage());
+        cardImage.setImageResource(card.getImage());
 		cardImage.setScaleType(ImageView.ScaleType.FIT_XY);
 
         int w_px = (int) (80f * getResources().getDisplayMetrics().density + 0.5f);
@@ -1018,9 +884,7 @@ public class Dealer extends Activity implements OnClickListener
         // 再生
         handler.postDelayed(new Runnable() {
             public void run() {
-                AudioManager audio = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-                int musicVol = audio.getStreamVolume(AudioManager.STREAM_MUSIC);
-                mSoundPool.play(mCardfall, (float) musicVol, (float) musicVol, 0, 0, 1.0F);
+                mSoundPool.play(mCardfall, game.getSoundVol(), game.getSoundVol(), 0, 0, 1.0F);
             }
         }, waittime);
 
@@ -1077,32 +941,6 @@ public class Dealer extends Activity implements OnClickListener
     { currentPlayerBetNumView.setText(String.valueOf((int) player.getInitBet()));}
 
     int countUpNum;
-    /*
-    void countUpPlayerCash(int beforeCash, int afterCash){
-        int loopCnt;
-        int countUpCash;
-        if((afterCash - beforeCash) < 10){
-            countUpCash = 1;
-            loopCnt = afterCash - beforeCash;
-        }else{
-            countUpCash = (afterCash - beforeCash) / 10;
-            loopCnt = 10;
-        }
-        for (int i = 1; i <= loopCnt; i++) {
-            if (i == loopCnt) {
-                countUpNum = (int) player.getBalance();
-            } else {
-                countUpNum = beforeCash + (countUpCash * i);
-            }
-            handler.postDelayed(new Runnable() {
-                int updateCash = countUpNum;
-                public void run() {
-                    playerCash.setText(String.valueOf(updateCash));
-                }
-            }, waittime + (i * 50));
-        }
-    }
-    */
     void updatePlayerCashlbl()
     {
         int beforeCash = Integer.parseInt(String.valueOf(playerCash.getText()));
@@ -1172,9 +1010,7 @@ public class Dealer extends Activity implements OnClickListener
                             buttonanim.setDuration(300);
                             findViewById(R.id.playerBlackjack).startAnimation(buttonanim);
 
-                            AudioManager audio = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-                            int musicVol = audio.getStreamVolume(AudioManager.STREAM_MUSIC);
-                            mSoundPool.play(mBlackjack, (float) musicVol, (float) musicVol, 0, 0, 1.0F);
+                            mSoundPool.play(mBlackjack, game.getSoundVol(), game.getSoundVol(), 0, 0, 1.0F);
                         }
                     },animWaittime);
                     soundWaittime += 1000;
@@ -1194,9 +1030,7 @@ public class Dealer extends Activity implements OnClickListener
                     if(!winSoundFlg) {
                         handler.postDelayed(new Runnable() {
                             public void run() {
-                                AudioManager audio = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-                                int musicVol = audio.getStreamVolume(AudioManager.STREAM_MUSIC);
-                                mSoundPool.play(mWin, (float) musicVol, (float) musicVol, 0, 0, 1.0F);
+                                mSoundPool.play(mWin, game.getSoundVol(), game.getSoundVol(), 0, 0, 1.0F);
                             }
                         }, soundWaittime);
                         soundWaittime += 800;
@@ -1217,9 +1051,7 @@ public class Dealer extends Activity implements OnClickListener
                     if(!pushSoundFlg) {
                         handler.postDelayed(new Runnable() {
                             public void run() {
-                                AudioManager audio = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-                                int musicVol = audio.getStreamVolume(AudioManager.STREAM_MUSIC);
-                                mSoundPool.play(mPush, (float) musicVol, (float) musicVol, 0, 0, 1.0F);
+                                mSoundPool.play(mPush, game.getSoundVol(), game.getSoundVol(), 0, 0, 1.0F);
                             }
                         },soundWaittime);
                         soundWaittime += 600;
@@ -1240,9 +1072,7 @@ public class Dealer extends Activity implements OnClickListener
                     if(!loseSoundFlg) {
                         handler.postDelayed(new Runnable() {
                             public void run() {
-                                AudioManager audio = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-                                int musicVol = audio.getStreamVolume(AudioManager.STREAM_MUSIC);
-                                mSoundPool.play(mLose, (float) musicVol, (float) musicVol, 0, 0, 1.0F);
+                                mSoundPool.play(mLose, game.getSoundVol(), game.getSoundVol(), 0, 0, 1.0F);
                             }
                         },soundWaittime);
                         soundWaittime += 900;
@@ -1511,9 +1341,6 @@ public class Dealer extends Activity implements OnClickListener
             if (currentPlayerIndex != nextHandtoPlay ||
                     action == action.SPLIT){
                 checksplitbutton();
-                //if(action != action.STAND){
-                    //waittime += 500;
-                //}
                 handler.postDelayed(new Runnable() {
                     public void run() {
                         findViewById(R.id.ddButton).setVisibility(Button.VISIBLE);
@@ -1527,36 +1354,11 @@ public class Dealer extends Activity implements OnClickListener
     }
 
     public void onClickHeader(final View view) {
-        // ヘッダー用
-        switch (view.getId()) {
-            case R.id.competition: {
-                Intent intent = new Intent(this, Competition.class);
-                startActivity(intent);
-                overridePendingTransition(0, 0);
-                return;
-            }
-            case R.id.result: {
-                Intent intent = new Intent(this, Result.class);
-                startActivity(intent);
-                overridePendingTransition(0, 0);
-                return;
-            }
-            case R.id.checkMyData: {
-                Intent intent = new Intent(this, MyData.class);
-                startActivity(intent);
-                overridePendingTransition(0, 0);
-                return;
-            }
-            case R.id.setting: {
-                Intent intent = new Intent(this, Setting.class);
-                startActivity(intent);
-                overridePendingTransition(0, 0);
-                return;
-            }
-        }
+        startActivity(game.getNewIntent(view));
+        overridePendingTransition(0, 0);
     }
 
-        @Override
+    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event){
         if (keyCode == KeyEvent.KEYCODE_BACK){
             moveTaskToBack(true);

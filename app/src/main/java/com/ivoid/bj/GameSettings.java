@@ -1,10 +1,5 @@
 package com.ivoid.bj;
 
-import android.widget.Button;
-
-import java.util.HashMap;
-import java.util.Map;
-
 class GameSettings
 {
 	byte decks, splits, burns, shuffleTimes; 
@@ -14,9 +9,6 @@ class GameSettings
 	
 	private boolean[] bools={true,false};
 	private byte[] bytes={6,8};
-
-    private Map<Integer, Integer> levels;
-    private Map<Integer, Integer> avelableBets;
 	
 	GameSettings()
 	{

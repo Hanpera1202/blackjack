@@ -25,6 +25,8 @@ import java.io.UnsupportedEncodingException;
  */
 public class ResultDialog extends FragmentActivity implements View.OnClickListener {
 
+    Game game;
+
     private final String getResultUrl = "http://blackjack.uh-oh.jp/result/%s/%s";
     private final String getMailRegistUrl = "http://blackjack.uh-oh.jp/user/registmail/%s/%s";
 
@@ -42,7 +44,6 @@ public class ResultDialog extends FragmentActivity implements View.OnClickListen
     private SharedPreferences preference;
     private SharedPreferences.Editor editor;
 
-    private String user_id;
     private String mail_address;
 
     AsyncJsonLoader asyncJsonLoader;
@@ -50,6 +51,7 @@ public class ResultDialog extends FragmentActivity implements View.OnClickListen
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+        game = (Game) this.getApplication();
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
@@ -57,7 +59,6 @@ public class ResultDialog extends FragmentActivity implements View.OnClickListen
         preference = getSharedPreferences("user_data", MODE_PRIVATE);
         editor = preference.edit();
 
-        user_id = preference.getString("user_id", "");
         mail_address = preference.getString("mail_address", "");
 
         Intent i = getIntent();
@@ -87,13 +88,13 @@ public class ResultDialog extends FragmentActivity implements View.OnClickListen
             }
         });
         // 処理を実行
-        asyncJsonLoader.execute(String.format(getResultUrl, user_id, competition_id));
+        asyncJsonLoader.execute(String.format(getResultUrl, game.getUesrId(), competition_id));
     }
 
     @Override
     public void onResume(){
         super.onResume();
-        // ダイアログの再表示
+        // Redisplay dialog
         if (asyncJsonLoader.isInProcess()) {
             asyncJsonLoader.showDialog();
         }
@@ -156,7 +157,7 @@ public class ResultDialog extends FragmentActivity implements View.OnClickListen
         try {
             byte[] data = mail_address.getBytes("UTF-8");
             String base64_mail_address = Base64.encodeToString(data, android.util.Base64.URL_SAFE | android.util.Base64.NO_WRAP);
-            asyncJsonLoader.execute(String.format(getMailRegistUrl, user_id, base64_mail_address));
+            asyncJsonLoader.execute(String.format(getMailRegistUrl, game.getUesrId(), base64_mail_address));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }

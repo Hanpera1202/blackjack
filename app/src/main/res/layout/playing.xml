@@ -48,7 +48,6 @@
                 android:id="@+id/game"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:onClick="onClickHeader"
                 android:background="@drawable/mydata" />
 
             <Button
@@ -137,8 +136,6 @@
             android:id="@+id/dealerSum"
             android:layout_width="70dp"
             android:layout_height="match_parent"
-            android:gravity="top"
-            android:textStyle="bold"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
             android:visibility="invisible">

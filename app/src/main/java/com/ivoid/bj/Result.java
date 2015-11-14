@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +34,8 @@ import java.util.TimeZone;
  */
 public class Result extends Activity {
 
+    Game game;
+
     private final String getResultsUrl = "http://blackjack.uh-oh.jp/results/%s";
 
     private List<String> ids = new ArrayList<String>();
@@ -50,18 +53,18 @@ public class Result extends Activity {
 
     private SharedPreferences preference;
     private SharedPreferences.Editor editor;
-    private String user_id;
 
     AsyncJsonLoader asyncJsonLoader;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+        game = (Game) this.getApplication();
+
         setContentView(R.layout.result);
 
         //プリファレンスの準備
         preference = getSharedPreferences("user_data", MODE_PRIVATE);
-        user_id = preference.getString("user_id", "");
 
         player = new Player(getApplicationContext(), "Richard");
         ((TextView)findViewById(R.id.playerCash)).setText(String.valueOf((int)player.getBalance()));
@@ -95,13 +98,13 @@ public class Result extends Activity {
             }
         });
         // 処理を実行
-        asyncJsonLoader.execute(String.format(getResultsUrl, user_id));
+        asyncJsonLoader.execute(String.format(getResultsUrl, game.getUesrId()));
     }
 
     @Override
     public void onResume(){
         super.onResume();
-        // ダイアログの再表示
+        // Redisplay dialog
         if (asyncJsonLoader.isInProcess()) {
             asyncJsonLoader.showDialog();
         }
@@ -235,38 +238,10 @@ public class Result extends Activity {
 
     }
 
-    public void onClickHeader(final View view)
-    {
-        switch (view.getId()) {
-            case R.id.game: {
-                Intent intent = new Intent(this, Dealer.class);
-                startActivity(intent);
-                finish();
-                overridePendingTransition(0, 0);
-                break;
-            }
-            case R.id.competition: {
-                Intent intent = new Intent(this, Competition.class);
-                startActivity(intent);
-                finish();
-                overridePendingTransition(0, 0);
-                break;
-            }
-            case R.id.checkMyData: {
-                Intent intent = new Intent(this, MyData.class);
-                startActivity(intent);
-                finish();
-                overridePendingTransition(0, 0);
-                break;
-            }
-            case R.id.setting: {
-                Intent intent = new Intent(this, Setting.class);
-                startActivity(intent);
-                finish();
-                overridePendingTransition(0, 0);
-                break;
-            }
-        }
+    public void onClickHeader(final View view) {
+        startActivity(game.getNewIntent(view));
+        finish();
+        overridePendingTransition(0, 0);
     }
 
     @Override
