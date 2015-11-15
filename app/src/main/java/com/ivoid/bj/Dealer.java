@@ -15,6 +15,7 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.view.KeyEvent;
@@ -106,6 +107,8 @@ public class Dealer extends Activity implements OnClickListener
     private int waittime;
     private byte global_b;
 
+    BonusCDTimer bonusCountDownTimer = null;
+
     @Override
 	public void onCreate(Bundle savedInstanceState)
 	{
@@ -140,6 +143,12 @@ public class Dealer extends Activity implements OnClickListener
         setContentView(R.layout.playing);
 
         setViews();
+        initUI();
+
+        if(getTimelefOfLoginBonus() == 0L){
+            Intent intent = new Intent(this, LoginBonus.class);
+            startActivity(intent);
+        }
     }
 
     @Override
@@ -177,21 +186,18 @@ public class Dealer extends Activity implements OnClickListener
         mInsuranceWin = mSoundPool.load(getApplicationContext(), R.raw.insurance_win, 1);
         mInsuranceLose = mSoundPool.load(getApplicationContext(), R.raw.insurance_lose, 1);
 
+        playerCash.setText(String.valueOf((int) player.getBalance()));
         if (betting){
-            playerCash.setText(String.valueOf((int) player.getBalance()));
             if (preference.getFloat("gotBonusPoints", 0f) > 0f) {
                 player.deposit(preference.getFloat("gotBonusPoints", 0f));
                 editor.putFloat("gotBonusPoints", 0f);
                 editor.commit();
                 updatePlayerCashlbl();
                 initUI();
-            }else if(player.getInitBet() == 0) {
-                initUI();
             }else if(player.getBalance() < player.getInitBet()) {
                 clearBet();
             }
         }else{
-            playerCash.setText(String.valueOf((int) player.getBalance()));
             // dd,split,insuranceボタン表示の再判定
             if(insurancingFlg){
                 if(!isInsurable()){
@@ -256,6 +262,8 @@ public class Dealer extends Activity implements OnClickListener
 
         if (betting)
 		{
+            loginBonusCountDown();
+
 			buttons.put(R.id.clearButton, Action.CLEAR);
 			buttons.put(R.id.dealButton, Action.DEAL);
 
@@ -276,7 +284,6 @@ public class Dealer extends Activity implements OnClickListener
                 buttonanim.setRepeatCount(Animation.INFINITE);
                 buttonanim.setRepeatMode(Animation.REVERSE);
                 bonus.startAnimation(buttonanim);
-                buttons.put(R.id.bonus, Action.BONUS);
             }else{
                 Button bonus = (Button) findViewById(R.id.bonus);
                 bonus.setAnimation(null);
@@ -319,7 +326,6 @@ public class Dealer extends Activity implements OnClickListener
         }
 
 		vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-
 
 		for (final Integer entry : buttons.keySet()) {
 			((Button) findViewById(entry)).setOnClickListener(this);
@@ -425,6 +431,7 @@ public class Dealer extends Activity implements OnClickListener
 
 	void newGame()
 	{
+        findViewById(R.id.loginBonus).setVisibility(RelativeLayout.VISIBLE);
         findViewById(R.id.betting).setVisibility(LinearLayout.VISIBLE);
         dealerHand.update();
 		player.update();
@@ -1129,6 +1136,7 @@ public class Dealer extends Activity implements OnClickListener
                         initUI();
                         firstDeal();
 						findViewById(R.id.betting).setVisibility(RelativeLayout.INVISIBLE);
+                        findViewById(R.id.loginBonus).setVisibility(RelativeLayout.INVISIBLE);
 					}
         			break;
         		}
@@ -1185,21 +1193,6 @@ public class Dealer extends Activity implements OnClickListener
 					collectBet(1000f);
 					break;
 				}
-                case BONUS:
-                {
-                    if (mInterstitialAd.isLoaded()) {
-                        mInterstitialAd.setAdListener(new AdListener() {
-                            @Override
-                            public void onAdClosed() {
-                                beginBonusGame();
-                            }
-                        });
-                        mInterstitialAd.show();
-                    } else {
-                        beginBonusGame();
-                    }
-                    break;
-                }
             }
 
             vibrator.vibrate(40);
@@ -1278,11 +1271,6 @@ public class Dealer extends Activity implements OnClickListener
         }, waittime);
     }
 
-    void beginBonusGame(){
-        Intent intent = new Intent(this, Bonus.class);
-        startActivity(intent);
-    }
-
     void getNextAction(Action action)
     {
     	nextHandtoPlay=(byte)-1;
@@ -1352,6 +1340,91 @@ public class Dealer extends Activity implements OnClickListener
 			}
     	}
     }
+
+    public Long getTimelefOfLoginBonus(){
+        Long bonusGetTimeStamp = preference.getLong("bonusGetTimeStamp", 0);
+        Long needTime = settings.loginBonusSeconds * 1000 - (System.currentTimeMillis() - bonusGetTimeStamp);
+        if(needTime < 0){
+            return 0L;
+        }else{
+            return needTime;
+        }
+    }
+
+    public void loginBonusCountDown(){
+        // 以前にタイマーを起動していればリセット
+        if (bonusCountDownTimer != null){
+            bonusCountDownTimer.cancel();
+            bonusCountDownTimer = null;
+        }
+        Long timeLeft = getTimelefOfLoginBonus();
+        if(timeLeft == 0L){
+            ((TextView)findViewById(R.id.CountDown)).setText("You cat get\nlogin bonus!");
+            findViewById(R.id.loginBonus).setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    beginBonus(v);
+                }
+            });
+        }else {
+            findViewById(R.id.loginBonus).setOnClickListener(null);
+            // カウントダウンする
+            bonusCountDownTimer = new BonusCDTimer(timeLeft, 500);
+            bonusCountDownTimer.start();
+        }
+    }
+
+    public class BonusCDTimer extends CountDownTimer {
+
+        TextView count_txt = (TextView) findViewById(R.id.CountDown);
+
+        public BonusCDTimer(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);
+        }
+
+        @Override
+        public void onTick(long millisUntilFinished) {
+            count_txt.setText("Next bonus\n" + (millisUntilFinished / 1000 / 3600) + ":" +
+                    String.format("%02d", (millisUntilFinished / 1000 / 60 % 60)) + ":" +
+                    String.format("%02d", (millisUntilFinished / 1000 % 60)));
+        }
+
+        @Override
+        public void onFinish() {
+            count_txt.setText("You cat get\nlogin bonus!");
+            findViewById(R.id.loginBonus).setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    beginBonus(v);
+                }
+            });
+        }
+    }
+
+    public void beginBonus(final View view){
+        switch (view.getId()) {
+            case R.id.bonus: {
+                if (mInterstitialAd.isLoaded()) {
+                    mInterstitialAd.setAdListener(new AdListener() {
+                        @Override
+                        public void onAdClosed() {
+                            Intent intent = new Intent(getApplicationContext(), Bonus.class);
+                            startActivity(intent);
+                        }
+                    });
+                    mInterstitialAd.show();
+                } else {
+                    Intent intent = new Intent(this, Bonus.class);
+                    startActivity(intent);
+                }
+                break;
+            }
+            case R.id.loginBonus: {
+                Intent intent = new Intent(this, LoginBonus.class);
+                startActivity(intent);
+                break;
+            }
+        }
+    }
+
 
     public void onClickHeader(final View view) {
         startActivity(game.getNewIntent(view));

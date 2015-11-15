@@ -721,11 +721,38 @@
         </LinearLayout>
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/loginBonus"
+        android:layout_width="wrap_content"
+        android:layout_height="55dp"
+        android:layout_above="@+id/betting"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/bg_playercash">
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/chip"
+            android:layout_gravity="left|center"/>
+
+        <TextView
+            android:id="@+id/CountDown"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:text="0:00:00"
+            android:textColor="#ffffffff"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_gravity="center"/>
+
+    </LinearLayout>
 
     <Button
+        android:id="@+id/bonus"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:id="@+id/bonus"
+        android:onClick="beginBonus"
         android:layout_below="@+id/header"
         android:background="@drawable/fukidasi_yellow"
         android:visibility="invisible"/>
