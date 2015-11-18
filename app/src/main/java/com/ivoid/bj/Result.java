@@ -29,6 +29,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 /**
  * Created by nakazato on 2015/10/27.
  */
@@ -260,4 +262,10 @@ public class Result extends Activity {
             asyncJsonLoader.dismissDialog();
         }
     }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
 }

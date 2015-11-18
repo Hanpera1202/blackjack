@@ -15,7 +15,6 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.view.KeyEvent;
@@ -32,8 +31,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.InterstitialAd;
+
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 
 /*
@@ -99,23 +98,16 @@ public class Dealer extends Activity implements OnClickListener
     private SharedPreferences preference;
     private SharedPreferences.Editor editor;
 
-    AdRequest adRequest;
-    InterstitialAd mInterstitialAd;
-
     private boolean insurancingFlg;
     private boolean clickable;
     private int waittime;
     private byte global_b;
-
-    BonusCDTimer bonusCountDownTimer = null;
 
     @Override
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
         game = (Game) this.getApplication();
-
-        adRequest = new AdRequest.Builder().build();
 
         //プリファレンスの準備
         preference = getSharedPreferences("user_data", MODE_PRIVATE);
@@ -128,27 +120,14 @@ public class Dealer extends Activity implements OnClickListener
 					   ); 
 		dealerHand = new BJHand("Dealer");
 
-        if (preference.getBoolean("Launched", false)==false) {
-            //Initial start-up
-            editor.putBoolean("Launched", true);
-            editor.commit();
-            player = new Player(getApplicationContext(), "Richard", settings.startCash);
-        }else {
-            player = new Player(getApplicationContext(), "Richard");
-        }
+        player = new Player(getApplicationContext(), "God");
+
         currentPlayerHand = player.getHand((byte) 0);
         betting = true;
         clickable = true;
 
         setContentView(R.layout.playing);
-
         setViews();
-        initUI();
-
-        if(getTimelefOfLoginBonus() == 0L){
-            Intent intent = new Intent(this, LoginBonus.class);
-            startActivity(intent);
-        }
     }
 
     @Override
@@ -157,11 +136,6 @@ public class Dealer extends Activity implements OnClickListener
 
         // アニメーションスタート時間のリセット
         waittime = 0;
-
-        //インタースティシャル広告の読み込み
-        mInterstitialAd = new InterstitialAd(this);
-        mInterstitialAd.setAdUnitId(getString(R.string.inters_ad_unit_id));
-        requestNewInterstitial();
 
         // 予め音声データを読み込む
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
@@ -188,14 +162,23 @@ public class Dealer extends Activity implements OnClickListener
 
         playerCash.setText(String.valueOf((int) player.getBalance()));
         if (betting){
-            if (preference.getFloat("gotBonusPoints", 0f) > 0f) {
-                player.deposit(preference.getFloat("gotBonusPoints", 0f));
-                editor.putFloat("gotBonusPoints", 0f);
-                editor.commit();
-                updatePlayerCashlbl();
-                initUI();
-            }else if(player.getBalance() < player.getInitBet()) {
-                clearBet();
+            if(checkLoginBonus()){
+                Intent intent = new Intent(this, LoginBonus.class);
+                startActivity(intent);
+            } else {
+                if (preference.getFloat("gotBonusPoints", 0f) > 0f) {
+                    player.deposit(preference.getFloat("gotBonusPoints", 0f));
+                    editor.putFloat("gotBonusPoints", 0f);
+                    editor.commit();
+                    updatePlayerCashlbl();
+                }else if(player.getBalance() < player.getInitBet()) {
+                    clearBet();
+                }
+                checkFreeChipsButton();
+                // initUIがコールされていなければコール
+                if(buttons == null){
+                    initUI();
+                }
             }
         }else{
             // dd,split,insuranceボタン表示の再判定
@@ -249,12 +232,6 @@ public class Dealer extends Activity implements OnClickListener
         playerCash=(TextView)findViewById(R.id.playerCash);
     }
 
-    private void requestNewInterstitial() {
-        AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice("YOUR_DEVICE_HASH")
-                .build();
-        mInterstitialAd.loadAd(adRequest);
-    }
 
 	private void initUI()
 	{
@@ -262,8 +239,6 @@ public class Dealer extends Activity implements OnClickListener
 
         if (betting)
 		{
-            loginBonusCountDown();
-
 			buttons.put(R.id.clearButton, Action.CLEAR);
 			buttons.put(R.id.dealButton, Action.DEAL);
 
@@ -275,20 +250,6 @@ public class Dealer extends Activity implements OnClickListener
             buttons.put(R.id.rebet, Action.REBET);
 
 			playerBet=(TextView) findViewById(R.id.playerBet);
-
-            if(player.getBalance() < 10.0f) {
-                Button bonus = (Button) findViewById(R.id.bonus);
-                bonus.setVisibility(Button.VISIBLE);
-                AlphaAnimation buttonanim = new AlphaAnimation(1, 0.0f);
-                buttonanim.setDuration(800);
-                buttonanim.setRepeatCount(Animation.INFINITE);
-                buttonanim.setRepeatMode(Animation.REVERSE);
-                bonus.startAnimation(buttonanim);
-            }else{
-                Button bonus = (Button) findViewById(R.id.bonus);
-                bonus.setAnimation(null);
-                bonus.setVisibility(Button.INVISIBLE);
-            }
 
             collectBet(player.getRebet());
 
@@ -431,7 +392,6 @@ public class Dealer extends Activity implements OnClickListener
 
 	void newGame()
 	{
-        findViewById(R.id.loginBonus).setVisibility(RelativeLayout.VISIBLE);
         findViewById(R.id.betting).setVisibility(LinearLayout.VISIBLE);
         dealerHand.update();
 		player.update();
@@ -440,6 +400,7 @@ public class Dealer extends Activity implements OnClickListener
 		getNextAction=false;
         // update playerBet to 0
         updatePlayerBetlbl();
+        checkFreeChipsButton();
         initUI();
 	}
 		
@@ -828,6 +789,22 @@ public class Dealer extends Activity implements OnClickListener
         }
     }
 
+    void checkFreeChipsButton(){
+        if(player.getBalance() < 10.0f) {
+            Button bonus = (Button) findViewById(R.id.bonus);
+            bonus.setVisibility(Button.VISIBLE);
+            AlphaAnimation buttonanim = new AlphaAnimation(1, 0.0f);
+            buttonanim.setDuration(1000);
+            buttonanim.setRepeatCount(Animation.INFINITE);
+            buttonanim.setRepeatMode(Animation.REVERSE);
+            bonus.startAnimation(buttonanim);
+        }else{
+            Button bonus = (Button) findViewById(R.id.bonus);
+            bonus.setAnimation(null);
+            bonus.setVisibility(Button.INVISIBLE);
+        }
+    }
+
     void dealCard(BJHand hand) {
         dealCard(hand, false, false);
     }
@@ -1136,7 +1113,6 @@ public class Dealer extends Activity implements OnClickListener
                         initUI();
                         firstDeal();
 						findViewById(R.id.betting).setVisibility(RelativeLayout.INVISIBLE);
-                        findViewById(R.id.loginBonus).setVisibility(RelativeLayout.INVISIBLE);
 					}
         			break;
         		}
@@ -1341,90 +1317,41 @@ public class Dealer extends Activity implements OnClickListener
     	}
     }
 
-    public Long getTimelefOfLoginBonus(){
+    public boolean checkLoginBonus(){
         Long bonusGetTimeStamp = preference.getLong("bonusGetTimeStamp", 0);
-        Long needTime = settings.loginBonusSeconds * 1000 - (System.currentTimeMillis() - bonusGetTimeStamp);
-        if(needTime < 0){
-            return 0L;
+        Long needTime = 86400 * 1000 - (System.currentTimeMillis() - bonusGetTimeStamp);
+        if(needTime < 0L){
+            return true;
         }else{
-            return needTime;
+            return false;
         }
     }
 
-    public void loginBonusCountDown(){
-        // 以前にタイマーを起動していればリセット
-        if (bonusCountDownTimer != null){
-            bonusCountDownTimer.cancel();
-            bonusCountDownTimer = null;
-        }
-        Long timeLeft = getTimelefOfLoginBonus();
-        if(timeLeft == 0L){
-            ((TextView)findViewById(R.id.CountDown)).setText("You cat get\nlogin bonus!");
-            findViewById(R.id.loginBonus).setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    beginBonus(v);
+    public void beginFreeChips(final View view){
+        if (game.mInterstitialAd.isLoaded()) {
+            game.mInterstitialAd.setAdListener(new AdListener() {
+                @Override
+                public void onAdFailedToLoad(int errorCode) {
+                    game.requestNewInterstitial();
                 }
-            });
-        }else {
-            findViewById(R.id.loginBonus).setOnClickListener(null);
-            // カウントダウンする
-            bonusCountDownTimer = new BonusCDTimer(timeLeft, 500);
-            bonusCountDownTimer.start();
-        }
-    }
-
-    public class BonusCDTimer extends CountDownTimer {
-
-        TextView count_txt = (TextView) findViewById(R.id.CountDown);
-
-        public BonusCDTimer(long millisInFuture, long countDownInterval) {
-            super(millisInFuture, countDownInterval);
-        }
-
-        @Override
-        public void onTick(long millisUntilFinished) {
-            count_txt.setText("Next bonus\n" + (millisUntilFinished / 1000 / 3600) + ":" +
-                    String.format("%02d", (millisUntilFinished / 1000 / 60 % 60)) + ":" +
-                    String.format("%02d", (millisUntilFinished / 1000 % 60)));
-        }
-
-        @Override
-        public void onFinish() {
-            count_txt.setText("You cat get\nlogin bonus!");
-            findViewById(R.id.loginBonus).setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    beginBonus(v);
-                }
-            });
-        }
-    }
-
-    public void beginBonus(final View view){
-        switch (view.getId()) {
-            case R.id.bonus: {
-                if (mInterstitialAd.isLoaded()) {
-                    mInterstitialAd.setAdListener(new AdListener() {
-                        @Override
-                        public void onAdClosed() {
-                            Intent intent = new Intent(getApplicationContext(), Bonus.class);
-                            startActivity(intent);
-                        }
-                    });
-                    mInterstitialAd.show();
-                } else {
-                    Intent intent = new Intent(this, Bonus.class);
+                @Override
+                public void onAdClosed() {
+                    game.requestNewInterstitial();
+                    Intent intent = new Intent(getApplicationContext(), Bonus.class);
                     startActivity(intent);
+                    overridePendingTransition(R.anim.in_up, 0);
                 }
-                break;
-            }
-            case R.id.loginBonus: {
-                Intent intent = new Intent(this, LoginBonus.class);
-                startActivity(intent);
-                break;
-            }
+            });
+            game.mInterstitialAd.show();
+        } else {
+            Intent intent = new Intent(this, Bonus.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.in_up, 0);
         }
+        Button bonus = (Button) findViewById(R.id.bonus);
+        bonus.setAnimation(null);
+        bonus.setVisibility(Button.INVISIBLE);
     }
-
 
     public void onClickHeader(final View view) {
         startActivity(game.getNewIntent(view));
@@ -1438,6 +1365,11 @@ public class Dealer extends Activity implements OnClickListener
             return true;
         }
         return false;
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
 }

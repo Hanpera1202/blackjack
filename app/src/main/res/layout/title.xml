@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background = "@drawable/bg">
+    android:layout_height="fill_parent">
+
+    <ImageView
+        android:id="@+id/bgImage"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:scaleType="centerCrop" />
 
     <Button
         android:id="@+id/game"
@@ -37,7 +43,9 @@
             android:layout_height="40dp"
             android:text="result"
             android:onClick="onClickHeader"
-            android:visibility="invisible"/>
+            android:visibility="invisible"
+            fontPath="fonts/Roboto-Bold.ttf"
+            tools:ignore="MissingPrefix"/>
 
     </LinearLayout>
 

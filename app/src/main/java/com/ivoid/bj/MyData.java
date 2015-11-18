@@ -1,17 +1,23 @@
 package com.ivoid.bj;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bj.R;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 public class MyData extends Activity {
+
+    Game game;
 
 	private SharedPreferences preference;
     private Player player;
@@ -43,6 +49,11 @@ public class MyData extends Activity {
         ((TextView)findViewById(R.id.doublewins)).setText(String.valueOf((int)doublewins + "(" + (int)(doublewins/plays*100) + "%)"));
 
 	}
+
+    @Override
+    public void onResume(){
+        super.onResume();
+    }
 
 	public void onClickHeader(View view) {
         switch (view.getId()) {
@@ -78,12 +89,22 @@ public class MyData extends Activity {
 	}
 
     @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event){
         if (keyCode == KeyEvent.KEYCODE_BACK){
             moveTaskToBack(true);
             return true;
         }
         return false;
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
 }

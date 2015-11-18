@@ -5,26 +5,23 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
-import android.media.Image;
 import android.media.SoundPool;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bj.R;
-import com.google.android.gms.ads.InterstitialAd;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class Bonus extends Activity implements OnClickListener
 {
@@ -54,8 +51,6 @@ public class Bonus extends Activity implements OnClickListener
 		preference = getSharedPreferences("user_data", MODE_PRIVATE);
 		editor = preference.edit();
 		shoe = new BonusDeck();
-
-		(findViewById(R.id.close_button)).setOnClickListener(this);
 
 		flipCards = new HashMap<Integer, Button>();
 		flipCards.put((R.id.card1), (Button)findViewById(R.id.card1));
@@ -113,56 +108,49 @@ public class Bonus extends Activity implements OnClickListener
 
     @Override
 	public void onClick(View v) {
+        if(flipCnt < 3) {
+            flipCnt++;
+            flip((Button) findViewById(v.getId()));
+        }
+        if(flipCnt == 3) {
+            for (final Integer entry : flipCards.keySet()) {
+                ((Button) findViewById(entry)).setOnClickListener(null);
+            }
+            RelativeLayout getBonus = (RelativeLayout) findViewById(R.id.getbonus);
+            getBonus.setVisibility(TextView.VISIBLE);
+            ScaleAnimation buttonanim =
+                    new ScaleAnimation(
+                    0.0f,1.0f,0.0f,1.0f,
+                    getBonus.getWidth()/2,
+                    getBonus.getHeight()/2);
+            buttonanim.setStartOffset(100);
+            buttonanim.setDuration(500);
+            getBonus.startAnimation(buttonanim);
 
-		switch(v.getId()){
-			case R.id.close_button:
-				finish();
-				break;
-			default:
-				if(flipCnt < 4) {
-					flipCnt++;
-					flip((Button) findViewById(v.getId()));
-				}
-				if(flipCnt == 4) {
-					for (final Integer entry : flipCards.keySet()) {
-						((Button) findViewById(entry)).setOnClickListener(null);
-					}
-					RelativeLayout getBonus = (RelativeLayout) findViewById(R.id.getbonus);
-					getBonus.setVisibility(TextView.VISIBLE);
-					ScaleAnimation buttonanim =
-							new ScaleAnimation(
-							0.0f,1.0f,0.0f,1.0f,
-							getBonus.getWidth()/2,
-							getBonus.getHeight()/2);
-					buttonanim.setStartOffset(100);
-					buttonanim.setDuration(500);
-					getBonus.startAnimation(buttonanim);
+            // 再生
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    AudioManager audio = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+                    int musicVol = audio.getStreamVolume(AudioManager.STREAM_MUSIC);
+                    mSoundPool.play(mCash, (float) musicVol, (float) musicVol, 0, 0, 1.0F);
+                }
+            }, 200);
 
-                    // 再生
-                    handler.postDelayed(new Runnable() {
-                        public void run() {
-                            AudioManager audio = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-                            int musicVol = audio.getStreamVolume(AudioManager.STREAM_MUSIC);
-                            mSoundPool.play(mCash, (float) musicVol, (float) musicVol, 0, 0, 1.0F);
-                        }
-                    }, 200);
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    finish();
+                    overridePendingTransition(0, R.anim.out_down);
+                }
+            }, 1600);
+        }
 
-					handler.postDelayed(new Runnable() {
-						public void run() {
-							//findViewById(R.id.close_button).setVisibility(Button.VISIBLE);
-							finish();
-							overridePendingTransition(0, 0);
-						}
-					}, 1600);
-				}
-		}
 	}
 
 	public void flip(Button button){
-		if(flipCnt == 4 && gotPoints < 10) {
+		if(flipCnt == 3 && gotPoints < 10) {
 			do{
 				card = shoe.drawCard();
-			}while(card.getValue() < 10);
+			}while(gotPoints * card.getValue() < 10);
 		}else{
 			card = shoe.drawCard();
 		}
@@ -174,7 +162,7 @@ public class Bonus extends Activity implements OnClickListener
 		}else{
 			gotPoints *= card.getValue();
 		}
-		getpoints.setText(gotPoints + "pt GET!!");
+		getpoints.setText(gotPoints + "pt\nGET!!");
 		editor.putFloat("gotBonusPoints", gotPoints);
 		editor.commit();
 		button.setOnClickListener(null);
@@ -183,4 +171,10 @@ public class Bonus extends Activity implements OnClickListener
         int musicVol = audio.getStreamVolume(AudioManager.STREAM_MUSIC);
         mSoundPool.play(mCardfall, (float) musicVol, (float) musicVol, 0, 0, 1.0F);
 	}
+
+	@Override
+	protected void attachBaseContext(Context newBase) {
+		super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+	}
+
 }

@@ -32,6 +32,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 /**
  * Created by nakazato on 2015/10/27.
  */
@@ -45,11 +47,11 @@ public class Competition extends FragmentActivity {
     private List<String> ids = new ArrayList<String>();
     private List<String> names = new ArrayList<String>();
     private List<String> imageUrls = new ArrayList<String>();
-    private List<String> winNums = new ArrayList<String>();
+    private List<Integer> winNums = new ArrayList<Integer>();
     private List<String> endDates = new ArrayList<String>();
-    private List<String> applyNums = new ArrayList<String>();
-    private List<String> points = new ArrayList<String>();
-    private List<String> myApplyNums = new ArrayList<String>();
+    private List<Integer> totalApplyNums = new ArrayList<Integer>();
+    private List<Integer> points = new ArrayList<Integer>();
+    private List<Integer> applyNums = new ArrayList<Integer>();
     private BaseAdapter adapter;
 
     private DialogFragment alertDialog;
@@ -84,11 +86,11 @@ public class Competition extends FragmentActivity {
                         ids.add(competition.getString("id"));
                         names.add(competition.getString("name"));
                         imageUrls.add(competition.getString("image_url"));
-                        winNums.add(competition.getString("win_num"));
+                        winNums.add(competition.getInt("win_num"));
                         endDates.add(competition.getString("end_date"));
-                        applyNums.add(competition.getString("apply_num"));
-                        myApplyNums.add(competition.getString("my_apply_num"));
-                        points.add(competition.getString("point"));
+                        totalApplyNums.add(competition.getInt("apply_num"));
+                        applyNums.add(competition.getInt("my_apply_num"));
+                        points.add(competition.getInt("point"));
                     }
                     setAdapter();
 
@@ -118,12 +120,10 @@ public class Competition extends FragmentActivity {
 
         // BaseAdapter を継承したadapterのインスタンスを生成
         // 子要素のレイアウトファイル competition_list_items.xml を activity_main.xml に inflate するためにadapterに引数として渡す
-        adapter = new ListViewAdapter(getApplicationContext(),R.layout.competition_list_items);
+        adapter = new ListViewAdapter(this,R.layout.competition_list_items);
 
         // ListViewにadapterをセット
         listView.setAdapter(adapter);
-
-        //listView.setOnItemClickListener(this);
     }
 
     class ViewHolder {
@@ -131,8 +131,8 @@ public class Competition extends FragmentActivity {
         ImageView image;
         TextView winNum;
         TextView endDate;
+        TextView totalApplyNum;
         TextView applyNum;
-        TextView myApplyNum;
         TextView point;
         Button apply;
     }
@@ -161,8 +161,8 @@ public class Competition extends FragmentActivity {
                 holder.image = (ImageView) convertView.findViewById(R.id.image);
                 holder.winNum = (TextView) convertView.findViewById(R.id.winNum);
                 holder.endDate = (TextView) convertView.findViewById(R.id.endDate);
+                holder.totalApplyNum = (TextView) convertView.findViewById(R.id.totalApplyNum);
                 holder.applyNum = (TextView) convertView.findViewById(R.id.applyNum);
-                holder.myApplyNum = (TextView) convertView.findViewById(R.id.myApplyNum);
                 holder.point = (TextView) convertView.findViewById(R.id.point);
                 holder.apply = (Button)convertView.findViewById(R.id.apply);
                 holder.apply.setOnClickListener(this);
@@ -177,21 +177,25 @@ public class Competition extends FragmentActivity {
             holder.image.setTag(imageUrls.get(position));
             AsyncImageLoader asyncImageLoader = new AsyncImageLoader(holder.image);
             asyncImageLoader.execute(imageUrls.get(position));
-            holder.winNum.setText("Total " + winNums.get(position) + " winners");
+            if(winNums.get(position) > 1) {
+                holder.winNum.setText("Total " + winNums.get(position) + " winners");
+            }else{
+                holder.winNum.setText("Total 1 winner");
+            }
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
             try {
                 Date date = sdf.parse(endDates.get(position));
-                SimpleDateFormat convertFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                SimpleDateFormat convertFormat = new SimpleDateFormat("HH:mm MM/dd/yyyy");
                 convertFormat.setTimeZone(TimeZone.getDefault());
-                holder.endDate.setText("Closing Time:" + convertFormat.format(date));
+                holder.endDate.setText("Event Priod : Until " + convertFormat.format(date));
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            holder.applyNum.setText("Apply Num:" + applyNums.get(position));
-            holder.myApplyNum.setText("My Apply Num:" + myApplyNums.get(position));
-            holder.point.setText("Use Point:" + points.get(position));
+            holder.totalApplyNum.setText("Currently, Total "+ totalApplyNums.get(position) + " Applications");
+            holder.applyNum.setText("Your Application Number : " + applyNums.get(position));
+            holder.point.setText("Use Point : " + String.valueOf(points.get(position)));
             holder.apply.setTag(ids.get(position));
 
             return convertView;
@@ -223,7 +227,7 @@ public class Competition extends FragmentActivity {
     }
 
     void applyCompetition(String applicaiton_id){
-        Integer point = Integer.parseInt(points.get(ids.indexOf(applicaiton_id)));
+        Integer point = points.get(ids.indexOf(applicaiton_id));
         AsyncJsonLoader asyncJsonLoader = new AsyncJsonLoader(this,new AsyncJsonLoader.AsyncCallback() {
             // 実行後
             public boolean postExecute(JSONObject result) {
@@ -243,7 +247,7 @@ public class Competition extends FragmentActivity {
         },"Applying");
         // 処理を実行
         if(player.getBalance() >= point) {
-            createAlertDialog("Applicants completed");
+            createAlertDialog("Applicantion completed");
             asyncJsonLoader.execute(String.format(applyUrl, game.getUesrId(), applicaiton_id));
         }else{
             createAlertDialog("Your point is not enough");
@@ -332,4 +336,10 @@ public class Competition extends FragmentActivity {
             dismissAalertDialog();
         }
     }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
 }

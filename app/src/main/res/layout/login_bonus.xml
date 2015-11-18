@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:padding="10dp"
-    android:background="#c89f0013">
+    android:background="#EDB94A">
 
     <LinearLayout
         android:orientation="vertical"
@@ -14,125 +15,153 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="You got the login bonus."
-            android:textStyle="bold"
-            android:textSize="20sp"
-            android:textColor="#ffd700"/>
+            android:text="GET LOGIN BONUS"
+            android:textSize="25sp"
+            android:textColor="#A04632"
+            fontPath="fonts/Roboto-Bold.ttf"
+            tools:ignore="MissingPrefix"/>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:orientation="horizontal"
-            android:layout_marginTop="15dp">
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/bonusMessageFirst"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="25sp"
+                android:textColor="#ED684A"
+                fontPath="fonts/Roboto-Bold.ttf"
+                tools:ignore="MissingPrefix"/>
+            <TextView
+                android:id="@+id/bonusMessageLast"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textColor="#5E5E5E"
+                fontPath="fonts/Roboto-Bold.ttf"
+                tools:ignore="MissingPrefix"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:text="Login Bonus"
-                android:textStyle="bold"
                 android:textSize="17sp"
-                android:textColor="#ffd700"
-                android:gravity="left" />
+                android:textColor="#5E5E5E"
+                android:gravity="left"
+                fontPath="fonts/Roboto-Bold.ttf"
+                tools:ignore="MissingPrefix"/>
 
             <TextView
                 android:id="@+id/loginBonus"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="17sp"
                 android:text="0"
-                android:textColor="@android:color/white"
-                android:gravity="right" />
+                android:textColor="#ffffffff"
+                android:textSize="17sp"
+                android:gravity="center"
+                android:background="@drawable/bg_playercash"
+                fontPath="fonts/Roboto-Bold.ttf"
+                tools:ignore="MissingPrefix"/>
+
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:orientation="horizontal"
-            android:layout_marginTop="15dp">
+            android:gravity="center_vertical">
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:text="Play Games Bonus\n(play games 1/10)"
-                android:textStyle="bold"
                 android:textSize="17sp"
-                android:textColor="#ffd700"
-                android:gravity="left" />
+                android:textColor="#5E5E5E"
+                android:gravity="left"
+                android:layout_gravity="center_vertical"
+                fontPath="fonts/Roboto-Bold.ttf"
+                tools:ignore="MissingPrefix"/>
 
             <TextView
                 android:id="@+id/playGamesBonus"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="17sp"
                 android:text="0"
-                android:textColor="@android:color/white"
-                android:gravity="right|center_vertical" />
+                android:textColor="#ffffffff"
+                android:textSize="17sp"
+                android:gravity="center"
+                android:background="@drawable/bg_playercash"
+                fontPath="fonts/Roboto-Bold.ttf"
+                tools:ignore="MissingPrefix"/>
 
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="4px"
-            android:layout_marginTop="15dp"
-            android:background="#ffd700" />
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:background="#ED684A" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:orientation="horizontal"
-            android:layout_marginTop="15dp">
+            android:gravity="center_vertical">
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:text="Bonus Total"
-                android:textStyle="bold"
                 android:textSize="17sp"
-                android:textColor="#ffd700"
-                android:gravity="left" />
+                android:textColor="#5E5E5E"
+                android:gravity="left|center_vertical"
+                fontPath="fonts/Roboto-Bold.ttf"
+                tools:ignore="MissingPrefix"/>
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/total"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true"
-                android:background="@drawable/bg_playercash">
-
-                <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:src="@drawable/chip"/>
-
-                <TextView
-                    android:id="@+id/total"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="0"
-                    android:textColor="#ffffffff"
-                    android:textSize="17sp"
-                    android:textStyle="bold"
-                    android:gravity="center"
-                    android:layout_gravity="center"/>
-
-            </LinearLayout>
+                android:text="0"
+                android:textColor="#ffffffff"
+                android:textSize="17sp"
+                android:gravity="center"
+                android:background="@drawable/bg_playercash"
+                fontPath="fonts/Roboto-Bold.ttf"
+                tools:ignore="MissingPrefix"/>
 
 
         </LinearLayout>
 
         <Button
             android:id="@+id/collect"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
             android:layout_marginTop="15dp"
             android:text="COLLECT"
-            android:textStyle="bold"
-            android:textColor="@android:color/white"/>
+            android:textSize="17sp"
+            android:textColor="@android:color/white"
+            android:background="#ED684A"
+            fontPath="fonts/Roboto-Bold.ttf"
+            tools:ignore="MissingPrefix"/>
 
     </LinearLayout>
 

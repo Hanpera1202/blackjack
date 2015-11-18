@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background = "@drawable/bg">
+    android:background="@drawable/bg_play">
 
     <RelativeLayout
         android:id="@+id/header"
@@ -30,9 +30,10 @@
                 android:text="0"
                 android:textColor="#ffffffff"
                 android:textSize="18sp"
-                android:textStyle="bold"
                 android:gravity="center"
-                android:layout_gravity="center"/>
+                android:layout_gravity="center"
+                fontPath="fonts/Roboto-Bold.ttf"
+                tools:ignore="MissingPrefix"/>
 
         </LinearLayout>
 
@@ -48,35 +49,34 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:onClick="onClickHeader"
-                android:background="@drawable/mydata" />
+                android:background="@drawable/h_game" />
 
             <Button
                 android:id="@+id/competition"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:onClick="onClickHeader"
-                android:background="@drawable/mydata" />
+                android:background="@drawable/h_prize" />
 
             <Button
                 android:id="@+id/result"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:onClick="onClickHeader"
-                android:background="@drawable/mydata" />
+                android:background="@drawable/h_result" />
 
             <Button
                 android:id="@+id/checkMyData"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:onClick="onClickHeader"
-                android:background="@drawable/mydata" />
+                android:background="@drawable/h_data" />
 
             <Button
                 android:id="@+id/setting"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:onClick="onClickHeader"
-                android:background="@drawable/mydata" />
+                android:background="@drawable/h_setting_on" />
 
         </LinearLayout>
 
@@ -96,7 +96,9 @@
             android:text="Push Notification"
             android:textSize="22sp"
             android:gravity="center"
-            android:layout_alignParentLeft="true" />
+            android:layout_alignParentLeft="true"
+            fontPath="fonts/Roboto-Bold.ttf"
+            tools:ignore="MissingPrefix"/>
 
         <RelativeLayout
             android:layout_width="0dp"
@@ -129,7 +131,9 @@
             android:text="Sound"
             android:textSize="22sp"
             android:gravity="center"
-            android:layout_alignParentLeft="true" />
+            android:layout_alignParentLeft="true"
+            fontPath="fonts/Roboto-Bold.ttf"
+            tools:ignore="MissingPrefix"/>
 
         <RelativeLayout
             android:layout_width="0dp"

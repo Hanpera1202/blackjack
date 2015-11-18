@@ -1,11 +1,13 @@
 package com.ivoid.bj;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -13,6 +15,8 @@ import com.bj.R;
 import com.parse.ParseException;
 import com.parse.ParsePush;
 import com.parse.SaveCallback;
+
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
  * Created by nakazato on 2015/10/27.
@@ -63,6 +67,11 @@ public class Setting extends Activity implements CompoundButton.OnCheckedChangeL
     }
 
     @Override
+    public void onResume(){
+        super.onResume();
+    }
+
+    @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (buttonView.getId() == R.id.tglPush) {
             boolean on = buttonView.isChecked();
@@ -102,11 +111,21 @@ public class Setting extends Activity implements CompoundButton.OnCheckedChangeL
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event){
         if (keyCode == KeyEvent.KEYCODE_BACK){
             moveTaskToBack(true);
             return true;
         }
         return false;
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 }

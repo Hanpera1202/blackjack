@@ -32,10 +32,10 @@ class BonusDeck
 	{
 		for ( byte value = 1 ; value < 11 ; value++ ) {
 			for (byte suit = 0; suit < 4; ) {
-				if (value <= 3) {
+				if (value <= 4) {
 					deck.add(new Card(value, suit, true));
 					suit += 1;
-				} else if(value <= 6) {
+				} else if(value <= 8) {
 					deck.add(new Card(value, suit, true));
 					suit += 2;
 				} else {
