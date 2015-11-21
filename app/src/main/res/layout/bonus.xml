@@ -1,214 +1,150 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="#dc212121">
+    android:layout_width="270dp"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    android:background="#EDB94A"
+    android:layout_gravity="center">
 
     <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
         android:orientation="vertical"
-        android:gravity="center">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="top|center">
 
         <TextView
-            android:layout_width="match_parent"
+            android:id="@+id/bonusMessage"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="PLEASE TAP THE THREE CARDS"
-            android:textSize="20sp"
-            android:textColor="#DF4F14"
-            android:gravity="center"
+            android:text="YOU GOT BONUS"
+            android:textSize="22sp"
+            android:textColor="#A04632"
             fontPath="fonts/Roboto-Bold.ttf"
             tools:ignore="MissingPrefix"/>
 
-
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp">
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:gravity="center">
 
-            <Button
-                android:id="@+id/card1"
-                android:layout_width="50dp"
-                android:layout_height="80dp"
-                android:background="@drawable/back"/>
-
-            <Button
-                android:id="@+id/card2"
-                android:layout_width="50dp"
-                android:layout_height="80dp"
-                android:background="@drawable/back"/>
-
-            <Button
-                android:id="@+id/card3"
-                android:layout_width="50dp"
-                android:layout_height="80dp"
-                android:background="@drawable/back"/>
-
-            <Button
-                android:id="@+id/card4"
-                android:layout_width="50dp"
-                android:layout_height="80dp"
-                android:background="@drawable/back"/>
-
-            <Button
-                android:id="@+id/card5"
-                android:layout_width="50dp"
-                android:layout_height="80dp"
-                android:background="@drawable/back"/>
-
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textColor="#ED684A"
+                android:text="Thank you for playing."
+                fontPath="fonts/Roboto-Bold.ttf"
+                tools:ignore="MissingPrefix"/>
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:id="@+id/specialBonusArea"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:visibility="gone">
 
-            <Button
-                android:id="@+id/card6"
-                android:layout_width="50dp"
-                android:layout_height="80dp"
-                android:background="@drawable/back"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="Special Bonus"
+                android:textSize="20sp"
+                android:textColor="#5E5E5E"
+                android:gravity="left"
+                fontPath="fonts/Roboto-Bold.ttf"
+                tools:ignore="MissingPrefix"/>
 
-            <Button
-                android:id="@+id/card7"
-                android:layout_width="50dp"
-                android:layout_height="80dp"
-                android:background="@drawable/back"/>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:background="@drawable/bg_playercash">
 
-            <Button
-                android:id="@+id/card8"
-                android:layout_width="50dp"
-                android:layout_height="80dp"
-                android:background="@drawable/back"/>
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/chip"/>
 
-            <Button
-                android:id="@+id/card9"
-                android:layout_width="50dp"
-                android:layout_height="80dp"
-                android:background="@drawable/back"/>
+                <TextView
+                    android:id="@+id/specialBonus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textColor="#ffffffff"
+                    android:textSize="18sp"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    fontPath="fonts/Roboto-Bold.ttf"
+                    tools:ignore="MissingPrefix"/>
 
-            <Button
-                android:id="@+id/card10"
-                android:layout_width="50dp"
-                android:layout_height="80dp"
-                android:background="@drawable/back"/>
-
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <Button
-                android:id="@+id/card11"
-                android:layout_width="50dp"
-                android:layout_height="80dp"
-                android:background="@drawable/back"/>
-
-            <Button
-                android:id="@+id/card12"
-                android:layout_width="50dp"
-                android:layout_height="80dp"
-                android:background="@drawable/back"/>
-
-            <Button
-                android:id="@+id/card13"
-                android:layout_width="50dp"
-                android:layout_height="80dp"
-                android:background="@drawable/back"/>
-
-            <Button
-                android:id="@+id/card14"
-                android:layout_width="50dp"
-                android:layout_height="80dp"
-                android:background="@drawable/back"/>
-
-            <Button
-                android:id="@+id/card15"
-                android:layout_width="50dp"
-                android:layout_height="80dp"
-                android:background="@drawable/back"/>
-
+            </LinearLayout>
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
-            <Button
-                android:id="@+id/card16"
-                android:layout_width="50dp"
-                android:layout_height="80dp"
-                android:background="@drawable/back"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="Hint Coin"
+                android:textSize="20sp"
+                android:textColor="#5E5E5E"
+                android:gravity="left"
+                android:layout_gravity="center_vertical"
+                fontPath="fonts/Roboto-Bold.ttf"
+                tools:ignore="MissingPrefix"/>
 
-            <Button
-                android:id="@+id/card17"
-                android:layout_width="50dp"
-                android:layout_height="80dp"
-                android:background="@drawable/back"/>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:background="@drawable/bg_playercash">
 
-            <Button
-                android:id="@+id/card18"
-                android:layout_width="50dp"
-                android:layout_height="80dp"
-                android:background="@drawable/back"/>
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/coin"/>
 
-            <Button
-                android:id="@+id/card19"
-                android:layout_width="50dp"
-                android:layout_height="80dp"
-                android:background="@drawable/back"/>
+                <TextView
+                    android:id="@+id/loginBonus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textColor="#ffffffff"
+                    android:textSize="18sp"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    fontPath="fonts/Roboto-Bold.ttf"
+                    tools:ignore="MissingPrefix"/>
 
-            <Button
-                android:id="@+id/card20"
-                android:layout_width="50dp"
-                android:layout_height="80dp"
-                android:background="@drawable/back"/>
-
+            </LinearLayout>
 
         </LinearLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_margin="10dp"
-            android:textSize="20sp"
-            android:textColor="#DEDEDE"
-            android:text="The number obtained by multiplying the numerical value of the obtained card is the bonus point."/>
+        <Button
+            android:id="@+id/collect"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="15dp"
+            android:text="COLLECT"
+            android:textSize="17sp"
+            android:textColor="@android:color/white"
+            android:background="#ED684A"
+            fontPath="fonts/Roboto-Bold.ttf"
+            tools:ignore="MissingPrefix"/>
 
     </LinearLayout>
-
-    <RelativeLayout
-        android:id="@+id/getbonus"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:visibility="invisible" >
-
-        <ImageView
-            android:id="@+id/getbonusimage"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/getbonus" />
-
-        <TextView
-            android:id="@+id/getbonuspoints"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0pt GET!!"
-            android:textColor="#212121"
-            android:textSize="35sp"
-            android:gravity="center"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            fontPath="fonts/Roboto-Bold.ttf"
-            tools:ignore="MissingPrefix"/>
-
-    </RelativeLayout>
 
 </RelativeLayout>

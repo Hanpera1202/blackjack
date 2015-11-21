@@ -302,7 +302,7 @@ public class Competition extends FragmentActivity {
     }
 
     // アラートダイアログ非表示
-    private void dismissAalertDialog() {
+    private void dismissAlertDialog() {
         if (alertDialog !=  null) {
             Fragment prev = getSupportFragmentManager().findFragmentByTag("alertDialog");
             if (prev != null) {
@@ -333,7 +333,7 @@ public class Competition extends FragmentActivity {
         if (asyncJsonLoader != null) {
             // ダイアログを閉じる（2重表示防止）
             asyncJsonLoader.dismissDialog();
-            dismissAalertDialog();
+            dismissAlertDialog();
         }
     }
 

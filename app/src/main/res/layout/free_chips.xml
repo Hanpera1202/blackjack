@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#dc212121">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="PLEASE TAP THE THREE CARDS"
+            android:textSize="20sp"
+            android:textColor="#DF4F14"
+            android:gravity="center"
+            fontPath="fonts/Roboto-Bold.ttf"
+            tools:ignore="MissingPrefix"/>
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp">
+
+            <Button
+                android:id="@+id/card1"
+                android:layout_width="50dp"
+                android:layout_height="80dp"
+                android:background="@drawable/back"/>
+
+            <Button
+                android:id="@+id/card2"
+                android:layout_width="50dp"
+                android:layout_height="80dp"
+                android:background="@drawable/back"/>
+
+            <Button
+                android:id="@+id/card3"
+                android:layout_width="50dp"
+                android:layout_height="80dp"
+                android:background="@drawable/back"/>
+
+            <Button
+                android:id="@+id/card4"
+                android:layout_width="50dp"
+                android:layout_height="80dp"
+                android:background="@drawable/back"/>
+
+            <Button
+                android:id="@+id/card5"
+                android:layout_width="50dp"
+                android:layout_height="80dp"
+                android:background="@drawable/back"/>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/card6"
+                android:layout_width="50dp"
+                android:layout_height="80dp"
+                android:background="@drawable/back"/>
+
+            <Button
+                android:id="@+id/card7"
+                android:layout_width="50dp"
+                android:layout_height="80dp"
+                android:background="@drawable/back"/>
+
+            <Button
+                android:id="@+id/card8"
+                android:layout_width="50dp"
+                android:layout_height="80dp"
+                android:background="@drawable/back"/>
+
+            <Button
+                android:id="@+id/card9"
+                android:layout_width="50dp"
+                android:layout_height="80dp"
+                android:background="@drawable/back"/>
+
+            <Button
+                android:id="@+id/card10"
+                android:layout_width="50dp"
+                android:layout_height="80dp"
+                android:background="@drawable/back"/>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/card11"
+                android:layout_width="50dp"
+                android:layout_height="80dp"
+                android:background="@drawable/back"/>
+
+            <Button
+                android:id="@+id/card12"
+                android:layout_width="50dp"
+                android:layout_height="80dp"
+                android:background="@drawable/back"/>
+
+            <Button
+                android:id="@+id/card13"
+                android:layout_width="50dp"
+                android:layout_height="80dp"
+                android:background="@drawable/back"/>
+
+            <Button
+                android:id="@+id/card14"
+                android:layout_width="50dp"
+                android:layout_height="80dp"
+                android:background="@drawable/back"/>
+
+            <Button
+                android:id="@+id/card15"
+                android:layout_width="50dp"
+                android:layout_height="80dp"
+                android:background="@drawable/back"/>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/card16"
+                android:layout_width="50dp"
+                android:layout_height="80dp"
+                android:background="@drawable/back"/>
+
+            <Button
+                android:id="@+id/card17"
+                android:layout_width="50dp"
+                android:layout_height="80dp"
+                android:background="@drawable/back"/>
+
+            <Button
+                android:id="@+id/card18"
+                android:layout_width="50dp"
+                android:layout_height="80dp"
+                android:background="@drawable/back"/>
+
+            <Button
+                android:id="@+id/card19"
+                android:layout_width="50dp"
+                android:layout_height="80dp"
+                android:background="@drawable/back"/>
+
+            <Button
+                android:id="@+id/card20"
+                android:layout_width="50dp"
+                android:layout_height="80dp"
+                android:background="@drawable/back"/>
+
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="10dp"
+            android:textSize="20sp"
+            android:textColor="#DEDEDE"
+            android:text="The number obtained by multiplying the numerical value of the obtained card is the bonus point."/>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/getbonus"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:visibility="invisible" >
+
+        <ImageView
+            android:id="@+id/getbonusimage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/getbonus" />
+
+        <TextView
+            android:id="@+id/getbonuspoints"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0pt GET!!"
+            android:textColor="#212121"
+            android:textSize="35sp"
+            android:gravity="center"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            fontPath="fonts/Roboto-Bold.ttf"
+            tools:ignore="MissingPrefix"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>

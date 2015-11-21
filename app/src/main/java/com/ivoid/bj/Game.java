@@ -4,25 +4,16 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.SeekBar;
 
 import com.bj.R;
-import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.parse.Parse;
 import com.parse.ParseInstallation;
 import com.parse.ParsePush;
-import com.squareup.leakcanary.LeakCanary;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
@@ -33,6 +24,7 @@ public class Game extends Application
     private SharedPreferences.Editor editor;
 
     InterstitialAd mInterstitialAd;
+    InterstitialAd mMovieAd;
 
     private long lastTimeAdShown=0L;
     private long lastTimeAdFail=0L;
@@ -40,7 +32,6 @@ public class Game extends Application
     @Override
     public void onCreate() {
         super.onCreate();
-        LeakCanary.install(this);
 
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                         .setDefaultFontPath("fonts/Roboto-Regular.ttf")
@@ -62,6 +53,10 @@ public class Game extends Application
         mInterstitialAd = new InterstitialAd(this);
         mInterstitialAd.setAdUnitId(getString(R.string.inters_ad_unit_id));
         requestNewInterstitial();
+        //動画広告の読み込み
+        mMovieAd = new InterstitialAd(this);
+        mMovieAd.setAdUnitId(getString(R.string.inters_ad_unit_id));
+        requestNewMovie();
 
     }
 
@@ -70,6 +65,13 @@ public class Game extends Application
                 .addTestDevice("YOUR_DEVICE_HASH")
                 .build();
         mInterstitialAd.loadAd(adRequest);
+    }
+
+    public void requestNewMovie() {
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice("YOUR_DEVICE_HASH")
+                .build();
+        mMovieAd.loadAd(adRequest);
     }
 
     public void setUesrId(String userId){

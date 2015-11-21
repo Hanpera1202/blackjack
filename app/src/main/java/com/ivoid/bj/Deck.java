@@ -25,9 +25,23 @@ class Deck
 		for ( byte counter = 0; counter < b ; counter++ )
 			deck.remove(0);
 	}
+
+	Card checkNextCard()
+	{
+        if(cardsLeft() == 0){
+            fillDeck();
+            shuffleDeck();
+        }
+		Card card = deck.get(0); // Draw a Card from the top of the deck.
+		return card; // Return the Card.
+	}
 	
 	Card drawCard()
 	{
+        if(cardsLeft() == 0){
+            fillDeck();
+            shuffleDeck();
+        }
 		Card card = deck.get(0); // Draw a Card from the top of the deck.
 		deck.remove(0); // Remove the Card from the Deck.
 		return card; // Return the Card.

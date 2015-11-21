@@ -9,14 +9,14 @@
     <RelativeLayout
         android:id="@+id/header"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="50dp"
+        android:background="@drawable/h_wood">
 
         <LinearLayout
             android:id="@+id/playerCashView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
             android:background="@drawable/bg_playercash">
 
             <ImageView
@@ -43,7 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
-            android:background="@drawable/bg_playercash">
+            android:layout_margin="5dp">
 
             <Button
                 android:id="@+id/game"
@@ -87,6 +87,47 @@
 
     </RelativeLayout>
 
+    <LinearLayout
+        android:id="@+id/playerGoal"
+        android:layout_width="wrap_content"
+        android:layout_height="25dp"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/header"
+        android:layout_alignParentLeft="true">
+
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="match_parent"
+            android:scaleType="centerInside"
+            android:src="@drawable/competition"/>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="200dp"
+            android:layout_height="15dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:id="@+id/playerProgress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="300"
+            android:textSize="12sp"
+            android:textColor="#ffffff"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="/10000pt"
+            android:textSize="12sp"
+            android:textColor="#ffffff"
+            android:layout_gravity="center"/>
+    </LinearLayout>
 
     <!--
     <com.google.android.gms.ads.AdView
@@ -107,9 +148,9 @@
         android:id="@+id/delaerInfoArea"
         android:layout_width="162dp"
         android:layout_height="125dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="5dp"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/header"/>
+        android:layout_below="@+id/playerGoal"/>
 
     <RelativeLayout
         android:id="@+id/dealerHand"
@@ -132,10 +173,10 @@
         android:id="@+id/dealerInfo"
         android:layout_width="162dp"
         android:layout_height="125dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="5dp"
         android:gravity="bottom"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/header">
+        android:layout_below="@+id/playerGoal">
 
         <RelativeLayout
             android:id="@+id/dealerSum"
@@ -175,7 +216,7 @@
     <View
         android:id="@+id/playerInfo1Area"
         android:layout_width="162dp"
-        android:layout_height="310dp"
+        android:layout_height="305dp"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
         android:layout_toRightOf="@+id/CenterView"/>
@@ -186,7 +227,7 @@
         android:layout_height="match_parent"
         android:gravity="bottom"
         android:layout_alignLeft="@id/playerInfo1Area"
-        android:layout_marginBottom="185dp"
+        android:layout_marginBottom="180dp"
         android:layout_marginLeft="5dp">
 
         <RelativeLayout
@@ -223,7 +264,7 @@
     <RelativeLayout
         android:id="@+id/playerInfo1"
         android:layout_width="162dp"
-        android:layout_height="310dp"
+        android:layout_height="305dp"
         android:gravity="center|bottom"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
@@ -232,7 +273,7 @@
         <LinearLayout
             android:id="@+id/playerBet1"
             android:layout_width="142dp"
-            android:layout_height="180dp"
+            android:layout_height="175dp"
             android:layout_marginTop="5dp"
             android:orientation="horizontal"
             android:layout_centerHorizontal="true"
@@ -268,7 +309,7 @@
         <RelativeLayout
             android:id="@+id/playerMain1"
             android:layout_width="match_parent"
-            android:layout_height="185dp"
+            android:layout_height="180dp"
             android:layout_centerHorizontal="true"
             android:layout_alignTop="@id/playerCardZone1">
 
@@ -309,7 +350,6 @@
                     android:id="@+id/playerBetNum1"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="5dp"
                     android:textSize="20sp"
                     android:gravity="center|bottom"
                     fontPath="fonts/Roboto-Bold.ttf"
@@ -321,7 +361,7 @@
                 android:id="@+id/playerResult1"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:layout_marginBottom="98dp"
+                android:layout_marginBottom="93dp"
                 android:scaleType="centerInside"
                 android:visibility="invisible"
                 android:layout_alignParentBottom="true"/>
@@ -344,16 +384,16 @@
         android:id="@+id/insurance"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:layout_below="@id/dealerInfo"
         android:layout_centerHorizontal="true"
         android:visibility="invisible">
 
         <ImageView
             android:id="@+id/insuranceBg"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:scaleType="fitXY"
-            android:layout_marginTop="10dp"
             android:src="@drawable/tips_insurance"
             android:layout_centerHorizontal="true" />
 
@@ -361,9 +401,9 @@
             android:id="@+id/insuranceBet"
             android:layout_width="60dp"
             android:layout_height="400dp"
-            android:layout_marginTop="27.5dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="5dp"
             android:layout_alignTop="@id/insuranceBg"
             android:layout_centerHorizontal="true"
             android:orientation="horizontal"
@@ -375,7 +415,7 @@
             android:id="@+id/insuranceBetNum"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="60dp"
+            android:layout_marginTop="47dp"
             android:textColor="#ffffffff"
             android:textSize="20sp"
             android:layout_centerHorizontal="true"
@@ -386,7 +426,7 @@
             android:id="@+id/insuranceResult"
             android:layout_width="match_parent"
             android:layout_height="30dp"
-            android:layout_marginTop="35dp"
+            android:layout_marginTop="22.5dp"
             android:scaleType="centerInside"
             android:layout_centerHorizontal="true"
             android:visibility="invisible" />
@@ -439,7 +479,7 @@
     <View
         android:id="@+id/playerInfo2Area"
         android:layout_width="162dp"
-        android:layout_height="310dp"
+        android:layout_height="305dp"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
         android:layout_toLeftOf="@+id/CenterView"/>
@@ -450,7 +490,7 @@
         android:layout_height="match_parent"
         android:gravity="bottom"
         android:layout_alignLeft="@id/playerInfo2Area"
-        android:layout_marginBottom="185dp"
+        android:layout_marginBottom="180dp"
         android:layout_marginLeft="5dp">
 
         <RelativeLayout
@@ -464,7 +504,7 @@
     <RelativeLayout
         android:id="@+id/playerInfo2"
         android:layout_width="162dp"
-        android:layout_height="310dp"
+        android:layout_height="305dp"
         android:gravity="center|bottom"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
@@ -473,7 +513,7 @@
         <LinearLayout
             android:id="@+id/playerBet2"
             android:layout_width="142dp"
-            android:layout_height="180dp"
+            android:layout_height="175dp"
             android:layout_marginTop="5dp"
             android:orientation="horizontal"
             android:layout_centerHorizontal="true"
@@ -509,7 +549,7 @@
         <RelativeLayout
             android:id="@+id/playerMain2"
             android:layout_width="match_parent"
-            android:layout_height="185dp"
+            android:layout_height="180dp"
             android:layout_centerHorizontal="true"
             android:layout_alignTop="@id/playerCardZone2">
 
@@ -548,7 +588,6 @@
                     android:id="@+id/playerBetNum2"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="5dp"
                     android:textSize="20sp"
                     android:gravity="center|bottom"
                     fontPath="fonts/Roboto-Bold.ttf"
@@ -560,7 +599,7 @@
                 android:id="@+id/playerResult2"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:layout_marginBottom="98dp"
+                android:layout_marginBottom="93dp"
                 android:scaleType="centerInside"
                 android:visibility="invisible"
                 android:layout_alignParentBottom="true"/>
@@ -692,7 +731,6 @@
         android:layout_centerInParent="true"
         android:gravity="center|bottom">
 
-
         <Button
             android:id="@+id/ddButton"
             android:layout_width="150dp"
@@ -724,6 +762,19 @@
 
         </LinearLayout>
     </LinearLayout>
+
+    <Button
+        android:id="@+id/hintButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:textSize="20sp"
+        android:text="0"
+        android:textColor="#565656"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/coin"
+        android:layout_above="@+id/betting"
+        android:layout_alignParentRight="true"/>
 
     <Button
         android:id="@+id/bonus"

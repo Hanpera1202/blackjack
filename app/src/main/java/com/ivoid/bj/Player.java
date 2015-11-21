@@ -7,94 +7,97 @@ import java.util.ArrayList;
 
 class Player
 {
-	 private final String name;
-	 private Wallet wallet; 
-	
-	 private ArrayList<BJHand> hands=new ArrayList<BJHand>();
-	 
-	 private boolean insurance = false; //did the player make an insurance bet?
-	 private float insuranceBetValue = 0f; //did the player make an insurance bet?
-	 private boolean playing; // all players are either playing or not (if not, they are removed from the Game list of players)
-	 private float rebet=0f; // Saved last bet 	 
-	
-	 Player(Context context, String name, float initCurrency)
-	 {
-		 this.name=name;
-		 wallet=new Wallet(context, initCurrency);
-		 playing = true;
-		 addHand(new BJHand(name));
-	 }
+    private final String name;
+	private CoinWallet coinWallet;
+    private Wallet wallet;
 
-	 Player(Context context, String name)
-	 {
-		 this.name=name;
-		 wallet=new Wallet(context);
-		 playing = true;
-		 addHand(new BJHand(name));
-	 }
+	private ArrayList<BJHand> hands=new ArrayList<BJHand>();
+
+    private boolean insurance = false; //did the player make an insurance bet?
+	private float insuranceBetValue = 0f; //did the player make an insurance bet?
+	private boolean playing; // all players are either playing or not (if not, they are removed from the Game list of players)
+	private float rebet=0f; // Saved last bet
+
+	Player(Context context, String name)
+	{
+		this.name=name;
+		wallet=new Wallet(context);
+        coinWallet=new CoinWallet(context);
+		playing = true;
+		addHand(new BJHand(name));
+	}
 
 	void setPlaying(boolean b)
-	 { playing = b; }
+	{ playing = b; }
 
-	 void update()
-	 {
-		 insurance = false;
-		 insuranceBetValue = 0f;
-		 BJHand firstHand = hands.get(0);
-		 rebet = firstHand.getBet().getValue();
+	void update()
+	{
+		insurance = false;
+        insuranceBetValue = 0f;
+        BJHand firstHand = hands.get(0);
+        rebet = firstHand.getBet().getValue();
 		 
-		 if (firstHand.didDD()) rebet/=2f;
+        if (firstHand.didDD()) rebet/=2f;
 		 
-		 clearHands();
-		 addHand(new BJHand(name));
-	 }
+        clearHands();
+        addHand(new BJHand(name));
+	}
 	 
-	 void clearHands()
-	 { hands.clear(); }
+    void clearHands()
+    { hands.clear(); }
 	 
-	 void deposit(float amount)
-	 { wallet.deposit(amount); }
+    void deposit(float amount)
+    { wallet.deposit(amount); }
 	
-	 void withdraw(float amount)
-	 { wallet.withdraw(amount); }
+    void withdraw(float amount)
+    { wallet.withdraw(amount); }
 
-	 void addHand( BJHand hand )
-	 { hands.add(hand); }
+    void depositCoin(float amount)
+    { coinWallet.deposit(amount); }
 
-	 void takeInsurance(float amount)
-	 {
-         insuranceBetValue = amount;
-		 insurance=true;
-	 }
+    void withdrawCoin(float amount)
+    { coinWallet.withdraw(amount); }
+
+    void addHand( BJHand hand )
+    { hands.add(hand); }
+
+    void takeInsurance(float amount)
+    {
+        insuranceBetValue = amount;
+        insurance=true;
+    }
 	
-	 //Accessors
-	 String getName()
-	 { return name; }
+    //Accessors
+    String getName()
+    { return name; }
 	
-	 float getBalance()
-	 { return wallet.getBalance(); }
+    float getBalance()
+    { return wallet.getBalance(); }
 
-	 float getInsuranceBetValue()
-	 { return insuranceBetValue; }
+    float getCoinBalance()
+    { return coinWallet.getBalance(); }
 
-	 boolean tookInsurance()
-	 { return insurance; }
+    float getInsuranceBetValue()
+    { return insuranceBetValue; }
 
-	 float getRebet()
-	 { return rebet; }
+    boolean tookInsurance()
+    { return insurance; }
+
+    float getRebet()
+    { return rebet; }
 	 
-	 float getInitBet()
-	 { return hands.get(0).getBet().getValue(); }
+    float getInitBet()
+    { return hands.get(0).getBet().getValue(); }
 	
-	 boolean getPlaying()
-	 { return playing; }
+    boolean getPlaying()
+    { return playing; }
 	
-	 byte howManyHands()
-	 { return (byte) hands.size(); }
+    byte howManyHands()
+    { return (byte) hands.size(); }
 	
-	 ArrayList<BJHand> getHands()
-	 { return hands; }
+    ArrayList<BJHand> getHands()
+    { return hands; }
 	
-	 BJHand getHand(byte b)
-	 { return hands.get(b); }                                 
+    BJHand getHand(byte b)
+    { return hands.get(b); }
 }
