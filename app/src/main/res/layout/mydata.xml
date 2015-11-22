@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@drawable/bg_play">
@@ -9,14 +9,14 @@
     <RelativeLayout
         android:id="@+id/header"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="50dp"
+        android:background="@drawable/h_wood">
 
         <LinearLayout
             android:id="@+id/playerCashView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
             android:background="@drawable/bg_playercash">
 
             <ImageView
@@ -31,9 +31,10 @@
                 android:text="0"
                 android:textColor="#ffffffff"
                 android:textSize="18sp"
-                android:textStyle="bold"
                 android:gravity="center"
-                android:layout_gravity="center"/>
+                android:layout_gravity="center"
+                fontPath="fonts/Roboto-Bold.ttf"
+                tools:ignore="MissingPrefix"/>
 
         </LinearLayout>
 
@@ -42,44 +43,47 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
-            android:background="@drawable/bg_playercash">
+            android:layout_margin="5dp">
 
             <Button
                 android:id="@+id/game"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
+                android:layout_marginRight="3dp"
                 android:onClick="onClickHeader"
-                android:background="@drawable/mydata" />
+                android:background="@drawable/h_game"/>
 
             <Button
                 android:id="@+id/competition"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
+                android:layout_marginRight="3dp"
                 android:onClick="onClickHeader"
-                android:background="@drawable/mydata" />
+                android:background="@drawable/h_prize" />
 
             <Button
                 android:id="@+id/result"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
+                android:layout_marginRight="3dp"
                 android:onClick="onClickHeader"
-                android:background="@drawable/mydata" />
+                android:background="@drawable/h_result" />
 
             <Button
                 android:id="@+id/checkMyData"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:onClick="onClickHeader"
-                android:background="@drawable/mydata" />
+                android:layout_marginRight="3dp"
+                android:background="@drawable/h_data_on" />
 
             <Button
                 android:id="@+id/setting"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:onClick="onClickHeader"
-                android:background="@drawable/mydata" />
-
+                android:background="@drawable/h_setting" />
         </LinearLayout>
+
     </RelativeLayout>
 
     <LinearLayout

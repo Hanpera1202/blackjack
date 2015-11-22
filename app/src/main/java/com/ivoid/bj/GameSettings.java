@@ -18,7 +18,7 @@ class GameSettings
 		decks=1; splits=1; burns=(byte)(5.0*Math.random()); shuffleTimes = 3;
 		startCash=1000f; tableMin=10f; tableMax= 10000f;
 		ddPostSplit=true; surrender=true; insurance=true; stand17soft=true; aceResplit=true; dd1011=true;
-		loginBonusCoins=3;coninBonusCount=1000;
+		loginBonusCoins=3;coninBonusCount=10;
     }
 	
 	private boolean sometimes(boolean[] choices)

@@ -19,21 +19,28 @@
 
     <TextView
         android:id="@+id/endDate"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="20sp"
         android:textColor="#8A2A27"
-        android:gravity="center"
         fontPath="fonts/Roboto-Bold.ttf"
         tools:ignore="MissingPrefix"/>
 
     <TextView
         android:id="@+id/totalApplyNum"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="17sp"
         android:textColor="#292929"
-        android:gravity="center"
+        fontPath="fonts/Roboto-Bold.ttf"
+        tools:ignore="MissingPrefix"/>
+
+    <TextView
+        android:id="@+id/winNum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="17sp"
+        android:textColor="#D7413C"
         fontPath="fonts/Roboto-Bold.ttf"
         tools:ignore="MissingPrefix"/>
 
@@ -45,31 +52,20 @@
         android:layout_marginTop="5dp"/>
 
     <TextView
-        android:id="@+id/winNum"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="17sp"
-        android:textColor="#D7413C"
-        fontPath="fonts/Roboto-Bold.ttf"
-        tools:ignore="MissingPrefix"/>
-
-    <TextView
         android:id="@+id/applyNum"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="15sp"
         android:textColor="#292929"
-        android:gravity="center"
         fontPath="fonts/Roboto-Bold.ttf"
         tools:ignore="MissingPrefix"/>
 
     <TextView
         android:id="@+id/point"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="15sp"
         android:textColor="#292929"
-        android:gravity="center"
         fontPath="fonts/Roboto-Bold.ttf"
         tools:ignore="MissingPrefix"/>
 

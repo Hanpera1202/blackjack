@@ -1225,14 +1225,9 @@ public class Dealer extends FragmentActivity implements OnClickListener
                 case HINTCOIN:
                 {
                     if(checkCoinBonus()) {
-                        if (game.mMovieAd.isLoaded()) {
-                            String message = "Do you want to get a hint coin to see the video ad?";
-                            DialogFragment ConfirmAdDialog = ConfirmDialogFragment.newInstance(message);
-                            ConfirmAdDialog.show(getSupportFragmentManager(), "confirmAdDialog");
-                        } else {
-                            createAlertDialog("Now loading ad.\nPlease Wait a moment.");
-                            showAlertDialog();
-                        }
+                        String message = "Do you want to get a hint coin to see the video ad?";
+                        DialogFragment ConfirmAdDialog = ConfirmDialogFragment.newInstance(message);
+                        ConfirmAdDialog.show(getSupportFragmentManager(), "confirmAdDialog");
                     }else{
                         createAlertDialog("The only up to " + settings.coninBonusCount + " times can get in one day.");
                         showAlertDialog();
@@ -1426,21 +1421,26 @@ public class Dealer extends FragmentActivity implements OnClickListener
     }
 
     public void showMovieAd(){
-        game.mMovieAd.setAdListener(new AdListener() {
-            @Override
-            public void onAdFailedToLoad(int errorCode) {
-                game.requestNewMovie();
-            }
+        if (game.mMovieAd.isLoaded()) {
+            game.mMovieAd.setAdListener(new AdListener() {
+                @Override
+                public void onAdFailedToLoad(int errorCode) {
+                    game.requestNewMovie();
+                }
 
-            @Override
-            public void onAdClosed() {
-                game.requestNewMovie();
-                Intent intent = new Intent(getApplicationContext(), Bonus.class);
-                intent.putExtra("type", "coin");
-                startActivity(intent);
-            }
-        });
-        game.mMovieAd.show();
+                @Override
+                public void onAdClosed() {
+                    game.requestNewMovie();
+                    Intent intent = new Intent(getApplicationContext(), Bonus.class);
+                    intent.putExtra("type", "coin");
+                    startActivity(intent);
+                }
+            });
+            game.mMovieAd.show();
+        } else {
+            createAlertDialog("Now loading ad.\nPlease Wait a moment.");
+            showAlertDialog();
+        }
     }
 
     public void useCoin(){
