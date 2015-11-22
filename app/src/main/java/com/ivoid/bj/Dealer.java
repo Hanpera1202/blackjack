@@ -138,7 +138,9 @@ public class Dealer extends FragmentActivity implements OnClickListener
         setViews();
 
         bar = (ProgressBar)findViewById(R.id.progressBar);
-        bar.setMax(10000);
+        bar.setMax(settings.necessaryPoint);
+        ((TextView)findViewById(R.id.necessaryPoint)).
+                setText("/" + settings.necessaryPoint + "pt");
 
     }
 
@@ -1002,9 +1004,9 @@ public class Dealer extends FragmentActivity implements OnClickListener
 
 
     private void setPlayerProgress(int updateCash){
-        if(updateCash > 10000) {
-            playerProgress.setText("10000");
-            bar.setProgress(10000);
+        if(updateCash > settings.necessaryPoint) {
+            playerProgress.setText(String.valueOf(settings.necessaryPoint));
+            bar.setProgress(settings.necessaryPoint);
         }else{
             playerProgress.setText(String.valueOf(updateCash));
             bar.setProgress(updateCash);

@@ -17,7 +17,7 @@
             android:id="@+id/bonusMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="YOU GOT BONUS"
+            android:text="YOU GET BONUS"
             android:textSize="22sp"
             android:textColor="#A04632"
             fontPath="fonts/Roboto-Bold.ttf"

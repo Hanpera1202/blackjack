@@ -21,17 +21,8 @@
         android:id="@+id/endDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:textColor="#8A2A27"
-        fontPath="fonts/Roboto-Bold.ttf"
-        tools:ignore="MissingPrefix"/>
-
-    <TextView
-        android:id="@+id/totalApplyNum"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="17sp"
-        android:textColor="#292929"
         fontPath="fonts/Roboto-Bold.ttf"
         tools:ignore="MissingPrefix"/>
 
@@ -39,7 +30,7 @@
         android:id="@+id/winNum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="17sp"
+        android:textSize="18sp"
         android:textColor="#D7413C"
         fontPath="fonts/Roboto-Bold.ttf"
         tools:ignore="MissingPrefix"/>
@@ -50,6 +41,41 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_marginTop="5dp"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Currently, Total "
+            android:textSize="15sp"
+            android:textColor="#292929"
+            fontPath="fonts/Roboto-Bold.ttf"
+            tools:ignore="MissingPrefix"/>
+
+        <TextView
+            android:id="@+id/totalApplyNum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textColor="#D7413C"
+            fontPath="fonts/Roboto-Bold.ttf"
+            tools:ignore="MissingPrefix"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" Applications"
+            android:textSize="15sp"
+            android:textColor="#292929"
+            fontPath="fonts/Roboto-Bold.ttf"
+            tools:ignore="MissingPrefix"/>
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/applyNum"

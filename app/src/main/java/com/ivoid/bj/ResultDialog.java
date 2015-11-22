@@ -43,6 +43,7 @@ public class ResultDialog extends FragmentActivity implements View.OnClickListen
 
     private DialogFragment registMailDialog;
     private DialogFragment CompRegistMailDialog;
+    private ConfirmDialogFragment confirmDialog;
 
     private SharedPreferences preference;
     private SharedPreferences.Editor editor;
@@ -223,6 +224,50 @@ public class ResultDialog extends FragmentActivity implements View.OnClickListen
             }
         }
         CompRegistMailDialog = null;
+    }
+
+    public void showShare() {
+        try {
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_SEND);
+            intent.setType("text/plain");
+            intent.putExtra(Intent.EXTRA_TEXT, "共有する文言");
+            startActivity(Intent.createChooser(intent, "共有する"));
+        } catch (Exception e) {
+        }
+    }
+
+    // 確認ダイアログ作成
+    private void createConfirmDialog(String message, String id){
+        confirmDialog = ConfirmDialogFragment.newInstance(message, id);
+    }
+
+    // 確認ダイアログのメッセージを更新
+    private void updateConfirmDialogMessage(String message){
+        if(confirmDialog != null) {
+            Bundle args = new Bundle();
+            args.putString("message", message);
+            confirmDialog.setArguments(args);
+        }
+    }
+
+    // 確認ダイアログ表示
+    private void showConfirmDialog(String tag) {
+        if(confirmDialog != null) {
+            confirmDialog.show(getSupportFragmentManager(), tag);
+        }
+    }
+
+    // 確認ダイアログ非表示
+    private void dismissConfirmDialog() {
+        if (confirmDialog !=  null) {
+            Fragment prev = getSupportFragmentManager().findFragmentByTag("alertDialog");
+            if (prev != null) {
+                DialogFragment df = (DialogFragment) prev;
+                df.dismiss();
+            }
+        }
+        confirmDialog = null;
     }
 
     @Override

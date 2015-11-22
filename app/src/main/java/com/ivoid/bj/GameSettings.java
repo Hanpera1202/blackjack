@@ -8,6 +8,7 @@ class GameSettings
 	boolean ddPostSplit, surrender, insurance, stand17soft, aceResplit, dd1011;
 	int loginBonusCoins;
 	int coninBonusCount;
+    int necessaryPoint;
 	
 	private boolean[] bools={true,false};
 	private byte[] bytes={6,8};
@@ -16,9 +17,10 @@ class GameSettings
 	{
 		bjPay=1.5f; surrenderPay=-0.5f; insurancePay=2f; winPay=1f;
 		decks=1; splits=1; burns=(byte)(5.0*Math.random()); shuffleTimes = 3;
-		startCash=1000f; tableMin=10f; tableMax= 10000f;
+		startCash=100000f; tableMin=10f; tableMax= 10000f;
 		ddPostSplit=true; surrender=true; insurance=true; stand17soft=true; aceResplit=true; dd1011=true;
-		loginBonusCoins=3;coninBonusCount=10;
+		loginBonusCoins=3;coninBonusCount=3;
+        necessaryPoint=3000;
     }
 	
 	private boolean sometimes(boolean[] choices)

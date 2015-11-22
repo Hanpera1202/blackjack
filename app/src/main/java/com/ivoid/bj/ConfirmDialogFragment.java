@@ -8,10 +8,24 @@ import android.support.v4.app.DialogFragment;
 
 public class ConfirmDialogFragment extends DialogFragment {
 
+    public static ConfirmDialogFragment newInstance() {
+        ConfirmDialogFragment frag = new ConfirmDialogFragment();
+        return frag;
+    }
+
     public static ConfirmDialogFragment newInstance(String message) {
         ConfirmDialogFragment frag = new ConfirmDialogFragment();
         Bundle args = new Bundle();
         args.putString("message", message);
+        frag.setArguments(args);
+        return frag;
+    }
+
+    public static ConfirmDialogFragment newInstance(String message, String id) {
+        ConfirmDialogFragment frag = new ConfirmDialogFragment();
+        Bundle args = new Bundle();
+        args.putString("message", message);
+        args.putString("id", id);
         frag.setArguments(args);
         return frag;
     }
@@ -32,10 +46,25 @@ public class ConfirmDialogFragment extends DialogFragment {
                             case "confirmCoinDialog":
                                 ((Dealer)getActivity()).useCoin();
                                 break;
+                            case "confirmApplyDialog":
+                                String competitionId = getArguments().getString("id");
+                                ((Competition)getActivity()).applyCompetition(competitionId);
+                                break;
+                            case "confirmShareDialog":
+                                ((ResultDialog)getActivity()).showShare();
+                                break;
                         }
                     }
                 })
-                .setNegativeButton("CANCEL", null);
+                .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        switch(getTag()) {
+                            case "confirmShareDialog":
+                                ((Competition)getActivity()).showAd();
+                                break;
+                        }
+                    }
+                });
         return AlertDialogBuilder.create();
     }
 }

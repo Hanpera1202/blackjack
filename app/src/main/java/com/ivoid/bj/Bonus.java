@@ -58,7 +58,7 @@ public class Bonus extends Activity implements OnClickListener
         bonusType = i.getStringExtra("type");
 
         if(bonusType.equals("login")) {
-            ((TextView) findViewById(R.id.bonusMessage)).setText("YOU GOT BONUS");
+            ((TextView) findViewById(R.id.bonusMessage)).setText("YOU GET BONUS");
             // calculate login bonus points
             Long bonusGetTime = preference.getLong("bonusGetTime", 0);
             if (bonusGetTime == 0L) {
@@ -70,7 +70,7 @@ public class Bonus extends Activity implements OnClickListener
             ((TextView) findViewById(R.id.loginBonus)).setText(String.valueOf(bonusCoins));
 
         }else{
-            ((TextView) findViewById(R.id.bonusMessage)).setText("YOU GOT HINT COIN");
+            ((TextView) findViewById(R.id.bonusMessage)).setText("YOU GET HINT COIN");
             bonusCoins = 1;
             ((TextView) findViewById(R.id.loginBonus)).setText(String.valueOf(bonusCoins));
         }

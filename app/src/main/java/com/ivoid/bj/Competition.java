@@ -1,6 +1,7 @@
 package com.ivoid.bj;
 
 import com.bj.R;
+import com.google.android.gms.ads.AdListener;
 
 import android.content.Context;
 import android.content.Intent;
@@ -71,7 +72,7 @@ public class Competition extends FragmentActivity {
 
         setContentView(R.layout.competition);
 
-        player = new Player(getApplicationContext(), "Richard");
+        player = new Player(getApplicationContext(), "God");
         playerCash=(TextView)findViewById(R.id.playerCash);
         playerCash.setText(String.valueOf((int) player.getBalance()));
 
@@ -193,9 +194,9 @@ public class Competition extends FragmentActivity {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            holder.totalApplyNum.setText("Currently, Total "+ totalApplyNums.get(position) + " Applications");
+            holder.totalApplyNum.setText(String.valueOf(totalApplyNums.get(position)));
             holder.applyNum.setText("Your Application Number : " + applyNums.get(position));
-            holder.point.setText("Use Point : " + String.valueOf(points.get(position)));
+            holder.point.setText("Use Point : " + points.get(position));
             holder.apply.setTag(ids.get(position));
 
             return convertView;
@@ -221,21 +222,37 @@ public class Competition extends FragmentActivity {
          * リスト内のボタンがクリックされたら呼ばれる
          */
         public void onClick(View view) {
-            String applicaiton_id = (String) view.getTag();
-            applyCompetition(applicaiton_id);
+            String competitionId = (String) view.getTag();
+            Integer point = points.get(ids.indexOf(competitionId));
+            String message = "Are you sure you want to apply using the " + point + "pt?";
+            DialogFragment ConfirmAdDialog = ConfirmDialogFragment.newInstance(message, competitionId);
+            ConfirmAdDialog.show(getSupportFragmentManager(), "confirmApplyDialog");
         }
     }
 
-    void applyCompetition(String applicaiton_id){
-        Integer point = points.get(ids.indexOf(applicaiton_id));
+    void applyCompetition(String competitionId){
         AsyncJsonLoader asyncJsonLoader = new AsyncJsonLoader(this,new AsyncJsonLoader.AsyncCallback() {
             // 実行後
             public boolean postExecute(JSONObject result) {
                 try {
-                    String decrease_point = result.getString("decrease_point");
-                    if(!decrease_point.equals("false")) {
-                        player.withdraw(Integer.parseInt(decrease_point));
+                    if(result.getBoolean("result")) {
+                        String applyCompetitionId = result.getString("competition_id");
+                        Integer index = ids.indexOf(applyCompetitionId);
+                        player.withdraw(points.get(index));
+                        totalApplyNums.set(index, totalApplyNums.get(index) + 1);
+                        applyNums.set(index, applyNums.get(index) + 1);
+                        adapter.notifyDataSetChanged();
                         updatePlayerCashlbl();
+                        showAlertDialog("applyCompletedDialog");
+                    }else{
+                        String reason = result.getString("reason");
+                        switch(reason){
+                            case "ENDED":
+                                updateAlertDialogMessage("This prize competition has ended.");
+                                break;
+                            default:
+                                updateAlertDialogMessage("Applicantion failed.");
+                        }
                         showAlertDialog();
                     }
                 } catch (JSONException e) {
@@ -246,9 +263,9 @@ public class Competition extends FragmentActivity {
             }
         },"Applying");
         // 処理を実行
-        if(player.getBalance() >= point) {
-            createAlertDialog("Applicantion completed");
-            asyncJsonLoader.execute(String.format(applyUrl, game.getUesrId(), applicaiton_id));
+        if(player.getBalance() >= points.get(ids.indexOf(competitionId))) {
+            createAlertDialog("Applicantion completed.");
+            asyncJsonLoader.execute(String.format(applyUrl, game.getUesrId(), competitionId));
         }else{
             createAlertDialog("Your point is not enough");
             showAlertDialog();
@@ -289,15 +306,45 @@ public class Competition extends FragmentActivity {
         }
     }
 
+    public void showAd(){
+        if (game.mInterstitialAd.isLoaded()) {
+            game.mInterstitialAd.setAdListener(new AdListener() {
+                @Override
+                public void onAdFailedToLoad(int errorCode) {
+                    game.requestNewInterstitial();
+                }
+                @Override
+                public void onAdClosed() { game.requestNewInterstitial(); }
+            });
+            game.mInterstitialAd.show();
+        }
+    }
+
     // アラートダイアログ作成
     private void createAlertDialog(String message){
         alertDialog = AlertDialogFragment.newInstance(message);
     }
 
-    // アラートダイアログ表示
+    // アラートダイアログのメッセージを更新
+    private void updateAlertDialogMessage(String message){
+        if(alertDialog != null) {
+            Bundle args = new Bundle();
+            args.putString("message", message);
+            alertDialog.setArguments(args);
+        }
+    }
+
+    // アラートダイアログ表示tag指定なし
     private void showAlertDialog() {
         if(alertDialog != null) {
             alertDialog.show(getSupportFragmentManager(), "alertDialog");
+        }
+    }
+
+    // アラートダイアログ表示
+    private void showAlertDialog(String tag) {
+        if(alertDialog != null) {
+            alertDialog.show(getSupportFragmentManager(), tag);
         }
     }
 

@@ -105,6 +105,7 @@
         <ProgressBar
             android:id="@+id/progressBar"
             style="?android:attr/progressBarStyleHorizontal"
+            android:progressDrawable="@drawable/progressbar"
             android:layout_width="200dp"
             android:layout_height="15dp"
             android:layout_marginLeft="5dp"
@@ -121,9 +122,9 @@
             android:layout_gravity="center"/>
 
         <TextView
+            android:id="@+id/necessaryPoint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="/10000pt"
             android:textSize="12sp"
             android:textColor="#ffffff"
             android:layout_gravity="center"/>
@@ -254,7 +255,7 @@
             android:layout_height="32.5dp"
             android:layout_marginLeft="20dp"
             android:layout_marginBottom="43.75dp"
-            android:background="@drawable/surrender"
+            android:background="@drawable/btn_surrender"
             android:layout_toRightOf="@+id/splitButton"
             android:layout_alignParentBottom="true"
             android:visibility="invisible" />
@@ -633,11 +634,11 @@
                 android:layout_marginRight="10dp">
 
                 <TextView
+                    android:id="@+id/playerBet"
                     android:layout_width="70dp"
                     android:layout_height="37.5dp"
                     android:text="0"
-                    android:background="@drawable/bg_white"
-                    android:id="@+id/playerBet"
+                    android:background="@drawable/bg_playerbet"
                     android:textSize="22sp"
                     android:textColor="#ff000000"
                     android:gravity="center"
@@ -648,7 +649,7 @@
                     android:id="@+id/clearButton"
                     android:layout_width="70dp"
                     android:layout_height="37.5dp"
-                    android:background="@drawable/clear"/>
+                    android:background="@drawable/btn_clear"/>
 
             </LinearLayout>
 
@@ -662,14 +663,14 @@
                     android:id="@+id/rebet"
                     android:layout_width="45dp"
                     android:layout_height="37.5dp"
-                    android:background="@drawable/rebet"
+                    android:background="@drawable/btn_rebet"
                     android:layout_marginBottom="5dp"/>
 
                 <Button
                     android:id="@+id/bet_all"
                     android:layout_width="45dp"
                     android:layout_height="37.5dp"
-                    android:background="@drawable/maxbet" />
+                    android:background="@drawable/btn_maxbet" />
 
             </LinearLayout>
 
@@ -735,7 +736,7 @@
             android:id="@+id/ddButton"
             android:layout_width="150dp"
             android:layout_height="43dp"
-            android:background="@drawable/doubledown"
+            android:background="@drawable/btn_double"
             android:visibility="invisible" />
 
         <LinearLayout
@@ -750,14 +751,14 @@
                 android:layout_width="150dp"
                 android:layout_height="60dp"
                 android:layout_marginRight="10dp"
-                android:background="@drawable/stand"
+                android:background="@drawable/btn_stand"
                 android:visibility="invisible"/>
 
             <Button
                 android:id="@+id/hitButton"
                 android:layout_width="150dp"
                 android:layout_height="60dp"
-                android:background="@drawable/hit"
+                android:background="@drawable/btn_hit"
                 android:visibility="invisible"/>
 
         </LinearLayout>
