@@ -4,17 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import com.bj.R;
 import org.json.JSONException;
@@ -48,12 +44,11 @@ public class Title extends Activity {
     public void onResume() {
         super.onResume();
 
-        // displya title only first
-        if(game.getUesrId().equals("")){
+        // display title only first
+        if(game.getUserId().equals("")){
             if ((preference.getString("user_id", "")).equals("")) {
                 registUser();
             } else {
-                game.setUesrId(preference.getString("user_id", ""));
                 showActionButton();
             }
             setBackgroundImage(R.drawable.bg);
@@ -76,7 +71,6 @@ public class Title extends Activity {
                     e.printStackTrace();
                     return false;
                 }
-                game.setUesrId(preference.getString("user_id", ""));
                 showActionButton();
                 return true;
             }
@@ -85,6 +79,7 @@ public class Title extends Activity {
     }
     
 	public void onClickHeader(final View view) {
+        game.setUserId(preference.getString("user_id", ""));
         startActivity(game.getNewIntent(view));
         finish();
         overridePendingTransition(0, 0);

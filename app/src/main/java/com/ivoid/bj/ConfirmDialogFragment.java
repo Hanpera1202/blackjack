@@ -43,8 +43,8 @@ public class ConfirmDialogFragment extends DialogFragment {
                             case "confirmAdDialog":
                                 ((Dealer) getActivity()).showMovieAd();
                                 break;
-                            case "confirmCoinDialog":
-                                ((Dealer)getActivity()).useCoin();
+                            case "confirmHintByCoinDialog":
+                                ((Dealer)getActivity()).getHint();
                                 break;
                             case "confirmApplyDialog":
                                 String competitionId = getArguments().getString("id");
@@ -52,6 +52,9 @@ public class ConfirmDialogFragment extends DialogFragment {
                                 break;
                             case "confirmShareDialog":
                                 ((ResultDialog)getActivity()).showShare();
+                                break;
+                            case "confirmFreeChipsByCoinDialog":
+                                ((Dealer)getActivity()).biginFreeChipsByCoin();
                                 break;
                         }
                     }

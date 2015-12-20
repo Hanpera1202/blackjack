@@ -19,10 +19,16 @@
             android:layout_centerVertical="true"
             android:background="@drawable/bg_playercash">
 
-            <ImageView
+            <Button
+                android:id="@+id/playerLevel"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:src="@drawable/chip"/>
+                android:text="1"
+                android:textColor="#000000"
+                android:textSize="14sp"
+                android:background="@drawable/chip"
+                fontPath="fonts/Roboto-Bold.ttf"
+                tools:ignore="MissingPrefix"/>
 
             <TextView
                 android:id="@+id/playerCash"
@@ -106,7 +112,7 @@
             android:id="@+id/progressBar"
             style="?android:attr/progressBarStyleHorizontal"
             android:progressDrawable="@drawable/progressbar"
-            android:layout_width="200dp"
+            android:layout_width="80dp"
             android:layout_height="15dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
@@ -128,6 +134,35 @@
             android:textSize="12sp"
             android:textColor="#ffffff"
             android:layout_gravity="center"/>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/loginBonus"
+        android:layout_width="wrap_content"
+        android:layout_height="25dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_below="@+id/header"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/bg_nextbonus">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/coin"
+            android:layout_gravity="left|center"/>
+
+        <TextView
+            android:id="@+id/CountDown"
+            android:layout_width="100dp"
+            android:layout_height="20dp"
+            android:text="0:00:00"
+            android:textColor="#ffffffff"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:gravity="center"/>
+
     </LinearLayout>
 
     <!--
@@ -626,25 +661,41 @@
             android:layout_weight="7"
             android:gravity="center_horizontal">
 
-
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_marginRight="10dp">
 
-                <TextView
-                    android:id="@+id/playerBet"
+                <RelativeLayout
                     android:layout_width="70dp"
                     android:layout_height="37.5dp"
-                    android:text="0"
-                    android:background="@drawable/bg_playerbet"
-                    android:textSize="22sp"
-                    android:textColor="#ff000000"
-                    android:gravity="center"
-                    android:layout_marginBottom="5dp"
-                    fontPath="fonts/Roboto-Bold.ttf"
-                    tools:ignore="MissingPrefix"/>
+                    android:layout_marginBottom="5dp">
+
+                    <TextView
+                        android:id="@+id/playerBet"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="0"
+                        android:background="@drawable/bg_playerbet"
+                        android:textSize="22sp"
+                        android:textColor="#ff000000"
+                        android:gravity="center"
+                        fontPath="fonts/Roboto-Bold.ttf"
+                        tools:ignore="MissingPrefix"/>
+
+                    <TextView
+                        android:id="@+id/playerMaxBet"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Max 10000pt"
+                        android:textSize="8sp"
+                        android:textColor="#ff0000"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerInParent="true"/>
+
+                </RelativeLayout>
+
                 <Button
                     android:id="@+id/clearButton"
                     android:layout_width="70dp"
@@ -770,7 +821,7 @@
         android:layout_height="50dp"
         android:textSize="20sp"
         android:text="0"
-        android:textColor="#565656"
+        android:textColor="#121212"
         android:layout_marginRight="10dp"
         android:layout_marginBottom="10dp"
         android:background="@drawable/coin"
@@ -778,13 +829,76 @@
         android:layout_alignParentRight="true"/>
 
     <Button
-        android:id="@+id/bonus"
+        android:id="@+id/freeChips"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:onClick="beginFreeChips"
         android:background="@drawable/freechips"
+        android:onClick="onClickFreeChips"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:visibility="invisible"/>
+
+    <LinearLayout
+        android:id="@+id/freeChipsTimer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:background="#dc121212"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:visibility="invisible">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Get more chips!"
+            android:layout_marginBottom="5dp"
+            android:textColor="#ED684A"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:layout_alignParentTop="true"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="Time to next free game:"
+            android:textColor="#EDEDED"
+            android:textSize="15sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/freeChipsCountDown"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0:00:00"
+            android:textColor="#EDEDED"
+            android:textSize="25sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="You can also use coin!"
+            android:textColor="#EDEDED"
+            android:textSize="15sp"
+            android:textStyle="bold"/>
+
+        <Button
+            android:id="@+id/useCoinToBonus"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:textSize="25sp"
+            android:text="-1"
+            android:textColor="#565656"
+            android:background="@drawable/coin"
+            android:onClick="onClickFreeChipsByCoin"
+            android:layout_below="@+id/freeChipsCountDown"
+            android:layout_centerHorizontal="true"/>
+    </LinearLayout>
+
 
 </RelativeLayout>

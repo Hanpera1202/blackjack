@@ -92,7 +92,7 @@ public class ResultDialog extends FragmentActivity implements View.OnClickListen
             }
         });
         // 処理を実行
-        asyncJsonLoader.execute(String.format(getResultUrl, game.getUesrId(), competition_id));
+        asyncJsonLoader.execute(String.format(getResultUrl, game.getUserId(), competition_id));
     }
 
     @Override
@@ -161,7 +161,7 @@ public class ResultDialog extends FragmentActivity implements View.OnClickListen
         try {
             byte[] data = mail_address.getBytes("UTF-8");
             String base64_mail_address = Base64.encodeToString(data, android.util.Base64.URL_SAFE | android.util.Base64.NO_WRAP);
-            asyncJsonLoader.execute(String.format(getMailRegistUrl, game.getUesrId(), base64_mail_address));
+            asyncJsonLoader.execute(String.format(getMailRegistUrl, game.getUserId(), base64_mail_address));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }

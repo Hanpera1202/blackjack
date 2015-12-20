@@ -30,7 +30,7 @@ public class FreeChips extends Activity implements OnClickListener
     private int mCash;
 
 	private int flipCnt;
-	private int gotPoints;
+	private int gotPoint;
 	private BonusDeck shoe;
 	private Card card;
 
@@ -79,7 +79,7 @@ public class FreeChips extends Activity implements OnClickListener
 		}
 
 		flipCnt = 0;
-		gotPoints = 0;
+		gotPoint = 0;
 	}
 
     @Override
@@ -113,6 +113,8 @@ public class FreeChips extends Activity implements OnClickListener
             flip((Button) findViewById(v.getId()));
         }
         if(flipCnt == 3) {
+            editor.putLong("freeChipsGetTime", System.currentTimeMillis());
+            editor.commit();
             for (final Integer entry : flipCards.keySet()) {
                 ((Button) findViewById(entry)).setOnClickListener(null);
             }
@@ -147,23 +149,23 @@ public class FreeChips extends Activity implements OnClickListener
 	}
 
 	public void flip(Button button){
-		if(flipCnt == 3 && gotPoints < 10) {
+		if(flipCnt == 3 && gotPoint < 10) {
 			do{
 				card = shoe.drawCard();
-			}while(gotPoints * card.getValue() < 10);
+			}while(gotPoint * card.getValue() < 10);
 		}else{
 			card = shoe.drawCard();
 		}
 		button.setBackgroundResource(card.getImage());
 		TextView getpoints = (TextView) findViewById(R.id.getbonuspoints);
 
-		if(gotPoints == 0) {
-			gotPoints = card.getValue();
+		if(gotPoint == 0) {
+			gotPoint = card.getValue();
 		}else{
-			gotPoints *= card.getValue();
+			gotPoint *= card.getValue();
 		}
-		getpoints.setText(gotPoints + "pt\nGET!!");
-		editor.putFloat("gotBonusPoints", gotPoints);
+		getpoints.setText(gotPoint + "pt\nGET!!");
+		editor.putFloat("gotBonusPoint", gotPoint);
 		editor.commit();
 		button.setOnClickListener(null);
 

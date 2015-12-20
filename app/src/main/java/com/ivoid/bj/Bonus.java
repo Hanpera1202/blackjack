@@ -32,8 +32,8 @@ public class Bonus extends Activity implements OnClickListener
 
     private String bonusType;
 
-    private int bonusPoints = 0;
-    private int bonusCoins = 0;
+    private int bonusPoint = 0;
+    private int bonusCoin = 0;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -60,19 +60,19 @@ public class Bonus extends Activity implements OnClickListener
         if(bonusType.equals("login")) {
             ((TextView) findViewById(R.id.bonusMessage)).setText("YOU GET BONUS");
             // calculate login bonus points
-            Long bonusGetTime = preference.getLong("bonusGetTime", 0);
-            if (bonusGetTime == 0L) {
-                bonusPoints = (int) settings.startCash;
-                ((TextView) findViewById(R.id.specialBonus)).setText(String.valueOf(bonusPoints));
+            Long loginBonusGetTime = preference.getLong("loginBonusGetTime", 0);
+            if (loginBonusGetTime == 0L) {
+                bonusPoint = (int) settings.startCash;
+                ((TextView) findViewById(R.id.specialBonus)).setText(String.valueOf(bonusPoint));
                 findViewById(R.id.specialBonusArea).setVisibility(View.VISIBLE);
             }
-            bonusCoins = settings.loginBonusCoins;
-            ((TextView) findViewById(R.id.loginBonus)).setText(String.valueOf(bonusCoins));
+            bonusCoin = settings.loginBonusCoins;
+            ((TextView) findViewById(R.id.loginBonus)).setText(String.valueOf(bonusCoin));
 
         }else{
             ((TextView) findViewById(R.id.bonusMessage)).setText("YOU GET HINT COIN");
-            bonusCoins = 1;
-            ((TextView) findViewById(R.id.loginBonus)).setText(String.valueOf(bonusCoins));
+            bonusCoin = 1;
+            ((TextView) findViewById(R.id.loginBonus)).setText(String.valueOf(bonusCoin));
         }
 
         findViewById(R.id.collect).setOnClickListener(this);
@@ -83,24 +83,25 @@ public class Bonus extends Activity implements OnClickListener
         String getTime = new SimpleDateFormat("yyyy-MM-dd").format(nowTimestamp);
         getTime += " 00:00:00";
         if(bonusType.equals("login")) {
-            if (bonusPoints > 0) {
-                editor.putFloat("gotBonusPoints", (float) bonusPoints);
+            if (bonusPoint > 0) {
+                editor.putFloat("gotBonusPoint", (float) bonusPoint);
             }
-            if (bonusCoins > 0) {
-                editor.putInt("gotBonusCoins", bonusCoins);
+            if (bonusCoin > 0) {
+                editor.putInt("gotBonusCoin", bonusCoin);
             }
             try {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 editor.putLong("loginBonusGetTime", sdf.parse(getTime).getTime());
+                editor.putLong("loginBonusGetTime", System.currentTimeMillis());
             } catch (ParseException e) {
                 e.printStackTrace();
             }
         }else{
-            if (bonusCoins > 0) {
-                editor.putInt("gotBonusCoins", bonusCoins);
+            if (bonusCoin > 0) {
+                editor.putInt("gotBonusCoin", bonusCoin);
             }
-            int gotCoinBonusCounts = preference.getInt("gotCoinBonusCounts", 0);
-            editor.putInt("gotCoinBonusCounts", gotCoinBonusCounts + 1);
+            int gotCoinBonusCounts = preference.getInt("gotCoinBonusCount", 0);
+            editor.putInt("gotCoinBonusCount", gotCoinBonusCounts + 1);
             try {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 editor.putLong("coinBonusGetTime", sdf.parse(getTime).getTime());

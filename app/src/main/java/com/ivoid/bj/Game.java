@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
-import android.util.Log;
 import android.view.View;
 
 import com.bj.R;
@@ -21,7 +20,6 @@ public class Game extends Application
 {
     private String mUserId = "";
     private SharedPreferences preference;
-    private SharedPreferences.Editor editor;
 
     InterstitialAd mInterstitialAd;
     InterstitialAd mMovieAd;
@@ -53,6 +51,7 @@ public class Game extends Application
         mInterstitialAd = new InterstitialAd(this);
         mInterstitialAd.setAdUnitId(getString(R.string.inters_ad_unit_id));
         requestNewInterstitial();
+
         //動画広告の読み込み
         mMovieAd = new InterstitialAd(this);
         mMovieAd.setAdUnitId(getString(R.string.inters_ad_unit_id));
@@ -74,12 +73,12 @@ public class Game extends Application
         mMovieAd.loadAd(adRequest);
     }
 
-    public void setUesrId(String userId){
+    public void setUserId(String userId){
         mUserId = userId;
         return;
     }
 
-    public String getUesrId(){
+    public String getUserId(){
         return mUserId;
     }
 

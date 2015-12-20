@@ -14,6 +14,7 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.support.v4.app.DialogFragment;
@@ -91,6 +92,8 @@ public class Dealer extends FragmentActivity implements OnClickListener
 	private TextView playerCash;
     private TextView playerProgress;
     private TextView playerCoin;
+    private TextView playerLevel;
+    private TextView playerMaxBet;
 
 	private Map<Integer, Action> buttons;
 	private Map<BJHand, RelativeLayout> hands;
@@ -107,6 +110,9 @@ public class Dealer extends FragmentActivity implements OnClickListener
     private boolean clickable;
     private int waittime;
     private byte global_b;
+
+    BonusCDTimer bonusCountDownTimer = null;
+    FreeChipsCDTimer freeChipsCountDownTimer = null;
 
     private DialogFragment alertDialog;
     private ProgressBar bar;
@@ -175,36 +181,29 @@ public class Dealer extends FragmentActivity implements OnClickListener
         mInsuranceWin = mSoundPool.load(getApplicationContext(), R.raw.insurance_win, 1);
         mInsuranceLose = mSoundPool.load(getApplicationContext(), R.raw.insurance_lose, 1);
 
+        playerLevel.setText(String.valueOf(player.getLevel()));
+        playerMaxBet.setText("MAX " + player.getMaxBet() + "pt");
         playerCash.setText(String.valueOf((int) player.getBalance()));
         playerCoin.setText(String.valueOf((int) player.getCoinBalance()));
-        setPlayerProgress((int)player.getBalance());
+        setPlayerProgress((int) player.getBalance());
         if (betting){
-            if(checkLoginBonus()){
-                Intent intent = new Intent(this, Bonus.class);
-                intent.putExtra("type", "login");
-                startActivity(intent);
-            } else {
-                if (preference.getFloat("gotBonusPoints", 0f) > 0f) {
-                    player.deposit(preference.getFloat("gotBonusPoints", 0f));
-                    editor.putFloat("gotBonusPoints", 0f);
-                    editor.commit();
-                    updatePlayerCashlbl();
-                }
-                if (preference.getInt("gotBonusCoins", 0) > 0) {
-                    player.depositCoin(preference.getInt("gotBonusCoins", 0));
-                    editor.putInt("gotBonusCoins", 0);
-                    editor.commit();
-                    updatePlayerCoinlbl();
-                }
-                if(player.getBalance() < player.getInitBet()) {
-                    clearBet();
-                }
-                checkFreeChipsButton();
-                // initUIがコールされていなければコール
-                if(buttons == null){
-                    initUI();
-                }
+            if (preference.getFloat("gotBonusPoint", 0f) > 0f) {
+                player.deposit(preference.getFloat("gotBonusPoint", 0f));
+                editor.putFloat("gotBonusPoint", 0f);
+                editor.commit();
+                updatePlayerCashlbl();
             }
+            if (preference.getInt("gotBonusCoin", 0) > 0) {
+                player.depositCoin(preference.getInt("gotBonusCoin", 0));
+                editor.putInt("gotBonusCoin", 0);
+                editor.commit();
+                updatePlayerCoinlbl();
+            }
+            if(player.getBalance() < player.getInitBet()) {
+                clearBet();
+            }
+            loginBonusCountDown();
+            checkExecInitUI(0);
         }else{
             // dd,split,insuranceボタン表示の再判定
             if(insurancingFlg){
@@ -257,6 +256,43 @@ public class Dealer extends FragmentActivity implements OnClickListener
         playerCash=(TextView)findViewById(R.id.playerCash);
         playerProgress=(TextView)findViewById(R.id.playerProgress);
         playerCoin=(TextView)findViewById(R.id.hintButton);
+        playerLevel=(TextView)findViewById(R.id.playerLevel);
+        playerMaxBet=(TextView)findViewById(R.id.playerMaxBet);
+    }
+
+    void checkExecInitUI(int waittime){
+        if(player.getBalance() < 10.0f) {
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    showFreeChipsButton();
+                }
+            }, waittime);
+        }else{
+            disableFreeChipsButton();
+        }
+
+        if (player.isLevelUp()) {
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    Intent intent = new Intent(getApplicationContext(), LevelUp.class);
+                    startActivity(intent);
+                }
+            }, waittime);
+        }else if(getTimeLefOfLoginBonus() == 0L){
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    Intent intent = new Intent(getApplicationContext(), Bonus.class);
+                    intent.putExtra("type", "login");
+                    startActivity(intent);
+                }
+            }, waittime);
+        }else{
+            if (buttons == null) {
+                findViewById(R.id.betting).setVisibility(LinearLayout.VISIBLE);
+                findViewById(R.id.hintButton).setVisibility(LinearLayout.VISIBLE);
+                initUI();
+            }
+        }
     }
 
     private void initUI()
@@ -329,6 +365,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
 		float reward = betValue * ratio;
 		
 		player.deposit(reward);
+        player.experience((int) reward);
 
     }
 
@@ -347,23 +384,20 @@ public class Dealer extends FragmentActivity implements OnClickListener
 				if(!dealerHand.hasBJ()) {
 					payTransaction(betValue, settings.bjPay);
 					hand.setStatus(Status.BLACKJACK);
-                    editor.putInt("blackjacks", preference.getInt("blackjacks", 0) + 1);
-                    editor.commit();
+                    player.setData("blackjacks");
 				}else{
 					payTransaction(betValue, 0f);
 					hand.setStatus(Status.PUSH);
-                    editor.putInt("pushs", preference.getInt("pushs", 0) + 1);
-                    editor.commit();
+                    player.setData("pushs");
                 }
 			}
 			else if ( dealerHand.didBust() || handValue > dealerValue ) {
 				payTransaction(betValue, settings.winPay);
 				hand.setStatus(Status.WON);
-                editor.putInt("wins", preference.getInt("wins", 0) + 1);
+                player.setData("wins");
                 if(hand.didDD()){
-                    editor.putInt("doublewins", preference.getInt("doublewins", 0) + 1);
+                    player.setData("doublewins");
                 }
-                editor.commit();
 			}
 			else if( dealerHand.hasBJ() || handValue < dealerValue) {
 				hand.setStatus(Status.LOST);
@@ -371,10 +405,8 @@ public class Dealer extends FragmentActivity implements OnClickListener
 			else {
 				payTransaction(betValue, 0f); /* if the hands tie in value, the player simply get his money back */
 				hand.setStatus(Status.PUSH);
-                editor.putInt("pushs", preference.getInt("pushs", 0) + 1);
-                editor.commit();
+                player.setData("pushs");
 			}
-
 		}
         updatePlayerResultlbl();
 	}
@@ -387,26 +419,26 @@ public class Dealer extends FragmentActivity implements OnClickListener
         if (dealerHand.hasBJ())
         {
             payTransaction(insuranceBetValue, settings.insurancePay);
-            editor.putInt("insurance_wins", preference.getInt("insurance_wins", 0) + 1);
+            player.setData("insurance_wins");
             handler.postDelayed(new Runnable() {
                 public void run() {
-                    ((ImageView)findViewById(R.id.insuranceResult)).setImageResource(R.drawable.win);
+                    ((ImageView) findViewById(R.id.insuranceResult)).setImageResource(R.drawable.win);
                     findViewById(R.id.insuranceResult).setVisibility(ImageView.VISIBLE);
                     ScaleAnimation buttonanim =
                             new ScaleAnimation(
-                                    0.0f,1.0f,0.0f,1.0f,
-                                    findViewById(R.id.insuranceResult).getWidth()/2,
-                                    findViewById(R.id.insuranceResult).getHeight()/2);
+                                    0.0f, 1.0f, 0.0f, 1.0f,
+                                    findViewById(R.id.insuranceResult).getWidth() / 2,
+                                    findViewById(R.id.insuranceResult).getHeight() / 2);
                     buttonanim.setDuration(300);
                     findViewById(R.id.insuranceResult).startAnimation(buttonanim);
 
                     mSoundPool.play(mInsuranceWin, game.getSoundVol(), game.getSoundVol(), 0, 0, 1.0F);
                 }
-            },waittime);
+            }, waittime);
         }
         else
         {
-            editor.putInt("insurance_loses", preference.getInt("insurance_loses", 0) + 1);
+            player.setData("insurance_loses");
             handler.postDelayed(new Runnable() {
                 public void run() {
                     ((ImageView)findViewById(R.id.insuranceResult)).setImageResource(R.drawable.lose);
@@ -419,8 +451,6 @@ public class Dealer extends FragmentActivity implements OnClickListener
 
 	void newGame()
 	{
-        findViewById(R.id.betting).setVisibility(LinearLayout.VISIBLE);
-        findViewById(R.id.hintButton).setVisibility(LinearLayout.VISIBLE);
         dealerHand.update();
 		player.update();
 		currentPlayerHand=player.getHand((byte) 0);
@@ -428,10 +458,9 @@ public class Dealer extends FragmentActivity implements OnClickListener
 		getNextAction=false;
         // update playerBet to 0
         updatePlayerBetlbl();
-        checkFreeChipsButton();
-        initUI();
+        checkExecInitUI(500);
 	}
-		
+
 	void clearBet()
 	{
 		BJHand hand = player.getHand((byte) 0);
@@ -443,7 +472,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
 	{
         float betValue=currentPlayerHand.getBet().getValue();
         if( stake > player.getBalance() - betValue ||
-                stake + betValue > settings.tableMax
+                stake + betValue > player.getMaxBet()
                 ) {
             return;
 		}
@@ -476,6 +505,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
     {
         if (hand.getCardCount()==2)
         {
+            player.setData("surrenders");
             float betValue = hand.getBet().getValue();
             payTransaction(betValue, settings.surrenderPay); //player gets half his bet back via negative ratio
             hand.setStatus(Status.SURRENDERED);
@@ -490,7 +520,9 @@ public class Dealer extends FragmentActivity implements OnClickListener
 	{
 		if (hand.getCardCount()==2)
 		{
-			//check 10/11
+            player.setData("doubles");
+
+            //check 10/11
 			byte handHardBJValue = hand.getHardBJValue(); 
 			
 			if (handHardBJValue == 10 || handHardBJValue==11)
@@ -522,7 +554,8 @@ public class Dealer extends FragmentActivity implements OnClickListener
 	{
 		if (hand.splitable(settings.aceResplit) && player.howManyHands()<(settings.splits+1))
 		{
-			//remove the second card from the first hand and make a new hand with it
+            player.setData("splits");
+            //remove the second card from the first hand and make a new hand with it
 			float betValue=hand.getBet().getValue();
 			Card poppedCard = hand.popCard((byte) 1);
 			((RelativeLayout)(currentPlayerHandView.getChildAt(0))).removeViewAt(1);
@@ -586,6 +619,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
             ((Button) findViewById(entry)).setVisibility(Button.INVISIBLE);
             ((Button) findViewById(entry)).setOnClickListener(null);
 		}
+        buttons = null;
 	}
 
 	void act()
@@ -731,7 +765,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
 
     boolean isInsurable()
     {
-        if ( settings.insurance && dealerHand.getCard((byte)0).getValue()==1 &&
+        if (settings.insurance && dealerHand.getCard((byte)0).getValue()==1 &&
                 player.getBalance() >= (float)(0.5*currentPlayerHand.getBet().getValue())) {
             return true;
         }else{
@@ -822,23 +856,6 @@ public class Dealer extends FragmentActivity implements OnClickListener
             findViewById(R.id.splitButton).setVisibility(Button.VISIBLE);
         }else{
             findViewById(R.id.splitButton).setVisibility(Button.INVISIBLE);
-        }
-    }
-
-    void checkFreeChipsButton()
-    {
-        if(player.getBalance() < 10.0f) {
-            Button bonus = (Button) findViewById(R.id.bonus);
-            bonus.setVisibility(Button.VISIBLE);
-            AlphaAnimation buttonanim = new AlphaAnimation(1, 0.0f);
-            buttonanim.setDuration(1000);
-            buttonanim.setRepeatCount(Animation.INFINITE);
-            buttonanim.setRepeatMode(Animation.REVERSE);
-            bonus.startAnimation(buttonanim);
-        }else{
-            Button bonus = (Button) findViewById(R.id.bonus);
-            bonus.setAnimation(null);
-            bonus.setVisibility(Button.INVISIBLE);
         }
     }
 
@@ -1142,9 +1159,8 @@ public class Dealer extends FragmentActivity implements OnClickListener
         	{
         		case DEAL:
         		{
-					if (player.getInitBet()>=settings.tableMin && player.getInitBet()<=settings.tableMax) {
-                        editor.putInt("plays", preference.getInt("plays", 0) + 1);
-                        editor.commit();
+					if (player.getInitBet()>=settings.tableMin && player.getInitBet()<=player.getMaxBet()) {
+                        player.setData("plays");
         				betting= false;
                         // dealer view reset
                         RelativeLayout handView = (RelativeLayout) (dealerHandView.getChildAt(0));
@@ -1179,13 +1195,12 @@ public class Dealer extends FragmentActivity implements OnClickListener
                 case ALL:
 				{
                     int maxbet;
-                    if(player.getBalance() > settings.tableMax){
-                        maxbet = (int)(settings.tableMax - currentPlayerHand.getBet().getValue());
+                    if(player.getBalance() > player.getMaxBet()){
+                        maxbet = (int)(player.getMaxBet() - currentPlayerHand.getBet().getValue());
                     }else{
                         maxbet=(int)(player.getBalance() - currentPlayerHand.getBet().getValue());
                     }
-                    // 10pt単位でしかかけられない
-                    maxbet = maxbet - (maxbet % 10);
+                    maxbet = maxbet - (maxbet % (int)settings.tableMin);
                     collectBet(maxbet);
 					break;
 				}
@@ -1262,8 +1277,6 @@ public class Dealer extends FragmentActivity implements OnClickListener
                     break;
                 }
                 case DOUBLEDOWN: {
-                    editor.putInt("doubles", preference.getInt("doubles", 0) + 1);
-                    editor.commit();
                     dd(currentPlayerHand);
                     handler.postDelayed(new Runnable() {
                         int NowIndex = currentPlayerIndex;
@@ -1275,13 +1288,10 @@ public class Dealer extends FragmentActivity implements OnClickListener
 					break;
                 }
                 case SPLIT: {
-                    editor.putInt("splits", preference.getInt("splits", 0) + 1);
                     split(currentPlayerHand);
                     break;
     			}
                 case SURRENDER: {
-                    editor.putInt("surrenders", preference.getInt("surrenders", 0) + 1);
-                    editor.commit();
                     surrender(currentPlayerHand);
                     break;
                 }
@@ -1299,7 +1309,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
                     if(player.getCoinBalance() > 0) {
                         String message = "Do you use a hint coin?";
                         DialogFragment ConfirmDialog = ConfirmDialogFragment.newInstance(message);
-                        ConfirmDialog.show(getSupportFragmentManager(), "confirmCoinDialog");
+                        ConfirmDialog.show(getSupportFragmentManager(), "confirmHintByCoinDialog");
                     }else{
                         createAlertDialog("You don't have a hint coin.");
                         showAlertDialog();
@@ -1395,13 +1405,78 @@ public class Dealer extends FragmentActivity implements OnClickListener
     	}
     }
 
-    public boolean checkLoginBonus(){
-        Long loginBonusGetTime = preference.getLong("loginBonusGetTime", 0);
-        Long needTime = 86400 * 1000 - (System.currentTimeMillis() - loginBonusGetTime);
-        if(needTime < 0L){
-            return true;
+    public Long getTimeLefOfFreeChips(){
+        Long freeChipsGetTime = preference.getLong("freeChipsGetTime", 0);
+        Long needTime = settings.freeChipsSeconds * 1000 - (System.currentTimeMillis() - freeChipsGetTime);
+        if(needTime < 0){
+            return 0L;
         }else{
-            return false;
+            return needTime;
+        }
+    }
+
+    void showFreeChipsButton()
+    {
+        Button freeChips = (Button) findViewById(R.id.freeChips);
+        LinearLayout freeChipsTimer = (LinearLayout) findViewById(R.id.freeChipsTimer);
+
+        // 以前にタイマーを起動していればリセット
+        if (freeChipsCountDownTimer != null){
+            freeChipsCountDownTimer.cancel();
+            freeChipsCountDownTimer = null;
+        }
+        Long timeLeft = getTimeLefOfFreeChips();
+        freeChips.setVisibility(Button.VISIBLE);
+        if(timeLeft > 0L){
+            freeChips.setOnClickListener(null);
+            freeChipsTimer.setVisibility(View.VISIBLE);
+            // カウントダウンする
+            freeChipsCountDownTimer = new FreeChipsCDTimer(timeLeft, 500);
+            freeChipsCountDownTimer.start();
+        } else {
+            freeChips.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    onClickFreeChips(v);
+                }
+            });
+        }
+    }
+
+    void disableFreeChipsButton()
+    {
+        Button freeChips = (Button) findViewById(R.id.freeChips);
+        LinearLayout freeChipsTimer = (LinearLayout) findViewById(R.id.freeChipsTimer);
+
+        //bonus.setAnimation(null);
+        freeChips.setOnClickListener(null);
+        freeChips.setVisibility(Button.INVISIBLE);
+        freeChipsTimer.setVisibility(View.INVISIBLE);
+    }
+
+
+    public class FreeChipsCDTimer extends CountDownTimer {
+
+        TextView count_txt = (TextView) findViewById(R.id.freeChipsCountDown);
+
+        public FreeChipsCDTimer(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);
+        }
+
+        @Override
+        public void onTick(long millisUntilFinished) {
+            count_txt.setText((millisUntilFinished / 1000 / 3600) + ":" +
+                    String.format("%02d", (millisUntilFinished / 1000 / 60 % 60)) + ":" +
+                    String.format("%02d", (millisUntilFinished / 1000 % 60)));
+        }
+
+        @Override
+        public void onFinish() {
+            findViewById(R.id.freeChipsTimer).setVisibility(View.INVISIBLE);
+            findViewById(R.id.freeChips).setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    onClickFreeChips(v);
+                }
+            });
         }
     }
 
@@ -1419,6 +1494,65 @@ public class Dealer extends FragmentActivity implements OnClickListener
             } else {
                 return false;
             }
+        }
+    }
+
+    public Long getTimeLefOfLoginBonus(){
+        Long loginBonusGetTime = preference.getLong("loginBonusGetTime", 0);
+        Long needTime = settings.loginBonusSeconds * 1000 - (System.currentTimeMillis() - loginBonusGetTime);
+        if(needTime < 0){
+            return 0L;
+        }else{
+            return needTime;
+        }
+    }
+
+    public void loginBonusCountDown(){
+
+        // 以前にタイマーを起動していればリセット
+        if (bonusCountDownTimer != null){
+            bonusCountDownTimer.cancel();
+            bonusCountDownTimer = null;
+        }
+        Long timeLeft = getTimeLefOfLoginBonus();
+        if(timeLeft == 0L){
+            ((TextView)findViewById(R.id.CountDown)).setText("GET BONUS!");
+            Intent intent = new Intent(getApplicationContext(), Bonus.class);
+            intent.putExtra("type", "login");
+            startActivity(intent);
+        } else {
+            findViewById(R.id.loginBonus).setOnClickListener(null);
+            // カウントダウンする
+            bonusCountDownTimer = new BonusCDTimer(timeLeft, 500);
+            bonusCountDownTimer.start();
+        }
+    }
+
+    public class BonusCDTimer extends CountDownTimer {
+
+        TextView count_txt = (TextView) findViewById(R.id.CountDown);
+
+        public BonusCDTimer(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);
+        }
+
+        @Override
+        public void onTick(long millisUntilFinished) {
+            count_txt.setText((millisUntilFinished / 1000 / 3600) + ":" +
+                    String.format("%02d", (millisUntilFinished / 1000 / 60 % 60)) + ":" +
+                    String.format("%02d", (millisUntilFinished / 1000 % 60)));
+        }
+
+        @Override
+        public void onFinish() {
+            count_txt.setText("GET BONUS!");
+            findViewById(R.id.loginBonus).setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Intent intent = new Intent(getApplicationContext(), Bonus.class);
+                    intent.putExtra("type", "login");
+                    startActivity(intent);
+                }
+            });
         }
     }
 
@@ -1445,7 +1579,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
         }
     }
 
-    public void useCoin(){
+    public void getHint(){
         Card card = shoe.checkNextCard();
         if(card.getValue() > 7) {
             createAlertDialog("The next card is greater than 7.");
@@ -1471,7 +1605,13 @@ public class Dealer extends FragmentActivity implements OnClickListener
         }
     }
 
-    public void beginFreeChips(final View view){
+    public void onClickFreeChipsByCoin(final View view){
+        String message = "Are you sure you want to consume a coin?";
+        DialogFragment ConfirmAdDialog = ConfirmDialogFragment.newInstance(message);
+        ConfirmAdDialog.show(getSupportFragmentManager(), "confirmFreeChipsByCoinDialog");
+    }
+
+    public void onClickFreeChips(final View view){
         if (game.mInterstitialAd.isLoaded()) {
             game.mInterstitialAd.setAdListener(new AdListener() {
                 @Override
@@ -1481,20 +1621,25 @@ public class Dealer extends FragmentActivity implements OnClickListener
                 @Override
                 public void onAdClosed() {
                     game.requestNewInterstitial();
-                    Intent intent = new Intent(getApplicationContext(), FreeChips.class);
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.in_up, 0);
+                    biginFreeChips();
                 }
             });
             game.mInterstitialAd.show();
         } else {
-            Intent intent = new Intent(this, FreeChips.class);
-            startActivity(intent);
-            overridePendingTransition(R.anim.in_up, 0);
+            biginFreeChips();
         }
-        Button bonus = (Button) findViewById(R.id.bonus);
-        bonus.setAnimation(null);
-        bonus.setVisibility(Button.INVISIBLE);
+    }
+
+    public void biginFreeChipsByCoin(){
+        player.withdrawCoin(1);
+        updatePlayerCoinlbl();
+        biginFreeChips();
+    }
+
+    public void biginFreeChips(){
+        Intent intent = new Intent(this, FreeChips.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.in_up, 0);
     }
 
     public void onClickHeader(final View view) {

@@ -100,7 +100,7 @@ public class Result extends Activity {
             }
         });
         // 処理を実行
-        asyncJsonLoader.execute(String.format(getResultsUrl, game.getUesrId()));
+        asyncJsonLoader.execute(String.format(getResultsUrl, game.getUserId()));
     }
 
     @Override

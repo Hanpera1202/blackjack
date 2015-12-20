@@ -1,11 +1,19 @@
 package com.ivoid.bj;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.util.Log;
+import android.widget.Button;
 
 import java.util.ArrayList;
 
 class Player
 {
+    private SharedPreferences preference;
+    private SharedPreferences.Editor editor;
+
+    private GameSettings settings;
+
     private final String name;
 	private CoinWallet coinWallet;
     private Wallet wallet;
@@ -19,6 +27,11 @@ class Player
 
 	Player(Context context, String name)
 	{
+        preference = context.getSharedPreferences("user_data", context.MODE_PRIVATE);
+        editor = preference.edit();
+
+        settings = new GameSettings();
+
 		this.name=name;
 		wallet=new Wallet(context);
         coinWallet=new CoinWallet(context);
@@ -44,7 +57,10 @@ class Player
 	 
     void clearHands()
     { hands.clear(); }
-	 
+
+    void experience(int amount)
+    { editor.putInt("experience", preference.getInt("experience", 0) + amount); }
+
     void deposit(float amount)
     { wallet.deposit(amount); }
 	
@@ -99,4 +115,33 @@ class Player
 	
     BJHand getHand(byte b)
     { return hands.get(b); }
+
+    void setData(String preferenceName)
+    {
+        editor.putInt(preferenceName, preference.getInt(preferenceName, 0) + 1);
+        editor.commit();
+    }
+
+    int getMaxBet()
+    { return settings.levels.get(getLevel()).maxBet; }
+
+    int getLevel()
+    { return preference.getInt("level", 1); }
+
+    boolean isLevelUp(){
+        if(getLevel() == settings.levels.size()){
+            return false;
+        }
+        int experience = preference.getInt("experience", 0);
+        if(experience >= settings.levels.get(getLevel()).totalExp){
+            return true;
+        }
+        return false;
+    }
+
+    void levelUp(){
+        editor.putInt("level", getLevel() + 1);
+        editor.commit();
+    }
+
 }

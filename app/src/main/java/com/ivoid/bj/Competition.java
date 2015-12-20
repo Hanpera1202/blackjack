@@ -103,7 +103,7 @@ public class Competition extends FragmentActivity {
             }
         });
         // 処理を実行
-        asyncJsonLoader.execute(String.format(getActiveUrl, game.getUesrId()));
+        asyncJsonLoader.execute(String.format(getActiveUrl, game.getUserId()));
     }
 
     @Override
@@ -265,7 +265,7 @@ public class Competition extends FragmentActivity {
         // 処理を実行
         if(player.getBalance() >= points.get(ids.indexOf(competitionId))) {
             createAlertDialog("Applicantion completed.");
-            asyncJsonLoader.execute(String.format(applyUrl, game.getUesrId(), competitionId));
+            asyncJsonLoader.execute(String.format(applyUrl, game.getUserId(), competitionId));
         }else{
             createAlertDialog("Your point is not enough");
             showAlertDialog();
