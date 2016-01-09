@@ -37,8 +37,8 @@ public class ResultDialog extends FragmentActivity implements View.OnClickListen
     private String name;
     private String imageUrl;
     private String winNum;
-    private String applyNum;
-    private String myApplyNum;
+    private String totalApplicationNum;
+    private String applicationNum;
     private String result;
 
     private DialogFragment registMailDialog;
@@ -79,8 +79,8 @@ public class ResultDialog extends FragmentActivity implements View.OnClickListen
                     name = apiresult.getString("name");
                     imageUrl = apiresult.getString("image_url");
                     winNum = apiresult.getString("win_num");
-                    applyNum = apiresult.getString("apply_num");
-                    myApplyNum = apiresult.getString("my_apply_num");
+                    totalApplicationNum = apiresult.getString("total_application_num");
+                    applicationNum = apiresult.getString("application_num");
 
                     setView();
 
@@ -119,9 +119,6 @@ public class ResultDialog extends FragmentActivity implements View.OnClickListen
         itemImage.setTag(imageUrl);
         AsyncImageLoader asyncImageLoader = new AsyncImageLoader(itemImage);
         asyncImageLoader.execute(imageUrl);
-        ((TextView)findViewById(R.id.winNum)).setText("Total " + winNum + " winners");
-        ((TextView)findViewById(R.id.applyNum)).setText("Apply Num : " + applyNum);
-        ((TextView)findViewById(R.id.myApplyNum)).setText("Your Apply Num : " + myApplyNum);
     }
 
     public void onClick(final View view)

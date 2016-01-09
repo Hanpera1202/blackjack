@@ -26,7 +26,6 @@ public class Setting extends Activity implements CompoundButton.OnCheckedChangeL
     Game game;
 
     private Player player;
-    private TextView playerCash;
 
     private SharedPreferences preference;
     private SharedPreferences.Editor editor;
@@ -50,8 +49,8 @@ public class Setting extends Activity implements CompoundButton.OnCheckedChangeL
         sound_on = preference.getBoolean("sound_on", true);
 
         player = new Player(getApplicationContext(), "Richard");
-        playerCash=(TextView)findViewById(R.id.playerCash);
-        playerCash.setText(String.valueOf((int) player.getBalance()));
+        ((TextView)findViewById(R.id.playerCash)).setText(String.valueOf((int)player.getBalance()));
+        ((TextView)findViewById(R.id.playerLevel)).setText(String.valueOf(player.getLevel()));
 
         // ToggleButtonの取得
         tglPush = (ToggleButton) findViewById(R.id.tglPush);

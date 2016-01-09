@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffffff">
+    android:padding="10dp"
+    android:background="#D6D6D6">
 
     <LinearLayout
         android:orientation="vertical"
@@ -14,62 +16,40 @@
             android:id="@+id/result"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
-            android:layout_margin="20dp"
+            android:layout_marginBottom="5dp"
             android:text="You lost. Try again"
-            android:textSize="35sp"
-            android:textStyle="bold"
-            android:textColor="#ff000000"/>
+            android:textSize="25sp"
+            android:textColor="#8A2A27"
+            fontPath="fonts/Roboto-Bold.ttf"
+            tools:ignore="MissingPrefix"/>
 
         <TextView
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="testtest"
-            android:textSize="30sp"
-            android:textStyle="bold"
-            android:textColor="#ff000000" />
+            android:textSize="20sp"
+            android:textColor="#D68E3C"
+            fontPath="fonts/Roboto-Bold.ttf"
+            tools:ignore="MissingPrefix"/>
 
         <ImageView
             android:id="@+id/image"
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:layout_margin="20dp"
-            android:scaleType="centerInside"
-            android:src="@drawable/m500"/>
-
-        <TextView
-            android:id="@+id/winNum"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:text="Total 10 winners"
-            android:textSize="25sp"
-            android:textColor="#ff000000"/>
-
-        <TextView
-            android:id="@+id/applyNum"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:text="Apply Num : 1000"
-            android:textSize="25sp"
-            android:textColor="#ff000000"/>
-
-        <TextView
-            android:id="@+id/myApplyNum"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:text="Your Apply Num : 10"
-            android:textSize="25sp"
-            android:textColor="#ff000000"/>
+            android:scaleType="centerInside"/>
 
         <Button
             android:id="@+id/close_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="RECIEVE THE PRIZE"
-            android:textColor="@android:color/white"/>
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:text="CLOSE"
+            android:textSize="20sp"
+            android:textColor="#D6D6D6"
+            android:layout_marginTop="5dp"
+            android:background="#D7413C"
+            fontPath="fonts/Roboto-Bold.ttf"
+            tools:ignore="MissingPrefix"/>
 
     </LinearLayout>
 

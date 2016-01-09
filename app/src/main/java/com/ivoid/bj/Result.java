@@ -43,10 +43,10 @@ public class Result extends Activity {
     private List<String> ids = new ArrayList<String>();
     private List<String> names = new ArrayList<String>();
     private List<String> imageUrls = new ArrayList<String>();
-    private List<String> winNums = new ArrayList<String>();
+    private List<Integer> winNums = new ArrayList<Integer>();
     private List<String> endDates = new ArrayList<String>();
-    private List<String> applyNums = new ArrayList<String>();
-    private List<String> myApplyNums = new ArrayList<String>();
+    private List<Integer> totalApplicationNums = new ArrayList<Integer>();
+    private List<Integer> applicationNums = new ArrayList<Integer>();
     private List<String> progresses = new ArrayList<String>();
     private List<String> results = new ArrayList<String>();
     private BaseAdapter adapter;
@@ -70,6 +70,7 @@ public class Result extends Activity {
 
         player = new Player(getApplicationContext(), "Richard");
         ((TextView)findViewById(R.id.playerCash)).setText(String.valueOf((int)player.getBalance()));
+        ((TextView)findViewById(R.id.playerLevel)).setText(String.valueOf(player.getLevel()));
 
         asyncJsonLoader = new AsyncJsonLoader(this, new AsyncJsonLoader.AsyncCallback() {
             // 実行後
@@ -82,10 +83,10 @@ public class Result extends Activity {
                         ids.add(competition.getString("id"));
                         names.add(competition.getString("name"));
                         imageUrls.add(competition.getString("image_url"));
-                        winNums.add(competition.getString("win_num"));
+                        winNums.add(competition.getInt("win_num"));
                         endDates.add(competition.getString("end_date"));
-                        applyNums.add(competition.getString("apply_num"));
-                        myApplyNums.add(competition.getString("my_apply_num"));
+                        totalApplicationNums.add(competition.getInt("total_application_num"));
+                        applicationNums.add(competition.getInt("application_num"));
                         progresses.add(competition.getString("progress"));
                         results.add(competition.getString("result"));
                     }
@@ -118,7 +119,7 @@ public class Result extends Activity {
 
         // BaseAdapter を継承したadapterのインスタンスを生成
         // 子要素のレイアウトファイル competition_list_items.xml を activity_main.xml に inflate するためにadapterに引数として渡す
-        adapter = new ListViewAdapter(getApplicationContext(),R.layout.result_list_items);
+        adapter = new ListViewAdapter(this,R.layout.result_list_items);
 
         // ListViewにadapterをセット
         listView.setAdapter(adapter);
@@ -131,8 +132,8 @@ public class Result extends Activity {
         ImageView image;
         TextView winNum;
         TextView endDate;
-        TextView applyNum;
-        TextView myApplyNum;
+        TextView totalApplicationNum;
+        TextView applicationNum;
         TextView progress;
         Button checkResult;
     }
@@ -161,8 +162,8 @@ public class Result extends Activity {
                 holder.image = (ImageView) convertView.findViewById(R.id.image);
                 holder.winNum = (TextView) convertView.findViewById(R.id.winNum);
                 holder.endDate = (TextView) convertView.findViewById(R.id.endDate);
-                holder.applyNum = (TextView) convertView.findViewById(R.id.applyNum);
-                holder.myApplyNum = (TextView) convertView.findViewById(R.id.myApplyNum);
+                holder.totalApplicationNum = (TextView) convertView.findViewById(R.id.totalApplicationNum);
+                holder.applicationNum = (TextView) convertView.findViewById(R.id.applicationNum);
                 holder.progress = (TextView) convertView.findViewById(R.id.progress);
                 holder.checkResult = (Button)convertView.findViewById(R.id.checkResult);
                 holder.checkResult.setOnClickListener(this);
@@ -178,36 +179,40 @@ public class Result extends Activity {
             holder.image.setTag(imageUrls.get(position));
             AsyncImageLoader asyncImageLoader = new AsyncImageLoader(holder.image);
             asyncImageLoader.execute(imageUrls.get(position));
-            holder.winNum.setText("Total " + winNums.get(position) + " winners");
-            holder.applyNum.setText("Apply Num:" + applyNums.get(position));
-            holder.myApplyNum.setText("Your Apply Num:" + myApplyNums.get(position));
+            if(winNums.get(position) > 1) {
+                holder.winNum.setText("Total " + winNums.get(position) + " winners");
+            }else{
+                holder.winNum.setText("Total 1 winner");
+            }
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+            try {
+                Date date = sdf.parse(endDates.get(position));
+                SimpleDateFormat convertFormat = new SimpleDateFormat("HH:mm MM/dd/yyyy");
+                convertFormat.setTimeZone(TimeZone.getDefault());
+                holder.endDate.setText("Event Priod : Until " + convertFormat.format(date));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            holder.totalApplicationNum.setText(String.valueOf(totalApplicationNums.get(position)));
+            holder.applicationNum.setText("Your Application Number : " + applicationNums.get(position));
+
             switch(progresses.get(position)){
                 case "1":
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                    sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-                    try {
-                        Date date = sdf.parse(endDates.get(position));
-                        SimpleDateFormat convertFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                        convertFormat.setTimeZone(TimeZone.getDefault());
-                        holder.progress.setText("Closing Time:" + convertFormat.format(date));
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
+                    holder.progress.setText("Currently in applying...");
                     holder.checkResult.setVisibility(Button.GONE);
-                    holder.checkResult.setTag(ids.get(position));
                     break;
                 case "2":
-                    holder.progress.setText("Currently in lottery");
+                    holder.progress.setText("Currently in lottery...");
                     holder.checkResult.setVisibility(Button.GONE);
-                    holder.checkResult.setTag(ids.get(position));
                     break;
                 case "3":
-                    holder.progress.setText("Result announcement");
+                    holder.progress.setText("Currently in announcing.");
                     holder.checkResult.setVisibility(Button.VISIBLE);
-                    holder.checkResult.setTag(ids.get(position));
                     break;
             }
 
+            holder.checkResult.setTag(ids.get(position));
             return convertView;
         }
 

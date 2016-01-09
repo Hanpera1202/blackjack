@@ -12,6 +12,7 @@ import android.os.Handler;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,9 +51,9 @@ public class Competition extends FragmentActivity {
     private List<String> imageUrls = new ArrayList<String>();
     private List<Integer> winNums = new ArrayList<Integer>();
     private List<String> endDates = new ArrayList<String>();
-    private List<Integer> totalApplyNums = new ArrayList<Integer>();
+    private List<Integer> totalApplicationNums = new ArrayList<Integer>();
+    private List<Integer> applicationNums = new ArrayList<Integer>();
     private List<Integer> points = new ArrayList<Integer>();
-    private List<Integer> applyNums = new ArrayList<Integer>();
     private BaseAdapter adapter;
 
     private DialogFragment alertDialog;
@@ -75,6 +76,7 @@ public class Competition extends FragmentActivity {
         player = new Player(getApplicationContext(), "God");
         playerCash=(TextView)findViewById(R.id.playerCash);
         playerCash.setText(String.valueOf((int) player.getBalance()));
+        ((TextView)findViewById(R.id.playerLevel)).setText(String.valueOf(player.getLevel()));
 
         asyncJsonLoader = new AsyncJsonLoader(this, new AsyncJsonLoader.AsyncCallback() {
             // 実行後
@@ -89,8 +91,8 @@ public class Competition extends FragmentActivity {
                         imageUrls.add(competition.getString("image_url"));
                         winNums.add(competition.getInt("win_num"));
                         endDates.add(competition.getString("end_date"));
-                        totalApplyNums.add(competition.getInt("apply_num"));
-                        applyNums.add(competition.getInt("my_apply_num"));
+                        totalApplicationNums.add(competition.getInt("total_application_num"));
+                        applicationNums.add(competition.getInt("application_num"));
                         points.add(competition.getInt("point"));
                     }
                     setAdapter();
@@ -102,6 +104,7 @@ public class Competition extends FragmentActivity {
                 return true;
             }
         });
+        Log.d("URL", String.format(getActiveUrl, game.getUserId()));
         // 処理を実行
         asyncJsonLoader.execute(String.format(getActiveUrl, game.getUserId()));
     }
@@ -132,8 +135,8 @@ public class Competition extends FragmentActivity {
         ImageView image;
         TextView winNum;
         TextView endDate;
-        TextView totalApplyNum;
-        TextView applyNum;
+        TextView totalApplicationNum;
+        TextView applicationNum;
         TextView point;
         Button apply;
     }
@@ -162,8 +165,8 @@ public class Competition extends FragmentActivity {
                 holder.image = (ImageView) convertView.findViewById(R.id.image);
                 holder.winNum = (TextView) convertView.findViewById(R.id.winNum);
                 holder.endDate = (TextView) convertView.findViewById(R.id.endDate);
-                holder.totalApplyNum = (TextView) convertView.findViewById(R.id.totalApplyNum);
-                holder.applyNum = (TextView) convertView.findViewById(R.id.applyNum);
+                holder.totalApplicationNum = (TextView) convertView.findViewById(R.id.totalApplicationNum);
+                holder.applicationNum = (TextView) convertView.findViewById(R.id.applicationNum);
                 holder.point = (TextView) convertView.findViewById(R.id.point);
                 holder.apply = (Button)convertView.findViewById(R.id.apply);
                 holder.apply.setOnClickListener(this);
@@ -194,8 +197,8 @@ public class Competition extends FragmentActivity {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            holder.totalApplyNum.setText(String.valueOf(totalApplyNums.get(position)));
-            holder.applyNum.setText("Your Application Number : " + applyNums.get(position));
+            holder.totalApplicationNum.setText(String.valueOf(totalApplicationNums.get(position)));
+            holder.applicationNum.setText("Your Application Number : " + applicationNums.get(position));
             holder.point.setText("Use Point : " + points.get(position));
             holder.apply.setTag(ids.get(position));
 
@@ -239,8 +242,8 @@ public class Competition extends FragmentActivity {
                         String applyCompetitionId = result.getString("competition_id");
                         Integer index = ids.indexOf(applyCompetitionId);
                         player.withdraw(points.get(index));
-                        totalApplyNums.set(index, totalApplyNums.get(index) + 1);
-                        applyNums.set(index, applyNums.get(index) + 1);
+                        totalApplicationNums.set(index, totalApplicationNums.get(index) + 1);
+                        applicationNums.set(index, applicationNums.get(index) + 1);
                         adapter.notifyDataSetChanged();
                         updatePlayerCashlbl();
                         showAlertDialog("applyCompletedDialog");

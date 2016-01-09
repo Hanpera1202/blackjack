@@ -1206,7 +1206,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
 				}
 				case REBET:
         		{
-        			collectBet(player.getRebet());
+        			collectBet(currentPlayerHand.getBet().getValue());
         			break;
         		}
 				case ONE:

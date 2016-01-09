@@ -33,6 +33,7 @@ public class MyData extends Activity {
 
         player = new Player(getApplicationContext(), "Richard");
         ((TextView)findViewById(R.id.playerCash)).setText(String.valueOf((int)player.getBalance()));
+        ((TextView)findViewById(R.id.playerLevel)).setText(String.valueOf(player.getLevel()));
 
         float plays = preference.getInt("plays", 0);
         float wins = preference.getInt("wins", 0);

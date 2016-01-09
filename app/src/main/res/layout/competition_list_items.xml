@@ -58,7 +58,7 @@
             tools:ignore="MissingPrefix"/>
 
         <TextView
-            android:id="@+id/totalApplyNum"
+            android:id="@+id/totalApplicationNum"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"
@@ -78,7 +78,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/applyNum"
+        android:id="@+id/applicationNum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="15sp"
