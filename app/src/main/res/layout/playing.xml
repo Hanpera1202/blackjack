@@ -14,8 +14,9 @@
 
         <LinearLayout
             android:id="@+id/playerCashView"
-            android:layout_width="wrap_content"
+            android:layout_width="133dp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
             android:layout_centerVertical="true"
             android:background="@drawable/bg_playercash">
 
@@ -43,6 +44,27 @@
                 tools:ignore="MissingPrefix"/>
 
         </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/progressBarNextLevel"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:progressDrawable="@drawable/progressbar"
+            android:layout_width="133dp"
+            android:layout_height="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_below="@+id/playerCashView"/>
+
+        <TextView
+            android:id="@+id/playerNextLevel"
+            android:layout_width="133dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-3dp"
+            android:layout_marginLeft="5dp"
+            android:text="0 / 1000"
+            android:textColor="#ffffffff"
+            android:textSize="7sp"
+            android:gravity="center"
+            android:layout_below="@+id/playerCashView"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -134,35 +156,6 @@
             android:textSize="12sp"
             android:textColor="#ffffff"
             android:layout_gravity="center"/>
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:id="@+id/loginBonus"
-        android:layout_width="wrap_content"
-        android:layout_height="25dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_below="@+id/header"
-        android:layout_alignParentRight="true"
-        android:background="@drawable/bg_nextbonus">
-
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/coin"
-            android:layout_gravity="left|center"/>
-
-        <TextView
-            android:id="@+id/CountDown"
-            android:layout_width="100dp"
-            android:layout_height="20dp"
-            android:text="0:00:00"
-            android:textColor="#ffffffff"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            android:gravity="center"/>
-
     </LinearLayout>
 
     <!--
@@ -714,7 +707,7 @@
                     android:id="@+id/rebet"
                     android:layout_width="45dp"
                     android:layout_height="37.5dp"
-                    android:background="@drawable/btn_rebet"
+                    android:background="@drawable/btn_2"
                     android:layout_marginBottom="5dp"/>
 
                 <Button
@@ -827,6 +820,27 @@
         android:background="@drawable/coin"
         android:layout_above="@+id/betting"
         android:layout_alignParentRight="true"/>
+
+    <LinearLayout
+        android:id="@+id/loginBonus"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="2dp"
+        android:layout_above="@+id/betting"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/bg_nextbonus">
+
+        <TextView
+            android:id="@+id/CountDown"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="0:00:00"
+            android:textColor="#ffffffff"
+            android:textSize="12sp"
+            android:gravity="center"/>
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/freeChips"

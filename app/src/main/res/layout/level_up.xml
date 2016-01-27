@@ -22,45 +22,17 @@
             fontPath="fonts/Roboto-Bold.ttf"
             tools:ignore="MissingPrefix"/>
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/newLevel"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:orientation="horizontal"
-            android:gravity="center">
-
-            <TextView
-                android:id="@+id/beforeLevel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="30sp"
-                android:textColor="#CFF6FF"
-                android:text="20"
-                fontPath="fonts/Roboto-Bold.ttf"
-                tools:ignore="MissingPrefix"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="30sp"
-                android:textColor="#CFF6FF"
-                android:text="  ->  "
-                fontPath="fonts/Roboto-Bold.ttf"
-                tools:ignore="MissingPrefix"/>
-
-            <TextView
-                android:id="@+id/newLevel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="30sp"
-                android:textColor="#CFF6FF"
-                android:text="21"
-                fontPath="fonts/Roboto-Bold.ttf"
-                tools:ignore="MissingPrefix"/>
-
-        </LinearLayout>
+            android:textSize="20sp"
+            android:textColor="#CFF6FF"
+            android:gravity="center"
+            fontPath="fonts/Roboto-Bold.ttf"
+            tools:ignore="MissingPrefix"/>
 
         <LinearLayout
-            android:id="@+id/increaseMaxbet"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:orientation="horizontal"
@@ -85,29 +57,10 @@
                 android:background="@drawable/bg_playercash">
 
                 <TextView
-                    android:id="@+id/beforeMaxBet"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="100"
-                    android:textColor="#EDEDED"
-                    android:textSize="18sp"
-                    fontPath="fonts/Roboto-Bold.ttf"
-                    tools:ignore="MissingPrefix"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=" -> "
-                    android:textColor="#EDEDED"
-                    android:textSize="18sp"
-                    fontPath="fonts/Roboto-Bold.ttf"
-                    tools:ignore="MissingPrefix"/>
-
-                <TextView
                     android:id="@+id/newMaxBet"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="200"
+                    android:text="200pt"
                     android:textColor="#EDEDED"
                     android:textSize="18sp"
                     fontPath="fonts/Roboto-Bold.ttf"
@@ -164,13 +117,13 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/collect"
+            android:id="@+id/ok"
             android:layout_width="80dp"
             android:layout_height="40dp"
             android:layout_marginTop="15dp"
             android:text="OK"
             android:textSize="17sp"
-            android:textColor="@android:color/white"
+            android:textColor="#ffffffff"
             android:background="#ED684A"
             fontPath="fonts/Roboto-Bold.ttf"
             tools:ignore="MissingPrefix"/>

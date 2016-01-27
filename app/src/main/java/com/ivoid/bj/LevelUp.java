@@ -48,18 +48,16 @@ public class LevelUp extends Activity implements OnClickListener
 		preference = getSharedPreferences("user_data", MODE_PRIVATE);
 		editor = preference.edit();
 
-        ((TextView) findViewById(R.id.beforeLevel)).setText(String.valueOf(player.getLevel()));
-        ((TextView) findViewById(R.id.beforeMaxBet)).setText(String.valueOf(player.getMaxBet()));
         if(player.isLevelUp()) {
             player.levelUp();
             getBonusCoin = settings.levels.get(player.getLevel()).getCoinCnt;
             editor.putInt("gotBonusCoin", getBonusCoin);
         }
-        ((TextView) findViewById(R.id.newLevel)).setText(String.valueOf(player.getLevel()));
-        ((TextView) findViewById(R.id.newMaxBet)).setText(String.valueOf(player.getMaxBet()));
+        ((TextView) findViewById(R.id.newLevel)).setText("You are now level " + player.getLevel() + ".");
+        ((TextView) findViewById(R.id.newMaxBet)).setText(player.getMaxBet() + " pt");
         ((TextView) findViewById(R.id.loginBonus)).setText(String.valueOf(getBonusCoin));
 
-        findViewById(R.id.collect).setOnClickListener(this);
+        findViewById(R.id.ok).setOnClickListener(this);
 	}
 
     @Override

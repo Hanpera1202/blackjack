@@ -58,8 +58,11 @@ class Player
     void clearHands()
     { hands.clear(); }
 
-    void experience(int amount)
-    { editor.putInt("experience", preference.getInt("experience", 0) + amount); }
+    void experience(int exp)
+    {
+        editor.putInt("experience", preference.getInt("experience", 0) + exp);
+        editor.commit();
+    }
 
     void deposit(float amount)
     { wallet.deposit(amount); }
@@ -129,14 +132,45 @@ class Player
     { return preference.getInt("level", 1); }
 
     boolean isLevelUp(){
-        if(getLevel() == settings.levels.size()){
-            return false;
+        int totalExp;
+        if(getLevel() > settings.levels.size()){
+            int maxTotalExp = settings.levels.get(settings.levels.size()).totalExp;
+            int maxNextExp = settings.levels.get(settings.levels.size()).nextExp;
+            int overCnt = getLevel() - settings.levels.size();
+            totalExp = maxTotalExp + overCnt * maxNextExp;
+        }else{
+            totalExp = settings.levels.get(getLevel()).totalExp;
         }
         int experience = preference.getInt("experience", 0);
-        if(experience >= settings.levels.get(getLevel()).totalExp){
+        if(experience >= totalExp){
             return true;
         }
         return false;
+    }
+
+    int getNowExp(){
+        int experience = preference.getInt("experience", 0);
+        int totalExp;
+        int nextExp;
+        if(getLevel() > settings.levels.size()){
+            int maxTotalExp = settings.levels.get(settings.levels.size()).totalExp;
+            int maxNextExp = settings.levels.get(settings.levels.size()).nextExp;
+            int overCnt = getLevel() - settings.levels.size();
+            totalExp = maxTotalExp + overCnt * maxNextExp;
+            nextExp = maxNextExp;
+        }else{
+            totalExp = settings.levels.get(getLevel()).totalExp;
+            nextExp = settings.levels.get(getLevel()).nextExp;
+        }
+        return experience - (totalExp - nextExp);
+    }
+
+    int getNextExp(){
+        if(getLevel() > settings.levels.size()){
+            return settings.levels.get(settings.levels.size()).nextExp;
+        }else{
+            return settings.levels.get(getLevel()).nextExp;
+        }
     }
 
     void levelUp(){

@@ -25,6 +25,10 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class FreeChips extends Activity implements OnClickListener
 {
+    Game game;
+
+    private GameSettings settings;
+
     private SoundPool mSoundPool;
     private int mCardfall;
     private int mCash;
@@ -45,11 +49,13 @@ public class FreeChips extends Activity implements OnClickListener
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+        game = (Game) this.getApplication();
 
 		setContentView(R.layout.free_chips);
 
 		preference = getSharedPreferences("user_data", MODE_PRIVATE);
 		editor = preference.edit();
+        settings = new GameSettings();
 		shoe = new BonusDeck();
 
 		flipCards = new HashMap<Integer, Button>();
@@ -108,11 +114,11 @@ public class FreeChips extends Activity implements OnClickListener
 
     @Override
 	public void onClick(View v) {
-        if(flipCnt < 3) {
+        if(flipCnt < settings.freeChipsFlips) {
             flipCnt++;
             flip((Button) findViewById(v.getId()));
         }
-        if(flipCnt == 3) {
+        if(flipCnt == settings.freeChipsFlips) {
             editor.putLong("freeChipsGetTime", System.currentTimeMillis());
             editor.commit();
             for (final Integer entry : flipCards.keySet()) {
@@ -132,9 +138,7 @@ public class FreeChips extends Activity implements OnClickListener
             // 再生
             handler.postDelayed(new Runnable() {
                 public void run() {
-                    AudioManager audio = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-                    int musicVol = audio.getStreamVolume(AudioManager.STREAM_MUSIC);
-                    mSoundPool.play(mCash, (float) musicVol, (float) musicVol, 0, 0, 1.0F);
+                    mSoundPool.play(mCash, game.getSoundVol(), game.getSoundVol(), 0, 0, 1.0F);
                 }
             }, 200);
 
@@ -149,7 +153,7 @@ public class FreeChips extends Activity implements OnClickListener
 	}
 
 	public void flip(Button button){
-		if(flipCnt == 3 && gotPoint < 10) {
+		if(flipCnt == settings.freeChipsFlips && gotPoint < 10) {
 			do{
 				card = shoe.drawCard();
 			}while(gotPoint * card.getValue() < 10);

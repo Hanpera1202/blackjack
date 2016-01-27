@@ -18,6 +18,7 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -91,6 +92,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
 	private TextView playerSum;
 	private TextView playerCash;
     private TextView playerProgress;
+    private TextView playerNextLevel;
     private TextView playerCoin;
     private TextView playerLevel;
     private TextView playerMaxBet;
@@ -110,12 +112,16 @@ public class Dealer extends FragmentActivity implements OnClickListener
     private boolean clickable;
     private int waittime;
     private byte global_b;
+    private boolean showBonusDialogFlag = false;
 
     BonusCDTimer bonusCountDownTimer = null;
     FreeChipsCDTimer freeChipsCountDownTimer = null;
 
     private DialogFragment alertDialog;
+    private DialogFragment LevelUpDialog;
+    private DialogFragment BonusDialog;
     private ProgressBar bar;
+    private ProgressBar nextLevelBar;
 
     @Override
 	public void onCreate(Bundle savedInstanceState)
@@ -147,6 +153,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
         bar.setMax(settings.necessaryPoint);
         ((TextView)findViewById(R.id.necessaryPoint)).
                 setText("/" + settings.necessaryPoint + "pt");
+        nextLevelBar = (ProgressBar)findViewById(R.id.progressBarNextLevel);
 
     }
 
@@ -186,6 +193,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
         playerCash.setText(String.valueOf((int) player.getBalance()));
         playerCoin.setText(String.valueOf((int) player.getCoinBalance()));
         setPlayerProgress((int) player.getBalance());
+        setPlayerNextLevelProgress();
         if (betting){
             if (preference.getFloat("gotBonusPoint", 0f) > 0f) {
                 player.deposit(preference.getFloat("gotBonusPoint", 0f));
@@ -255,6 +263,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
 
         playerCash=(TextView)findViewById(R.id.playerCash);
         playerProgress=(TextView)findViewById(R.id.playerProgress);
+        playerNextLevel=(TextView)findViewById(R.id.playerNextLevel);
         playerCoin=(TextView)findViewById(R.id.hintButton);
         playerLevel=(TextView)findViewById(R.id.playerLevel);
         playerMaxBet=(TextView)findViewById(R.id.playerMaxBet);
@@ -271,25 +280,41 @@ public class Dealer extends FragmentActivity implements OnClickListener
             disableFreeChipsButton();
         }
 
-        if (player.isLevelUp()) {
+        if (showBonusDialogFlag) {
             handler.postDelayed(new Runnable() {
                 public void run() {
+                    BonusDialog = BonusDialogFragment.newInstance("coin");
+                    BonusDialog.show(getSupportFragmentManager(), "bonusDialog");
+                    showBonusDialogFlag = false;
+                }
+            }, waittime);
+        }else if (player.isLevelUp()) {
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    /*
                     Intent intent = new Intent(getApplicationContext(), LevelUp.class);
                     startActivity(intent);
+                    */
+                    LevelUpDialog = LevelUpDialogFragment.newInstance();
+                    LevelUpDialog.show(getSupportFragmentManager(), "levelUpDialog");
                 }
             }, waittime);
         }else if(getTimeLefOfLoginBonus() == 0L){
             handler.postDelayed(new Runnable() {
                 public void run() {
+                    /*
                     Intent intent = new Intent(getApplicationContext(), Bonus.class);
                     intent.putExtra("type", "login");
-                    startActivity(intent);
+                    startActivity(intent);*/
+                    BonusDialog = BonusDialogFragment.newInstance("login");
+                    BonusDialog.show(getSupportFragmentManager(), "bonusDialog");
                 }
             }, waittime);
         }else{
             if (buttons == null) {
                 findViewById(R.id.betting).setVisibility(LinearLayout.VISIBLE);
                 findViewById(R.id.hintButton).setVisibility(LinearLayout.VISIBLE);
+                findViewById(R.id.loginBonus).setVisibility(LinearLayout.VISIBLE);
                 initUI();
             }
         }
@@ -365,8 +390,6 @@ public class Dealer extends FragmentActivity implements OnClickListener
 		float reward = betValue * ratio;
 		
 		player.deposit(reward);
-        player.experience((int) reward);
-
     }
 
     void payout ()
@@ -675,7 +698,6 @@ public class Dealer extends FragmentActivity implements OnClickListener
     private ArrayList<ImageView> betImages;
 	void setBet(LinearLayout playerBet, int betNum)
     {
-
         betImages=new ArrayList<ImageView>();
         while(betNum > 0 && betImages.size() < 5) {
             ImageView betImage = new ImageView(this);
@@ -1030,6 +1052,12 @@ public class Dealer extends FragmentActivity implements OnClickListener
         }
     }
 
+    private void setPlayerNextLevelProgress(){
+        nextLevelBar.setMax(player.getNextExp());
+        nextLevelBar.setProgress(player.getNowExp());
+        playerNextLevel.setText(player.getNowExp() + " / " + player.getNextExp());
+    }
+
     void updatePlayerResultlbl() {
         int animWaittime = waittime + 500;
         int soundWaittime = waittime + 500;
@@ -1161,6 +1189,8 @@ public class Dealer extends FragmentActivity implements OnClickListener
         		{
 					if (player.getInitBet()>=settings.tableMin && player.getInitBet()<=player.getMaxBet()) {
                         player.setData("plays");
+                        player.experience(1);
+                        setPlayerNextLevelProgress();
         				betting= false;
                         // dealer view reset
                         RelativeLayout handView = (RelativeLayout) (dealerHandView.getChildAt(0));
@@ -1182,8 +1212,9 @@ public class Dealer extends FragmentActivity implements OnClickListener
                         ((LinearLayout)(findViewById(R.id.insuranceBet))).removeAllViews();
                         initUI();
                         firstDeal();
-						findViewById(R.id.betting).setVisibility(RelativeLayout.INVISIBLE);
-                        findViewById(R.id.hintButton).setVisibility(RelativeLayout.INVISIBLE);
+						findViewById(R.id.betting).setVisibility(LinearLayout.INVISIBLE);
+                        findViewById(R.id.hintButton).setVisibility(LinearLayout.INVISIBLE);
+                        findViewById(R.id.loginBonus).setVisibility(LinearLayout.INVISIBLE);
 					}
         			break;
         		}
@@ -1241,8 +1272,16 @@ public class Dealer extends FragmentActivity implements OnClickListener
 				}
                 case HINTCOIN:
                 {
-                    if(checkCoinBonus()) {
-                        String message = "Do you want to get a hint coin to see the video ad?";
+                    if(getTimeLefOfLoginBonus() == 0L) {
+                        /*
+                        Intent intent = new Intent(this, Bonus.class);
+                        intent.putExtra("type", "login");
+                        startActivity(intent);
+                        */
+                        BonusDialog = BonusDialogFragment.newInstance("login");
+                        BonusDialog.show(getSupportFragmentManager(), "bonusDialog");
+                    }else if(checkCoinBonus()) {
+                        String message = "Do you want to get a coin to see the video ad?";
                         DialogFragment ConfirmAdDialog = ConfirmDialogFragment.newInstance(message);
                         ConfirmAdDialog.show(getSupportFragmentManager(), "confirmAdDialog");
                     }else{
@@ -1307,11 +1346,11 @@ public class Dealer extends FragmentActivity implements OnClickListener
                 case HINTCOIN:
                 {
                     if(player.getCoinBalance() > 0) {
-                        String message = "Do you use a hint coin?";
+                        String message = "Do you use a coin?";
                         DialogFragment ConfirmDialog = ConfirmDialogFragment.newInstance(message);
                         ConfirmDialog.show(getSupportFragmentManager(), "confirmHintByCoinDialog");
                     }else{
-                        createAlertDialog("You don't have a hint coin.");
+                        createAlertDialog("You don't have a coin.");
                         showAlertDialog();
                     }
                     break;
@@ -1434,12 +1473,25 @@ public class Dealer extends FragmentActivity implements OnClickListener
             freeChipsCountDownTimer = new FreeChipsCDTimer(timeLeft, 500);
             freeChipsCountDownTimer.start();
         } else {
-            freeChips.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    onClickFreeChips(v);
-                }
-            });
+            enableFreeChipsButton();
         }
+    }
+
+    void enableFreeChipsButton()
+    {
+        Button freeChips = (Button) findViewById(R.id.freeChips);
+        LinearLayout freeChipsTimer = (LinearLayout) findViewById(R.id.freeChipsTimer);
+        AlphaAnimation buttonanim = new AlphaAnimation(1, 0.0f);
+        buttonanim.setDuration(800);
+        buttonanim.setRepeatCount(Animation.INFINITE);
+        buttonanim.setRepeatMode(Animation.REVERSE);
+        freeChips.startAnimation(buttonanim);
+        freeChips.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                onClickFreeChips(v);
+            }
+        });
+        freeChipsTimer.setVisibility(View.INVISIBLE);
     }
 
     void disableFreeChipsButton()
@@ -1447,12 +1499,11 @@ public class Dealer extends FragmentActivity implements OnClickListener
         Button freeChips = (Button) findViewById(R.id.freeChips);
         LinearLayout freeChipsTimer = (LinearLayout) findViewById(R.id.freeChipsTimer);
 
-        //bonus.setAnimation(null);
+        freeChips.setAnimation(null);
         freeChips.setOnClickListener(null);
         freeChips.setVisibility(Button.INVISIBLE);
         freeChipsTimer.setVisibility(View.INVISIBLE);
     }
-
 
     public class FreeChipsCDTimer extends CountDownTimer {
 
@@ -1471,18 +1522,12 @@ public class Dealer extends FragmentActivity implements OnClickListener
 
         @Override
         public void onFinish() {
-            findViewById(R.id.freeChipsTimer).setVisibility(View.INVISIBLE);
-            findViewById(R.id.freeChips).setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    onClickFreeChips(v);
-                }
-            });
+            enableFreeChipsButton();
         }
     }
 
     public boolean checkCoinBonus(){
         Integer gotCoinBonusCounts = preference.getInt("gotCoinBonusCounts", 0);
-        Log.d("gotCoinBonusCounts", String.valueOf(gotCoinBonusCounts));
         if(gotCoinBonusCounts < settings.coninBonusCount){
             return true;
         }else {
@@ -1516,12 +1561,15 @@ public class Dealer extends FragmentActivity implements OnClickListener
         }
         Long timeLeft = getTimeLefOfLoginBonus();
         if(timeLeft == 0L){
-            ((TextView)findViewById(R.id.CountDown)).setText("GET BONUS!");
+            ((TextView)findViewById(R.id.CountDown)).setText("TOUCH!!");
+            /*
             Intent intent = new Intent(getApplicationContext(), Bonus.class);
             intent.putExtra("type", "login");
             startActivity(intent);
+            DialogFragment BonusDialog = BonusDialogFragment.newInstance("login");
+            BonusDialog.show(getSupportFragmentManager(), "bonusDialog");
+            */
         } else {
-            findViewById(R.id.loginBonus).setOnClickListener(null);
             // カウントダウンする
             bonusCountDownTimer = new BonusCDTimer(timeLeft, 500);
             bonusCountDownTimer.start();
@@ -1545,14 +1593,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
 
         @Override
         public void onFinish() {
-            count_txt.setText("GET BONUS!");
-            findViewById(R.id.loginBonus).setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    Intent intent = new Intent(getApplicationContext(), Bonus.class);
-                    intent.putExtra("type", "login");
-                    startActivity(intent);
-                }
-            });
+            count_txt.setText("TOUCH!!");
         }
     }
 
@@ -1567,9 +1608,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
                 @Override
                 public void onAdClosed() {
                     game.requestNewMovie();
-                    Intent intent = new Intent(getApplicationContext(), Bonus.class);
-                    intent.putExtra("type", "coin");
-                    startActivity(intent);
+                    showBonusDialogFlag = true;
                 }
             });
             game.mMovieAd.show();
@@ -1606,9 +1645,14 @@ public class Dealer extends FragmentActivity implements OnClickListener
     }
 
     public void onClickFreeChipsByCoin(final View view){
-        String message = "Are you sure you want to consume a coin?";
-        DialogFragment ConfirmAdDialog = ConfirmDialogFragment.newInstance(message);
-        ConfirmAdDialog.show(getSupportFragmentManager(), "confirmFreeChipsByCoinDialog");
+        if(player.getCoinBalance() > 0) {
+            String message = "Are you sure you want to consume a coin?";
+            DialogFragment ConfirmAdDialog = ConfirmDialogFragment.newInstance(message);
+            ConfirmAdDialog.show(getSupportFragmentManager(), "confirmFreeChipsByCoinDialog");
+        }else{
+            createAlertDialog("You don't have a coin.");
+            showAlertDialog();
+        }
     }
 
     public void onClickFreeChips(final View view){
@@ -1630,9 +1674,11 @@ public class Dealer extends FragmentActivity implements OnClickListener
         }
     }
 
-    public void biginFreeChipsByCoin(){
+    public void beginFreeChipsByCoin(){
         player.withdrawCoin(1);
         updatePlayerCoinlbl();
+        editor.putLong("freeChipsGetTime", 0);
+        editor.commit();
         biginFreeChips();
     }
 
@@ -1654,6 +1700,18 @@ public class Dealer extends FragmentActivity implements OnClickListener
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void onUserLeaveHint() {
+        if (LevelUpDialog != null) {
+            LevelUpDialog.dismiss();
+            LevelUpDialog = null;
+        }
+        if (BonusDialog !=  null) {
+            BonusDialog.dismiss();
+            BonusDialog = null;
+        }
     }
 
     @Override

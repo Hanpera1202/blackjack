@@ -54,7 +54,7 @@ public class ConfirmDialogFragment extends DialogFragment {
                                 ((ResultDialog)getActivity()).showShare();
                                 break;
                             case "confirmFreeChipsByCoinDialog":
-                                ((Dealer)getActivity()).biginFreeChipsByCoin();
+                                ((Dealer)getActivity()).beginFreeChipsByCoin();
                                 break;
                         }
                     }

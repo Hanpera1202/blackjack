@@ -75,7 +75,7 @@ public class Bonus extends Activity implements OnClickListener
             ((TextView) findViewById(R.id.loginBonus)).setText(String.valueOf(bonusCoin));
         }
 
-        findViewById(R.id.collect).setOnClickListener(this);
+        findViewById(R.id.ok).setOnClickListener(this);
 	}
 
     @Override
