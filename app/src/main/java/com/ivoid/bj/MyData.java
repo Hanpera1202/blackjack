@@ -9,6 +9,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bj.R;
@@ -26,14 +27,14 @@ public class MyData extends Activity {
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+        game = (Game) this.getApplication();
 
-		setContentView(R.layout.mydata);
+        setContentView(R.layout.mydata);
 
 		preference = getSharedPreferences("user_data", MODE_PRIVATE);
 
-        player = new Player(getApplicationContext(), "Richard");
-        ((TextView)findViewById(R.id.playerCash)).setText(String.valueOf((int)player.getBalance()));
-        ((TextView)findViewById(R.id.playerLevel)).setText(String.valueOf(player.getLevel()));
+        player = new Player(getApplicationContext(), "God");
+        game.setHeaderData(player, (RelativeLayout) findViewById(R.id.header));
 
         float plays = preference.getInt("plays", 0);
         float wins = preference.getInt("wins", 0);

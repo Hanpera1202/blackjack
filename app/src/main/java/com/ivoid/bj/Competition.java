@@ -21,6 +21,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -74,9 +75,9 @@ public class Competition extends FragmentActivity {
         setContentView(R.layout.competition);
 
         player = new Player(getApplicationContext(), "God");
+        game.setHeaderData(player,(RelativeLayout)findViewById(R.id.header));
+
         playerCash=(TextView)findViewById(R.id.playerCash);
-        playerCash.setText(String.valueOf((int) player.getBalance()));
-        ((TextView)findViewById(R.id.playerLevel)).setText(String.valueOf(player.getLevel()));
 
         asyncJsonLoader = new AsyncJsonLoader(this, new AsyncJsonLoader.AsyncCallback() {
             // 実行後
@@ -287,12 +288,12 @@ public class Competition extends FragmentActivity {
             sign = -1;
         }
 
-        if((afterCash - beforeCash) * sign < 10){
+        if((afterCash - beforeCash) * sign < 30){
             countCash = sign;
             loopCnt = (afterCash - beforeCash) * sign;
         }else{
-            countCash = (afterCash - beforeCash) / 10;
-            loopCnt = 10;
+            countCash = (afterCash - beforeCash) / 30;
+            loopCnt = 30;
         }
         for (int i = 1; i <= loopCnt; i++) {
             if (i == loopCnt) {
@@ -305,7 +306,7 @@ public class Competition extends FragmentActivity {
                 public void run() {
                     playerCash.setText(String.valueOf(updateCash));
                 }
-            }, waittime + (i * 50));
+            }, waittime + (i * 15));
         }
     }
 

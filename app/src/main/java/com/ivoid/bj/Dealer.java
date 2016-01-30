@@ -92,9 +92,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
 	private TextView playerSum;
 	private TextView playerCash;
     private TextView playerProgress;
-    private TextView playerNextLevel;
     private TextView playerCoin;
-    private TextView playerLevel;
     private TextView playerMaxBet;
 
 	private Map<Integer, Action> buttons;
@@ -121,7 +119,8 @@ public class Dealer extends FragmentActivity implements OnClickListener
     private DialogFragment LevelUpDialog;
     private DialogFragment BonusDialog;
     private ProgressBar bar;
-    private ProgressBar nextLevelBar;
+
+    private boolean backendFlag = false;
 
     @Override
 	public void onCreate(Bundle savedInstanceState)
@@ -153,7 +152,6 @@ public class Dealer extends FragmentActivity implements OnClickListener
         bar.setMax(settings.necessaryPoint);
         ((TextView)findViewById(R.id.necessaryPoint)).
                 setText("/" + settings.necessaryPoint + "pt");
-        nextLevelBar = (ProgressBar)findViewById(R.id.progressBarNextLevel);
 
     }
 
@@ -162,7 +160,10 @@ public class Dealer extends FragmentActivity implements OnClickListener
     {
         super.onResume();
 
-        // アニメーションスタート時間のリセット
+        // reset backendFlag
+        backendFlag = false;
+
+        // reset animation start time
         waittime = 0;
 
         // 予め音声データを読み込む
@@ -188,12 +189,10 @@ public class Dealer extends FragmentActivity implements OnClickListener
         mInsuranceWin = mSoundPool.load(getApplicationContext(), R.raw.insurance_win, 1);
         mInsuranceLose = mSoundPool.load(getApplicationContext(), R.raw.insurance_lose, 1);
 
-        playerLevel.setText(String.valueOf(player.getLevel()));
+        game.setHeaderData(player, (RelativeLayout)findViewById(R.id.header));
         playerMaxBet.setText("MAX " + player.getMaxBet() + "pt");
-        playerCash.setText(String.valueOf((int) player.getBalance()));
         playerCoin.setText(String.valueOf((int) player.getCoinBalance()));
         setPlayerProgress((int) player.getBalance());
-        setPlayerNextLevelProgress();
         if (betting){
             if (preference.getFloat("gotBonusPoint", 0f) > 0f) {
                 player.deposit(preference.getFloat("gotBonusPoint", 0f));
@@ -263,54 +262,49 @@ public class Dealer extends FragmentActivity implements OnClickListener
 
         playerCash=(TextView)findViewById(R.id.playerCash);
         playerProgress=(TextView)findViewById(R.id.playerProgress);
-        playerNextLevel=(TextView)findViewById(R.id.playerNextLevel);
         playerCoin=(TextView)findViewById(R.id.hintButton);
-        playerLevel=(TextView)findViewById(R.id.playerLevel);
         playerMaxBet=(TextView)findViewById(R.id.playerMaxBet);
     }
 
     void checkExecInitUI(int waittime){
-        if(player.getBalance() < 10.0f) {
-            handler.postDelayed(new Runnable() {
-                public void run() {
-                    showFreeChipsButton();
-                }
-            }, waittime);
-        }else{
+        if(backendFlag){
+            return;
+        }
+
+        if(player.getBalance() >= 10.0f) {
             disableFreeChipsButton();
         }
 
         if (showBonusDialogFlag) {
+            createBonusDialog("coin");
             handler.postDelayed(new Runnable() {
                 public void run() {
-                    BonusDialog = BonusDialogFragment.newInstance("coin");
-                    BonusDialog.show(getSupportFragmentManager(), "bonusDialog");
+                    showBonusDialog();
                     showBonusDialogFlag = false;
                 }
             }, waittime);
         }else if (player.isLevelUp()) {
+            createLevelUpDialog();
             handler.postDelayed(new Runnable() {
                 public void run() {
-                    /*
-                    Intent intent = new Intent(getApplicationContext(), LevelUp.class);
-                    startActivity(intent);
-                    */
-                    LevelUpDialog = LevelUpDialogFragment.newInstance();
-                    LevelUpDialog.show(getSupportFragmentManager(), "levelUpDialog");
+                    showLevelUpDialog();
                 }
             }, waittime);
         }else if(getTimeLefOfLoginBonus() == 0L){
+            createBonusDialog("login");
             handler.postDelayed(new Runnable() {
                 public void run() {
-                    /*
-                    Intent intent = new Intent(getApplicationContext(), Bonus.class);
-                    intent.putExtra("type", "login");
-                    startActivity(intent);*/
-                    BonusDialog = BonusDialogFragment.newInstance("login");
-                    BonusDialog.show(getSupportFragmentManager(), "bonusDialog");
+                    showBonusDialog();
                 }
             }, waittime);
         }else{
+            if(player.getBalance() < 10.0f) {
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        showFreeChipsButton();
+                    }
+                }, waittime);
+            }
             if (buttons == null) {
                 findViewById(R.id.betting).setVisibility(LinearLayout.VISIBLE);
                 findViewById(R.id.hintButton).setVisibility(LinearLayout.VISIBLE);
@@ -723,8 +717,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
         }
 
 
-        int anim_start_px = playerBet.getHeight();
-        int anim_end_px = (int) (5f * getResources().getDisplayMetrics().density + 0.5f) ;
+        int anim_start_y_px = playerBet.getHeight();
         int bet_px = (int) (25f * getResources().getDisplayMetrics().density + 0.5f);
         int bet_area_px = (int) (60f * getResources().getDisplayMetrics().density + 0.5f);
 
@@ -734,7 +727,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
         }
 
         for (int i = 0; i < betImages.size(); i++) {
-            TranslateAnimation translate = new TranslateAnimation(i * anim_end_px, 0, anim_start_px, 0);
+            TranslateAnimation translate = new TranslateAnimation(0, 0, anim_start_y_px, 0);
             translate.setDuration(300);
             translate.setStartOffset(50 * i);
             betImages.get(i).startAnimation(translate);
@@ -1037,7 +1030,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
                         setPlayerProgress(updateCash);
                     }
                 }
-            }, waittime + (i * 33));
+            }, waittime + (i * 15));
         }
     }
 
@@ -1050,12 +1043,6 @@ public class Dealer extends FragmentActivity implements OnClickListener
             playerProgress.setText(String.valueOf(updateCash));
             bar.setProgress(updateCash);
         }
-    }
-
-    private void setPlayerNextLevelProgress(){
-        nextLevelBar.setMax(player.getNextExp());
-        nextLevelBar.setProgress(player.getNowExp());
-        playerNextLevel.setText(player.getNowExp() + " / " + player.getNextExp());
     }
 
     void updatePlayerResultlbl() {
@@ -1190,7 +1177,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
 					if (player.getInitBet()>=settings.tableMin && player.getInitBet()<=player.getMaxBet()) {
                         player.setData("plays");
                         player.experience(1);
-                        setPlayerNextLevelProgress();
+                        game.setHeaderNextLevel(player,(RelativeLayout) findViewById(R.id.header));
         				betting= false;
                         // dealer view reset
                         RelativeLayout handView = (RelativeLayout) (dealerHandView.getChildAt(0));
@@ -1273,15 +1260,10 @@ public class Dealer extends FragmentActivity implements OnClickListener
                 case HINTCOIN:
                 {
                     if(getTimeLefOfLoginBonus() == 0L) {
-                        /*
-                        Intent intent = new Intent(this, Bonus.class);
-                        intent.putExtra("type", "login");
-                        startActivity(intent);
-                        */
-                        BonusDialog = BonusDialogFragment.newInstance("login");
-                        BonusDialog.show(getSupportFragmentManager(), "bonusDialog");
+                        createBonusDialog("login");
+                        showBonusDialog();
                     }else if(checkCoinBonus()) {
-                        String message = "Do you want to get a coin to see the video ad?";
+                        String message = "Do you want to get a HINT COIN to see the video ad?";
                         DialogFragment ConfirmAdDialog = ConfirmDialogFragment.newInstance(message);
                         ConfirmAdDialog.show(getSupportFragmentManager(), "confirmAdDialog");
                     }else{
@@ -1346,11 +1328,11 @@ public class Dealer extends FragmentActivity implements OnClickListener
                 case HINTCOIN:
                 {
                     if(player.getCoinBalance() > 0) {
-                        String message = "Do you use a coin?";
+                        String message = "Do you use a HINT COIN?";
                         DialogFragment ConfirmDialog = ConfirmDialogFragment.newInstance(message);
                         ConfirmDialog.show(getSupportFragmentManager(), "confirmHintByCoinDialog");
                     }else{
-                        createAlertDialog("You don't have a coin.");
+                        createAlertDialog("You don't have a HINT COIN.");
                         showAlertDialog();
                     }
                     break;
@@ -1562,13 +1544,6 @@ public class Dealer extends FragmentActivity implements OnClickListener
         Long timeLeft = getTimeLefOfLoginBonus();
         if(timeLeft == 0L){
             ((TextView)findViewById(R.id.CountDown)).setText("TOUCH!!");
-            /*
-            Intent intent = new Intent(getApplicationContext(), Bonus.class);
-            intent.putExtra("type", "login");
-            startActivity(intent);
-            DialogFragment BonusDialog = BonusDialogFragment.newInstance("login");
-            BonusDialog.show(getSupportFragmentManager(), "bonusDialog");
-            */
         } else {
             // カウントダウンする
             bonusCountDownTimer = new BonusCDTimer(timeLeft, 500);
@@ -1632,25 +1607,13 @@ public class Dealer extends FragmentActivity implements OnClickListener
         updatePlayerCoinlbl();
     }
 
-    // アラートダイアログ作成
-    private void createAlertDialog(String message){
-        alertDialog = AlertDialogFragment.newInstance(message);
-    }
-
-    // アラートダイアログ表示
-    private void showAlertDialog() {
-        if (alertDialog != null) {
-            alertDialog.show(getSupportFragmentManager(), "alertDialog");
-        }
-    }
-
     public void onClickFreeChipsByCoin(final View view){
         if(player.getCoinBalance() > 0) {
-            String message = "Are you sure you want to consume a coin?";
+            String message = "Are you sure you want to consume a HINT COIN?";
             DialogFragment ConfirmAdDialog = ConfirmDialogFragment.newInstance(message);
             ConfirmAdDialog.show(getSupportFragmentManager(), "confirmFreeChipsByCoinDialog");
         }else{
-            createAlertDialog("You don't have a coin.");
+            createAlertDialog("You don't have a HINT COIN.");
             showAlertDialog();
         }
     }
@@ -1693,9 +1656,71 @@ public class Dealer extends FragmentActivity implements OnClickListener
         overridePendingTransition(0, 0);
     }
 
+    // create alert dialog
+    private void createAlertDialog(String message){
+        alertDialog = AlertDialogFragment.newInstance(message);
+    }
+
+    // show alert dialog
+    private void showAlertDialog() {
+        if (alertDialog != null) {
+            alertDialog.show(getSupportFragmentManager(), "alertDialog");
+        }
+    }
+
+    // create level up dialog
+    private void createLevelUpDialog(){
+        LevelUpDialog = LevelUpDialogFragment.newInstance();
+    }
+
+    // show alert dialog
+    private void showLevelUpDialog() {
+        if (LevelUpDialog != null) {
+            LevelUpDialog.show(getSupportFragmentManager(), "levelUpDialog");
+        }
+    }
+
+    // hide alert level up dialog
+    private void dismissLevelUpDialog() {
+        if (LevelUpDialog != null) {
+            Fragment prev = getSupportFragmentManager().findFragmentByTag("levelUpDialog");
+            if (prev != null) {
+                DialogFragment df = (DialogFragment) prev;
+                df.dismiss();
+            }
+        }
+        LevelUpDialog = null;
+    }
+
+    // create bonus dialog
+    private void createBonusDialog(String type){
+        BonusDialog = BonusDialogFragment.newInstance(type);
+    }
+
+    // show alert dialog
+    private void showBonusDialog() {
+        if (BonusDialog != null) {
+            BonusDialog.show(getSupportFragmentManager(), "bonusDialog");
+        }
+    }
+
+    // hide alert bonus dialog
+    private void dismissBonusDialog() {
+        if (BonusDialog !=  null) {
+            Fragment prev = getSupportFragmentManager().findFragmentByTag("bonusDialog");
+            if (prev != null) {
+                DialogFragment df = (DialogFragment) prev;
+                df.dismiss();
+            }
+        }
+        BonusDialog = null;
+    }
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event){
         if (keyCode == KeyEvent.KEYCODE_BACK){
+            Log.d("onKeyDown", "KEYCODE_BACK");
+            backendFlag = true;
             moveTaskToBack(true);
             return true;
         }
@@ -1704,14 +1729,9 @@ public class Dealer extends FragmentActivity implements OnClickListener
 
     @Override
     public void onUserLeaveHint() {
-        if (LevelUpDialog != null) {
-            LevelUpDialog.dismiss();
-            LevelUpDialog = null;
-        }
-        if (BonusDialog !=  null) {
-            BonusDialog.dismiss();
-            BonusDialog = null;
-        }
+        dismissLevelUpDialog();
+        dismissBonusDialog();
+        backendFlag = true;
     }
 
     @Override

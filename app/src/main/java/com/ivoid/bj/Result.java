@@ -14,6 +14,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bj.R;
@@ -53,9 +54,6 @@ public class Result extends Activity {
 
     private Player player;
 
-    private SharedPreferences preference;
-    private SharedPreferences.Editor editor;
-
     AsyncJsonLoader asyncJsonLoader;
 
     @Override
@@ -65,12 +63,8 @@ public class Result extends Activity {
 
         setContentView(R.layout.result);
 
-        //プリファレンスの準備
-        preference = getSharedPreferences("user_data", MODE_PRIVATE);
-
-        player = new Player(getApplicationContext(), "Richard");
-        ((TextView)findViewById(R.id.playerCash)).setText(String.valueOf((int)player.getBalance()));
-        ((TextView)findViewById(R.id.playerLevel)).setText(String.valueOf(player.getLevel()));
+        player = new Player(getApplicationContext(), "God");
+        game.setHeaderData(player, (RelativeLayout) findViewById(R.id.header));
 
         asyncJsonLoader = new AsyncJsonLoader(this, new AsyncJsonLoader.AsyncCallback() {
             // 実行後

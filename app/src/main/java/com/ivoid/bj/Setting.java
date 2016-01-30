@@ -8,6 +8,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -49,8 +50,7 @@ public class Setting extends Activity implements CompoundButton.OnCheckedChangeL
         sound_on = preference.getBoolean("sound_on", true);
 
         player = new Player(getApplicationContext(), "Richard");
-        ((TextView)findViewById(R.id.playerCash)).setText(String.valueOf((int)player.getBalance()));
-        ((TextView)findViewById(R.id.playerLevel)).setText(String.valueOf(player.getLevel()));
+        game.setHeaderData(player, (RelativeLayout) findViewById(R.id.header));
 
         // ToggleButtonの取得
         tglPush = (ToggleButton) findViewById(R.id.tglPush);

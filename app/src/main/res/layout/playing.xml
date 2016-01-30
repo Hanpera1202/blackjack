@@ -225,6 +225,7 @@
                 android:layout_width="62dp"
                 android:layout_height="35dp"
                 android:textSize="20sp"
+                android:textColor="#ffffffff"
                 android:gravity="center"
                 android:layout_alignParentRight="true"
                 fontPath="fonts/Roboto-Bold.ttf"
@@ -363,6 +364,7 @@
                     android:layout_width="62dp"
                     android:layout_height="35dp"
                     android:textSize="20sp"
+                    android:textColor="#ffffffff"
                     android:gravity="center"
                     android:layout_alignParentRight="true"
                     fontPath="fonts/Roboto-Bold.ttf"
@@ -380,6 +382,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:textSize="20sp"
+                    android:textColor="#ffffffff"
                     android:gravity="center|bottom"
                     fontPath="fonts/Roboto-Bold.ttf"
                     tools:ignore="MissingPrefix"/>
@@ -601,6 +604,7 @@
                     android:layout_width="62dp"
                     android:layout_height="35dp"
                     android:textSize="20sp"
+                    android:textColor="#ffffffff"
                     android:gravity="center"
                     android:layout_alignParentRight="true"
                     fontPath="fonts/Roboto-Bold.ttf"
@@ -618,6 +622,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:textSize="20sp"
+                    android:textColor="#ffffffff"
                     android:gravity="center|bottom"
                     fontPath="fonts/Roboto-Bold.ttf"
                     tools:ignore="MissingPrefix"/>
@@ -896,7 +901,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="5dp"
-            android:text="You can also use coin!"
+            android:text="You can also use HINT COIN!"
             android:textColor="#EDEDED"
             android:textSize="15sp"
             android:textStyle="bold"/>

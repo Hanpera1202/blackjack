@@ -6,6 +6,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.bj.R;
 import com.google.android.gms.ads.AdRequest;
@@ -119,6 +123,23 @@ public class Game extends Application
             }
         }
         return newIntent;
+    }
+
+    public void setHeaderData(Player player, RelativeLayout header) {
+        LinearLayout playerCashView = (LinearLayout)header.getChildAt(0);
+        TextView playerLevel = (TextView)playerCashView.getChildAt(0);
+        TextView playerCash = (TextView)playerCashView.getChildAt(1);
+        playerCash.setText(String.valueOf((int) player.getBalance()));
+        playerLevel.setText(String.valueOf(player.getLevel()));
+        this.setHeaderNextLevel(player, header);
+    }
+
+    public void setHeaderNextLevel(Player player, RelativeLayout header){
+        ProgressBar nextLevelBar = (ProgressBar)header.getChildAt(1);
+        TextView playerNextLevel = (TextView)header.getChildAt(2);
+        nextLevelBar.setMax(player.getNextExp());
+        nextLevelBar.setProgress(player.getNowExp());
+        playerNextLevel.setText(player.getNowExp() + " / " + player.getNextExp());
     }
 
 }
