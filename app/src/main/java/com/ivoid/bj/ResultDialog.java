@@ -8,9 +8,11 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Base64;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -33,17 +35,13 @@ public class ResultDialog extends FragmentActivity implements View.OnClickListen
     private final String getResultUrl = "http://blackjack.uh-oh.jp/result/%s/%s";
     private final String getMailRegistUrl = "http://blackjack.uh-oh.jp/user/registmail/%s/%s";
 
-    private String id;
     private String name;
     private String imageUrl;
-    private String winNum;
-    private String totalApplicationNum;
-    private String applicationNum;
     private String result;
+    private String receiveFlag;
 
     private DialogFragment registMailDialog;
     private DialogFragment CompRegistMailDialog;
-    private ConfirmDialogFragment confirmDialog;
 
     private SharedPreferences preference;
     private SharedPreferences.Editor editor;
@@ -75,12 +73,9 @@ public class ResultDialog extends FragmentActivity implements View.OnClickListen
                 try {
                     // 各 ATND イベントのタイトルを配列へ格納
                     result = apiresult.getString("result");
-                    id = apiresult.getString("id");
                     name = apiresult.getString("name");
                     imageUrl = apiresult.getString("image_url");
-                    winNum = apiresult.getString("win_num");
-                    totalApplicationNum = apiresult.getString("total_application_num");
-                    applicationNum = apiresult.getString("application_num");
+                    receiveFlag = apiresult.getString("receive_flag");
 
                     setView();
 
@@ -104,11 +99,17 @@ public class ResultDialog extends FragmentActivity implements View.OnClickListen
         }
     }
 
-    private void setView(){
-        if(result == "1") {
+    private void setView() {
+        if (result.equals("1")) {
             setContentView(R.layout.result_dialog_win);
-            findViewById(R.id.positive_button).setOnClickListener(this);
-
+            if (receiveFlag.equals("1")){
+                findViewById(R.id.receive_msg).setVisibility(TextView.VISIBLE);
+                findViewById(R.id.positive_button).setVisibility(Button.GONE);
+            }else{
+                findViewById(R.id.positive_button).setOnClickListener(this);
+                findViewById(R.id.receive_msg).setVisibility(TextView.GONE);
+                findViewById(R.id.positive_button).setVisibility(Button.VISIBLE);
+            }
         }else{
             setContentView(R.layout.result_dialog_lose);
             findViewById(R.id.close_button).setOnClickListener(this);
@@ -221,50 +222,6 @@ public class ResultDialog extends FragmentActivity implements View.OnClickListen
             }
         }
         CompRegistMailDialog = null;
-    }
-
-    public void showShare() {
-        try {
-            Intent intent = new Intent();
-            intent.setAction(Intent.ACTION_SEND);
-            intent.setType("text/plain");
-            intent.putExtra(Intent.EXTRA_TEXT, "共有する文言");
-            startActivity(Intent.createChooser(intent, "共有する"));
-        } catch (Exception e) {
-        }
-    }
-
-    // 確認ダイアログ作成
-    private void createConfirmDialog(String message, String id){
-        confirmDialog = ConfirmDialogFragment.newInstance(message, id);
-    }
-
-    // 確認ダイアログのメッセージを更新
-    private void updateConfirmDialogMessage(String message){
-        if(confirmDialog != null) {
-            Bundle args = new Bundle();
-            args.putString("message", message);
-            confirmDialog.setArguments(args);
-        }
-    }
-
-    // 確認ダイアログ表示
-    private void showConfirmDialog(String tag) {
-        if(confirmDialog != null) {
-            confirmDialog.show(getSupportFragmentManager(), tag);
-        }
-    }
-
-    // 確認ダイアログ非表示
-    private void dismissConfirmDialog() {
-        if (confirmDialog !=  null) {
-            Fragment prev = getSupportFragmentManager().findFragmentByTag("alertDialog");
-            if (prev != null) {
-                DialogFragment df = (DialogFragment) prev;
-                df.dismiss();
-            }
-        }
-        confirmDialog = null;
     }
 
     @Override

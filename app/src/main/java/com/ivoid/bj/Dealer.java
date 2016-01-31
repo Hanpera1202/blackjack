@@ -57,6 +57,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
 	private Vibrator vibrator;
     private SoundPool mSoundPool;
     private int mCardfall;
+    private int mCash;
     private int mPush;
     private int mLose;
     private int mWin;
@@ -182,6 +183,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
                     .build();
         }
         mCardfall = mSoundPool.load(getApplicationContext(), R.raw.cardfall, 1);
+        mCash = mSoundPool.load(getApplicationContext(), R.raw.cash, 1);
         mPush = mSoundPool.load(getApplicationContext(), R.raw.push, 1);
         mLose = mSoundPool.load(getApplicationContext(), R.raw.lose, 1);
         mWin = mSoundPool.load(getApplicationContext(), R.raw.win, 1);
@@ -199,6 +201,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
                 editor.putFloat("gotBonusPoint", 0f);
                 editor.commit();
                 updatePlayerCashlbl();
+                mSoundPool.play(mCash, game.getSoundVol(), game.getSoundVol(), 0, 0, 1.0F);
             }
             if (preference.getInt("gotBonusCoin", 0) > 0) {
                 player.depositCoin(preference.getInt("gotBonusCoin", 0));

@@ -52,7 +52,7 @@ public class BonusDialogFragment extends DialogFragment {
             Long loginBonusGetTime = preference.getLong("loginBonusGetTime", 0);
             if (loginBonusGetTime == 0L) {
                 editor.putFloat("gotBonusPoint", settings.startCash);
-                ((TextView) dialog.findViewById(R.id.specialBonus)).setText(String.valueOf(settings.startCash));
+                ((TextView) dialog.findViewById(R.id.specialBonus)).setText(String.valueOf((int)settings.startCash));
                 dialog.findViewById(R.id.specialBonusArea).setVisibility(View.VISIBLE);
             }
             editor.putInt("gotBonusCoin", settings.loginBonusCoins);

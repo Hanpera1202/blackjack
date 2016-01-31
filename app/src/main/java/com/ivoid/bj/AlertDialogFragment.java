@@ -28,6 +28,9 @@ public class AlertDialogFragment extends DialogFragment {
                             case "applyCompletedDialog":
                                 ((Competition) getActivity()).showAd();
                                 break;
+                            case "compRegistMailDialog":
+                                getActivity().finish();
+                                break;
                         }
                     }
                 })

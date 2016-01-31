@@ -54,7 +54,7 @@ class BJHand extends Hand
 	boolean splitable(boolean aceResplit)
     {
 		if (getCardCount() > 2)		return false;
-		
+
 		//Values of first and second cards in hand.
 		byte first  = hand.get((byte)0).getValue(), 
 			 second = hand.get((byte)1).getValue(); 

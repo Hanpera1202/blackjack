@@ -47,6 +47,16 @@
             android:layout_margin="20dp"
             android:scaleType="centerInside"/>
 
+        <TextView
+            android:id="@+id/receive_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="The prize is already receiving."
+            android:textSize="20sp"
+            android:textColor="#D7413C"
+            fontPath="fonts/Roboto-Bold.ttf"
+            tools:ignore="MissingPrefix"/>
+
         <Button
             android:id="@+id/positive_button"
             android:layout_width="170dp"

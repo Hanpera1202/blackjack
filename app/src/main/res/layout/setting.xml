@@ -125,17 +125,17 @@
             android:id="@+id/settingPush"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:gravity="center">
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:text="Push Notification"
-                android:textSize="22sp"
-                android:gravity="left"
-                fontPath="fonts/Roboto-Bold.ttf"
-                tools:ignore="MissingPrefix"/>
+                android:textSize="23sp"
+                android:textColor="#FFFFFF"
+                android:gravity="left" />
 
             <RelativeLayout
                 android:layout_width="0dp"
@@ -158,17 +158,17 @@
             android:id="@+id/settingSound"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/settingPush">
+            android:layout_below="@+id/settingPush"
+            android:gravity="center">
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:text="Sound"
-                android:textSize="22sp"
-                android:gravity="left"
-                fontPath="fonts/Roboto-Bold.ttf"
-                tools:ignore="MissingPrefix"/>
+                android:textSize="23sp"
+                android:textColor="#FFFFFF"
+                android:gravity="left" />
 
             <RelativeLayout
                 android:layout_width="0dp"

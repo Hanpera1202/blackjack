@@ -50,9 +50,6 @@ public class ConfirmDialogFragment extends DialogFragment {
                                 String competitionId = getArguments().getString("id");
                                 ((Competition)getActivity()).applyCompetition(competitionId);
                                 break;
-                            case "confirmShareDialog":
-                                ((ResultDialog)getActivity()).showShare();
-                                break;
                             case "confirmFreeChipsByCoinDialog":
                                 ((Dealer)getActivity()).beginFreeChipsByCoin();
                                 break;

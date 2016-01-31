@@ -31,7 +31,6 @@ public class FreeChips extends Activity implements OnClickListener
 
     private SoundPool mSoundPool;
     private int mCardfall;
-    private int mCash;
 
 	private int flipCnt;
 	private int gotPoint;
@@ -108,7 +107,6 @@ public class FreeChips extends Activity implements OnClickListener
                     .build();
         }
         mCardfall = mSoundPool.load(getApplicationContext(), R.raw.cardfall, 1);
-        mCash = mSoundPool.load(getApplicationContext(), R.raw.cash, 1);
     }
 
 
@@ -135,19 +133,12 @@ public class FreeChips extends Activity implements OnClickListener
             buttonanim.setDuration(500);
             getBonus.startAnimation(buttonanim);
 
-            // 再生
-            handler.postDelayed(new Runnable() {
-                public void run() {
-                    mSoundPool.play(mCash, game.getSoundVol(), game.getSoundVol(), 0, 0, 1.0F);
-                }
-            }, 200);
-
             handler.postDelayed(new Runnable() {
                 public void run() {
                     finish();
                     overridePendingTransition(0, R.anim.out_down);
                 }
-            }, 1600);
+            }, 1000);
         }
 
 	}
@@ -173,9 +164,7 @@ public class FreeChips extends Activity implements OnClickListener
 		editor.commit();
 		button.setOnClickListener(null);
 
-        AudioManager audio = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        int musicVol = audio.getStreamVolume(AudioManager.STREAM_MUSIC);
-        mSoundPool.play(mCardfall, (float) musicVol, (float) musicVol, 0, 0, 1.0F);
+        mSoundPool.play(mCardfall, game.getSoundVol(), game.getSoundVol(), 0, 0, 1.0F);
 	}
 
 	@Override
