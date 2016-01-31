@@ -45,7 +45,11 @@ public class LevelUpDialogFragment extends DialogFragment {
 
         if(player.isLevelUp()) {
             player.levelUp();
-            getBonusCoin = settings.levels.get(player.getLevel()).getCoinCnt;
+            if(player.getLevel() > settings.levels.size()){
+                getBonusCoin = settings.levels.get(settings.levels.size()).getCoinCnt;
+            }else {
+                getBonusCoin = settings.levels.get(player.getLevel()).getCoinCnt;
+            }
             editor.putInt("gotBonusCoin", getBonusCoin);
         }
 

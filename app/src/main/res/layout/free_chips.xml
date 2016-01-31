@@ -14,7 +14,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="PLEASE TAP THE THREE CARDS"
+            android:text="PLEASE TAP THE FOUR CARDS"
             android:textSize="20sp"
             android:textColor="#DF4F14"
             android:gravity="center"

@@ -1509,14 +1509,14 @@ public class Dealer extends FragmentActivity implements OnClickListener
     }
 
     public boolean checkCoinBonus(){
-        Integer gotCoinBonusCounts = preference.getInt("gotCoinBonusCounts", 0);
-        if(gotCoinBonusCounts < settings.coninBonusCount){
+        Integer gotCoinBonusCount = preference.getInt("gotCoinBonusCount", 0);
+        if(gotCoinBonusCount < settings.coninBonusCount){
             return true;
         }else {
             Long coinBonusGetTime = preference.getLong("coinBonusGetTime", 0);
             Long needTime = 86400 * 1000 - (System.currentTimeMillis() - coinBonusGetTime);
             if (needTime < 0L) {
-                editor.putInt("gotCoinBonusCounts", 0);
+                editor.putInt("gotCoinBonusCount", 0);
                 return true;
             } else {
                 return false;

@@ -125,8 +125,13 @@ class Player
         editor.commit();
     }
 
-    int getMaxBet()
-    { return settings.levels.get(getLevel()).maxBet; }
+    int getMaxBet() {
+        if (getLevel() > settings.levels.size()) {
+            return settings.levels.get(settings.levels.size()).maxBet;
+        }else{
+            return settings.levels.get(getLevel()).maxBet;
+        }
+    }
 
     int getLevel()
     { return preference.getInt("level", 1); }
