@@ -30,7 +30,7 @@ class GameSettings
         loginBonusSeconds=10800;freeChipsSeconds=3600;loginBonusCoins=3;coninBonusCount=3;
         //loginBonusSeconds=10;freeChipsSeconds=3600;loginBonusCoins=3;coninBonusCount=3;
         freeChipsFlips = 4;
-        necessaryPoint=3000;
+        necessaryPoint=10000;
 
         levels = new HashMap<Integer, LevelInfo>();
         levels.put(  1, new LevelInfo( 1,10,10,3,100));
