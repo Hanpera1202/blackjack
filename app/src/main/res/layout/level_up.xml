@@ -41,7 +41,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="3"
+                android:layout_weight="2"
                 android:text="Max Bet"
                 android:textSize="20sp"
                 android:textColor="#EDEDED"
@@ -52,15 +52,33 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:gravity="center"
-                android:background="@drawable/bg_playercash">
+                android:layout_weight="3"
+                android:gravity="center|right">
+
+                <TextView
+                    android:id="@+id/prevMaxBet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="100pt"
+                    android:textColor="#EDEDED"
+                    android:textSize="18sp"
+                    fontPath="fonts/Roboto-Bold.ttf"
+                    tools:ignore="MissingPrefix"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" → "
+                    android:textColor="#EDEDED"
+                    android:textSize="18sp"
+                    fontPath="fonts/Roboto-Bold.ttf"
+                    tools:ignore="MissingPrefix"/>
 
                 <TextView
                     android:id="@+id/newMaxBet"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="200pt"
+                    android:text="100pt"
                     android:textColor="#EDEDED"
                     android:textSize="18sp"
                     fontPath="fonts/Roboto-Bold.ttf"
@@ -125,6 +143,7 @@
             android:textSize="17sp"
             android:textColor="#ffffffff"
             android:background="#ED684A"
+            android:gravity="center"
             fontPath="fonts/Roboto-Bold.ttf"
             tools:ignore="MissingPrefix"/>
 

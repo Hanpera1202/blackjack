@@ -12,9 +12,10 @@
         android:gravity="center">
 
         <TextView
+            android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="PLEASE TAP THE FOUR CARDS"
+            android:text="PLEASE CHOOSE 3 CARDS"
             android:textSize="20sp"
             android:textColor="#DF4F14"
             android:gravity="center"

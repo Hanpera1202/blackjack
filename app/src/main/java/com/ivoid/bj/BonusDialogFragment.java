@@ -52,18 +52,18 @@ public class BonusDialogFragment extends DialogFragment {
             Long loginBonusGetTime = preference.getLong("loginBonusGetTime", 0);
             if (loginBonusGetTime == 0L) {
                 editor.putFloat("gotBonusPoint", settings.startCash);
-                ((TextView) dialog.findViewById(R.id.specialBonus)).setText(String.valueOf((int)settings.startCash));
+                ((TextView) dialog.findViewById(R.id.specialBonus)).setText("+" + (int) settings.startCash);
                 dialog.findViewById(R.id.specialBonusArea).setVisibility(View.VISIBLE);
             }
             editor.putInt("gotBonusCoin", settings.loginBonusCoins);
-            ((TextView) dialog.findViewById(R.id.loginBonus)).setText(String.valueOf(settings.loginBonusCoins));
+            ((TextView) dialog.findViewById(R.id.loginBonus)).setText("+" + settings.loginBonusCoins);
 
             editor.putLong("loginBonusGetTime", System.currentTimeMillis());
 
         }else{
             ((TextView) dialog.findViewById(R.id.bonusMessage)).setText("YOU GOT COIN!");
             editor.putInt("gotBonusCoin", 1);
-            ((TextView) dialog.findViewById(R.id.loginBonus)).setText("1");
+            ((TextView) dialog.findViewById(R.id.loginBonus)).setText("+1");
             editor.putInt("gotCoinBonusCount", preference.getInt("gotCoinBonusCount", 0) + 1);
             try {
                 String getTime = new SimpleDateFormat("yyyy-MM-dd").format(System.currentTimeMillis());

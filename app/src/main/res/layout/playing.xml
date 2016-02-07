@@ -25,7 +25,7 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:text="1"
-                android:textColor="#000000"
+                android:textColor="#121212"
                 android:textSize="14sp"
                 android:background="@drawable/chip"
                 fontPath="fonts/Roboto-Bold.ttf"
@@ -123,12 +123,26 @@
         android:layout_below="@+id/header"
         android:layout_alignParentLeft="true">
 
-
-        <ImageView
+        <RelativeLayout
             android:layout_width="25dp"
-            android:layout_height="match_parent"
-            android:scaleType="centerInside"
-            android:src="@drawable/competition"/>
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerInside"
+                android:src="@drawable/competition"/>
+
+            <TextView
+                android:id="@+id/applyPossibleNum"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="300"
+                android:textSize="12sp"
+                android:textColor="#121212"
+                android:gravity="center"/>
+
+        </RelativeLayout>
 
         <ProgressBar
             android:id="@+id/progressBar"
@@ -138,15 +152,6 @@
             android:layout_height="15dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:layout_gravity="center"/>
-
-        <TextView
-            android:id="@+id/playerProgress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="300"
-            android:textSize="12sp"
-            android:textColor="#ffffff"
             android:layout_gravity="center"/>
 
         <TextView
@@ -677,7 +682,7 @@
                         android:text="0"
                         android:background="@drawable/bg_playerbet"
                         android:textSize="22sp"
-                        android:textColor="#ff000000"
+                        android:textColor="#121212"
                         android:gravity="center"
                         fontPath="fonts/Roboto-Bold.ttf"
                         tools:ignore="MissingPrefix"/>
@@ -690,7 +695,9 @@
                         android:textSize="8sp"
                         android:textColor="#ff0000"
                         android:layout_alignParentBottom="true"
-                        android:layout_centerInParent="true"/>
+                        android:layout_centerInParent="true"
+                        fontPath="fonts/Roboto-Bold.ttf"
+                        tools:ignore="MissingPrefix"/>
 
                 </RelativeLayout>
 
@@ -814,52 +821,39 @@
         </LinearLayout>
     </LinearLayout>
 
-    <Button
-        android:id="@+id/hintButton"
+    <RelativeLayout
+        android:id="@+id/playerCoin"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:textSize="20sp"
-        android:text="0"
-        android:textColor="#121212"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/coin"
-        android:layout_above="@+id/betting"
-        android:layout_alignParentRight="true"/>
-
-    <Button
-        android:id="@+id/hintButton2"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:textSize="30sp"
-        android:text="\?"
-        android:textColor="#121212"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
-        android:background="@drawable/coin"
         android:layout_below="@+id/playerGoal"
-        android:layout_alignParentRight="true" />
+        android:layout_alignParentRight="true" >
 
-    <LinearLayout
-        android:id="@+id/loginBonus"
-        android:layout_width="60dp"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="5dp"
-        android:layout_marginBottom="2dp"
-        android:layout_above="@+id/betting"
-        android:layout_alignParentRight="true"
-        android:background="@drawable/bg_nextbonus">
+        <Button
+            android:id="@+id/hintButton"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="32sp"
+            android:text="\?"
+            android:onClick="onClickCoin"
+            android:textColor="#121212"
+            android:background="@drawable/coin" />
 
         <TextView
-            android:id="@+id/CountDown"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="0:00:00"
+            android:id="@+id/coinNum"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:text="100"
             android:textColor="#ffffffff"
-            android:textSize="12sp"
-            android:gravity="center"/>
+            android:textSize="10sp"
+            android:gravity="center"
+            android:layout_alignRight="@id/hintButton"
+            android:layout_alignBottom="@id/hintButton"
+            android:background="@drawable/bg_coinnum">
+        </TextView>
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <Button
         android:id="@+id/freeChips"
@@ -915,7 +909,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="5dp"
-            android:text="You can also use HINT COIN!"
+            android:text="You can also use Hint Coin!"
             android:textColor="#EDEDED"
             android:textSize="15sp"
             android:textStyle="bold"/>

@@ -64,8 +64,7 @@ class BJHand extends Hand
 			if (aceResplit)	return true;
 			else			return false;
 		}
-		return true;
-		//return (first == second);
+		return (first == second);
 	}
 	
 	void addCard(Card c) 

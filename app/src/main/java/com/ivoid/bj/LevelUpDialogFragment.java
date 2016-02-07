@@ -43,6 +43,8 @@ public class LevelUpDialogFragment extends DialogFragment {
         preference = getActivity().getSharedPreferences("user_data", getActivity().MODE_PRIVATE);
         editor = preference.edit();
 
+        ((TextView) dialog.findViewById(R.id.prevMaxBet)).setText(player.getMaxBet() + "pt");
+
         if(player.isLevelUp()) {
             player.levelUp();
             if(player.getLevel() > settings.levels.size()){
@@ -54,8 +56,8 @@ public class LevelUpDialogFragment extends DialogFragment {
         }
 
         ((TextView) dialog.findViewById(R.id.newLevel)).setText("You are now level " + player.getLevel() + ".");
-        ((TextView) dialog.findViewById(R.id.newMaxBet)).setText(player.getMaxBet() + " pt");
-        ((TextView) dialog.findViewById(R.id.loginBonus)).setText(String.valueOf(getBonusCoin));
+        ((TextView) dialog.findViewById(R.id.newMaxBet)).setText(player.getMaxBet() + "pt");
+        ((TextView) dialog.findViewById(R.id.loginBonus)).setText("+" + String.valueOf(getBonusCoin));
 
         editor.commit();
 

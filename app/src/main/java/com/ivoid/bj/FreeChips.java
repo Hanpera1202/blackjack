@@ -34,7 +34,7 @@ public class FreeChips extends Activity implements OnClickListener
 
 	private int flipCnt;
 	private int gotPoint;
-	private BonusDeck shoe;
+	private FreeChipsDeck shoe;
 	private Card card;
 
 	private Map<Integer, Button> flipCards;
@@ -55,7 +55,7 @@ public class FreeChips extends Activity implements OnClickListener
 		preference = getSharedPreferences("user_data", MODE_PRIVATE);
 		editor = preference.edit();
         settings = new GameSettings();
-		shoe = new BonusDeck();
+		shoe = new FreeChipsDeck();
 
 		flipCards = new HashMap<Integer, Button>();
 		flipCards.put((R.id.card1), (Button)findViewById(R.id.card1));

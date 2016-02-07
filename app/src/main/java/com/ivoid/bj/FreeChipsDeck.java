@@ -2,11 +2,11 @@ package com.ivoid.bj;
 
 import java.util.ArrayList;
 
-class BonusDeck
+class FreeChipsDeck
 {
 	private ArrayList<Card> deck;   // An array of Cards, representing the Deck.
 
-	BonusDeck()
+	FreeChipsDeck()
    	{
 		deck = new ArrayList<Card>(); // Instantiate the ArrayList.
 
@@ -30,22 +30,11 @@ class BonusDeck
 	
 	void fillDeck()
 	{
-		for ( byte value = 1 ; value < 11 ; value++ ) {
-			for (byte suit = 0; suit < 4; ) {
-				if (value <= 4) {
-					deck.add(new Card(value, suit, true));
-					suit += 1;
-				} else if(value <= 8) {
-					deck.add(new Card(value, suit, true));
-					suit += 2;
-				} else {
-					deck.add(new Card(value, suit, true));
-					suit += 4;
-				}
-			}
-		}
+        for ( byte suit = 0 ; suit < 4 ; suit++ )
+            for ( byte value = 1 ; value < 14 ; value++ ) {
+                deck.add(new Card(value, suit, true));
+            }
 	}
-
 
 	void shuffleDeck()
 	{

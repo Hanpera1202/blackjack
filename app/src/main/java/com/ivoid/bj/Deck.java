@@ -57,7 +57,6 @@ class Deck
 	void fillDeck()
 	{
 		// Fill the deck with 52 Cards, 4 different suits & 13 different cards in each suit.  
-		
 		for ( byte decks = 0 ; decks < howManyDecks ; decks++ )
 			for ( byte suit = 0 ; suit < 4 ; suit++ )
 				for ( byte value = 1 ; value < 14 ; value++ ) {
@@ -69,7 +68,6 @@ class Deck
 	void fillDeckNaka()
 	{
 		// Fill the deck with 52 Cards, 4 different suits & 13 different cards in each suit.
-
 		for ( byte decks = 0 ; decks < howManyDecks ; decks++ )
 			for ( byte value = 1 ; value < 14 ; value++ )
 				for ( byte suit = 0 ; suit < 4 ; suit++ ){

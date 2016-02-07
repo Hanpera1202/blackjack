@@ -92,9 +92,10 @@ public class Dealer extends FragmentActivity implements OnClickListener
 	private TextView playerBet;
 	private TextView playerSum;
 	private TextView playerCash;
-    private TextView playerProgress;
-    private TextView playerCoin;
+    private TextView playerCoinNum;
     private TextView playerMaxBet;
+
+    private RelativeLayout playerCoin;
 
 	private Map<Integer, Action> buttons;
 	private Map<BJHand, RelativeLayout> hands;
@@ -113,7 +114,6 @@ public class Dealer extends FragmentActivity implements OnClickListener
     private byte global_b;
     private boolean showBonusDialogFlag = false;
 
-    BonusCDTimer bonusCountDownTimer = null;
     FreeChipsCDTimer freeChipsCountDownTimer = null;
 
     private DialogFragment alertDialog;
@@ -152,7 +152,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
         bar = (ProgressBar)findViewById(R.id.progressBar);
         bar.setMax(settings.necessaryPoint);
         ((TextView)findViewById(R.id.necessaryPoint)).
-                setText("/" + settings.necessaryPoint + "pt");
+                setText(settings.necessaryPoint + "pt");
 
     }
 
@@ -191,9 +191,9 @@ public class Dealer extends FragmentActivity implements OnClickListener
         mInsuranceWin = mSoundPool.load(getApplicationContext(), R.raw.insurance_win, 1);
         mInsuranceLose = mSoundPool.load(getApplicationContext(), R.raw.insurance_lose, 1);
 
-        game.setHeaderData(player, (RelativeLayout)findViewById(R.id.header));
+        game.setHeaderData(player, (RelativeLayout) findViewById(R.id.header));
         playerMaxBet.setText("MAX " + player.getMaxBet() + "pt");
-        playerCoin.setText(String.valueOf((int) player.getCoinBalance()));
+        setPlayerCoin(RelativeLayout.VISIBLE);
         setPlayerProgress((int) player.getBalance());
         if (betting){
             if (preference.getFloat("gotBonusPoint", 0f) > 0f) {
@@ -212,7 +212,6 @@ public class Dealer extends FragmentActivity implements OnClickListener
             if(player.getBalance() < player.getInitBet()) {
                 clearBet();
             }
-            loginBonusCountDown();
             checkExecInitUI(0);
         }else{
             // dd,split,insuranceボタン表示の再判定
@@ -264,8 +263,8 @@ public class Dealer extends FragmentActivity implements OnClickListener
         playerResults.add((ImageView) findViewById(R.id.playerResult2));
 
         playerCash=(TextView)findViewById(R.id.playerCash);
-        playerProgress=(TextView)findViewById(R.id.playerProgress);
-        playerCoin=(TextView)findViewById(R.id.hintButton);
+        playerCoinNum=(TextView)findViewById(R.id.coinNum);
+        playerCoin=(RelativeLayout)findViewById(R.id.playerCoin);
         playerMaxBet=(TextView)findViewById(R.id.playerMaxBet);
     }
 
@@ -310,8 +309,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
             }
             if (buttons == null) {
                 findViewById(R.id.betting).setVisibility(LinearLayout.VISIBLE);
-                findViewById(R.id.hintButton).setVisibility(LinearLayout.VISIBLE);
-                findViewById(R.id.loginBonus).setVisibility(LinearLayout.VISIBLE);
+                setPlayerCoin(RelativeLayout.VISIBLE);
                 initUI();
             }
         }
@@ -332,7 +330,6 @@ public class Dealer extends FragmentActivity implements OnClickListener
 			buttons.put(R.id.bet_500, Action.FIVEHUNDRED);
             buttons.put(R.id.bet_all, Action.ALL);
             buttons.put(R.id.rebet, Action.REBET);
-            buttons.put(R.id.hintButton, Action.HINTCOIN);
 
 			playerBet=(TextView) findViewById(R.id.playerBet);
 
@@ -351,7 +348,6 @@ public class Dealer extends FragmentActivity implements OnClickListener
 			buttons.put(R.id.splitButton, Action.SPLIT);
             buttons.put(R.id.insuranceYes, Action.INSURANCE_YES);
             buttons.put(R.id.insuranceNo, Action.INSURANCE_NO);
-            buttons.put(R.id.hintButton, Action.HINTCOIN);
 
             hands=new HashMap<BJHand, RelativeLayout>();
 
@@ -566,6 +562,13 @@ public class Dealer extends FragmentActivity implements OnClickListener
 
 			hand.setPlaying(false);
 
+            handler.postDelayed(new Runnable() {
+                int NowIndex = currentPlayerIndex;
+                public void run() {
+                    updatePlayerSumlbl(NowIndex);
+                }
+            }, waittime);
+
             checkPlayerHand(hand);
 		}
 	}
@@ -640,6 +643,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
             ((Button) findViewById(entry)).setOnClickListener(null);
 		}
         buttons = null;
+        setPlayerCoin(RelativeLayout.INVISIBLE);
 	}
 
 	void act()
@@ -698,7 +702,10 @@ public class Dealer extends FragmentActivity implements OnClickListener
         betImages=new ArrayList<ImageView>();
         while(betNum > 0 && betImages.size() < 5) {
             ImageView betImage = new ImageView(this);
-            if (betNum >= 500) {
+            if (betNum >= 1000) {
+                betImage.setImageResource(R.drawable.m1000);
+                betNum -= 1000;
+            } else if (betNum >= 500) {
                 betImage.setImageResource(R.drawable.m500);
                 betNum -= 500;
             } else if (betNum >= 100) {
@@ -711,8 +718,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
                 betImage.setImageResource(R.drawable.m10);
                 betNum -= 10;
             } else {
-                // todo
-                betImage.setImageResource(R.drawable.m1000);
+                betImage.setImageResource(R.drawable.m5);
                 betNum -= 5;
             }
             betImage.setScaleType(ImageView.ScaleType.FIT_XY);
@@ -837,13 +843,12 @@ public class Dealer extends FragmentActivity implements OnClickListener
 		public void run() {
             findViewById(R.id.standButton).setVisibility(Button.VISIBLE);
             findViewById(R.id.hitButton).setVisibility(Button.VISIBLE);
+            setPlayerCoin(RelativeLayout.VISIBLE);
             checksurrenderbutton();
             checkddbutton();
             checksplitbutton();
-            findViewById(R.id.hintButton).setVisibility(Button.VISIBLE);
-		}
+        }
 	};
-
 
     void checksurrenderbutton()
     {
@@ -859,6 +864,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
     void checkddbutton()
     {
         if (currentPlayerHand.getCardCount() == 2 &&
+                !currentPlayerHand.hasBJ() &&
                 player.getBalance() >= currentPlayerHand.getBet().getValue()){
             findViewById(R.id.ddButton).setVisibility(Button.VISIBLE);
         }else{
@@ -995,7 +1001,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
     { updatePlayerlbl(playerCash, (int)player.getBalance());}
 
     void updatePlayerCoinlbl()
-    { updatePlayerlbl(playerCoin, (int) player.getCoinBalance());}
+    { updatePlayerlbl(playerCoinNum, (int) player.getCoinBalance());}
 
     int countUpNum;
     TextView updateView;
@@ -1039,12 +1045,28 @@ public class Dealer extends FragmentActivity implements OnClickListener
 
 
     private void setPlayerProgress(int updateCash){
+        /*
         if(updateCash > settings.necessaryPoint) {
             playerProgress.setText(String.valueOf(settings.necessaryPoint));
             bar.setProgress(settings.necessaryPoint);
         }else{
             playerProgress.setText(String.valueOf(updateCash));
             bar.setProgress(updateCash);
+        }*/
+        ((TextView)findViewById(R.id.applyPossibleNum)).setText(String.valueOf(updateCash / settings.necessaryPoint));
+        bar.setProgress(updateCash % settings.necessaryPoint);
+
+    }
+
+    private void setPlayerCoin(int visible) {
+        playerCoin.setVisibility(visible);
+        if(visible == RelativeLayout.VISIBLE){
+            playerCoinNum.setText(String.valueOf((int) player.getCoinBalance()));
+            if (betting) {
+                ((TextView) findViewById(R.id.hintButton)).setText("+");
+            }else{
+                ((TextView) findViewById(R.id.hintButton)).setText("?");
+            }
         }
     }
 
@@ -1203,8 +1225,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
                         initUI();
                         firstDeal();
 						findViewById(R.id.betting).setVisibility(LinearLayout.INVISIBLE);
-                        findViewById(R.id.hintButton).setVisibility(LinearLayout.INVISIBLE);
-                        findViewById(R.id.loginBonus).setVisibility(LinearLayout.INVISIBLE);
+                        setPlayerCoin(RelativeLayout.INVISIBLE);
 					}
         			break;
         		}
@@ -1260,21 +1281,6 @@ public class Dealer extends FragmentActivity implements OnClickListener
 					collectBet(1000f);
 					break;
 				}
-                case HINTCOIN:
-                {
-                    if(getTimeLefOfLoginBonus() == 0L) {
-                        createBonusDialog("login");
-                        showBonusDialog();
-                    }else if(checkCoinBonus()) {
-                        String message = "Do you want to get a HINT COIN to see the video ad?";
-                        DialogFragment ConfirmAdDialog = ConfirmDialogFragment.newInstance(message);
-                        ConfirmAdDialog.show(getSupportFragmentManager(), "confirmAdDialog");
-                    }else{
-                        createAlertDialog("The only up to " + settings.coninBonusCount + " times can get in one day.");
-                        showAlertDialog();
-                    }
-                    break;
-                }
             }
 
             vibrator.vibrate(40);
@@ -1302,13 +1308,6 @@ public class Dealer extends FragmentActivity implements OnClickListener
                 }
                 case DOUBLEDOWN: {
                     dd(currentPlayerHand);
-                    handler.postDelayed(new Runnable() {
-                        int NowIndex = currentPlayerIndex;
-
-                        public void run() {
-                            updatePlayerSumlbl(NowIndex);
-                        }
-                    }, waittime);
 					break;
                 }
                 case SPLIT: {
@@ -1326,18 +1325,6 @@ public class Dealer extends FragmentActivity implements OnClickListener
                 }
                 case INSURANCE_NO:{
                     endInsurance();
-                    break;
-                }
-                case HINTCOIN:
-                {
-                    if(player.getCoinBalance() > 0) {
-                        String message = "Do you use a HINT COIN?";
-                        DialogFragment ConfirmDialog = ConfirmDialogFragment.newInstance(message);
-                        ConfirmDialog.show(getSupportFragmentManager(), "confirmHintByCoinDialog");
-                    }else{
-                        createAlertDialog("You don't have a HINT COIN.");
-                        showAlertDialog();
-                    }
                     break;
                 }
         	}
@@ -1419,7 +1406,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
                 checksplitbutton();
                 handler.postDelayed(new Runnable() {
                     public void run() {
-                        findViewById(R.id.ddButton).setVisibility(Button.VISIBLE);
+                        checkddbutton();
                         playerOverViews.get(currentPlayerIndex).setBackgroundResource(0);
                         playerOverViews.get(nextHandtoPlay).setBackgroundResource(R.drawable.layout_shape);
                         currentPlayerIndex = nextHandtoPlay;
@@ -1537,41 +1524,25 @@ public class Dealer extends FragmentActivity implements OnClickListener
         }
     }
 
-    public void loginBonusCountDown(){
-
-        // 以前にタイマーを起動していればリセット
-        if (bonusCountDownTimer != null){
-            bonusCountDownTimer.cancel();
-            bonusCountDownTimer = null;
-        }
-        Long timeLeft = getTimeLefOfLoginBonus();
-        if(timeLeft == 0L){
-            ((TextView)findViewById(R.id.CountDown)).setText("TOUCH!!");
-        } else {
-            // カウントダウンする
-            bonusCountDownTimer = new BonusCDTimer(timeLeft, 500);
-            bonusCountDownTimer.start();
-        }
-    }
-
-    public class BonusCDTimer extends CountDownTimer {
-
-        TextView count_txt = (TextView) findViewById(R.id.CountDown);
-
-        public BonusCDTimer(long millisInFuture, long countDownInterval) {
-            super(millisInFuture, countDownInterval);
-        }
-
-        @Override
-        public void onTick(long millisUntilFinished) {
-            count_txt.setText((millisUntilFinished / 1000 / 3600) + ":" +
-                    String.format("%02d", (millisUntilFinished / 1000 / 60 % 60)) + ":" +
-                    String.format("%02d", (millisUntilFinished / 1000 % 60)));
-        }
-
-        @Override
-        public void onFinish() {
-            count_txt.setText("TOUCH!!");
+    public void onClickCoin(final View view){
+        if(betting){
+            if(checkCoinBonus()) {
+                String message = "Do you want to get a Hint Coin to see the video ad?";
+                DialogFragment ConfirmAdDialog = ConfirmDialogFragment.newInstance(message);
+                ConfirmAdDialog.show(getSupportFragmentManager(), "confirmAdDialog");
+            }else{
+                createAlertDialog("The only up to " + settings.coninBonusCount + " times can get in one day.");
+                showAlertDialog();
+            }
+        }else{
+            if(player.getCoinBalance() > 0) {
+                String message = "Do you use a Hint Coin?";
+                DialogFragment ConfirmDialog = ConfirmDialogFragment.newInstance(message);
+                ConfirmDialog.show(getSupportFragmentManager(), "confirmHintByCoinDialog");
+            }else{
+                createAlertDialog("You don't have a Hint Coin.");
+                showAlertDialog();
+            }
         }
     }
 
@@ -1612,11 +1583,11 @@ public class Dealer extends FragmentActivity implements OnClickListener
 
     public void onClickFreeChipsByCoin(final View view){
         if(player.getCoinBalance() > 0) {
-            String message = "Are you sure you want to consume a HINT COIN?";
+            String message = "Are you sure you want to consume a Hint Coin?";
             DialogFragment ConfirmAdDialog = ConfirmDialogFragment.newInstance(message);
             ConfirmAdDialog.show(getSupportFragmentManager(), "confirmFreeChipsByCoinDialog");
         }else{
-            createAlertDialog("You don't have a HINT COIN.");
+            createAlertDialog("You don't have a Hint Coin.");
             showAlertDialog();
         }
     }

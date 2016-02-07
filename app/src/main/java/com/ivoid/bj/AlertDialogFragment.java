@@ -34,6 +34,7 @@ public class AlertDialogFragment extends DialogFragment {
                         }
                     }
                 })
+                .setNegativeButton(null,null)
                 .create();
     }
 }
