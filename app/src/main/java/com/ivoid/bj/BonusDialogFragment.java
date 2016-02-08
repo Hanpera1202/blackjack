@@ -81,7 +81,7 @@ public class BonusDialogFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 dismiss();
-                ((Dealer)getActivity()).onResume();
+                ((Dealer)getActivity()).setPlayerData();
             }
         });
 

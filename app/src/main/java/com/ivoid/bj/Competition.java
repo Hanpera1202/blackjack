@@ -4,8 +4,6 @@ import com.bj.R;
 import com.google.android.gms.ads.AdListener;
 
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import android.os.Handler;
@@ -58,6 +56,7 @@ public class Competition extends FragmentActivity {
     private BaseAdapter adapter;
 
     private DialogFragment alertDialog;
+    private ConfirmDialogFragment ConfirmDialog;
 
     private Player player;
     private TextView playerCash;
@@ -69,6 +68,7 @@ public class Competition extends FragmentActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState){
+
         super.onCreate(savedInstanceState);
         game = (Game) this.getApplication();
 
@@ -105,7 +105,6 @@ public class Competition extends FragmentActivity {
                 return true;
             }
         });
-        Log.d("URL", String.format(getActiveUrl, game.getUserId()));
         // 処理を実行
         asyncJsonLoader.execute(String.format(getActiveUrl, game.getUserId()));
     }
@@ -227,10 +226,15 @@ public class Competition extends FragmentActivity {
          */
         public void onClick(View view) {
             String competitionId = (String) view.getTag();
-            Integer point = points.get(ids.indexOf(competitionId));
-            String message = "Are you sure you want to apply using the " + point + "pt?";
-            DialogFragment ConfirmAdDialog = ConfirmDialogFragment.newInstance(message, competitionId);
-            ConfirmAdDialog.show(getSupportFragmentManager(), "confirmApplyDialog");
+            if(player.getBalance() >= points.get(ids.indexOf(competitionId))) {
+                Integer point = points.get(ids.indexOf(competitionId));
+                String message = "Are you sure you want to apply using the " + point + "pt?";
+                createConfirmDialog("confirmApplyDialog", message, competitionId);
+                showConfirmDialog();
+            }else{
+                createAlertDialog("default", "Your point is not enough");
+                showAlertDialog();
+            }
         }
     }
 
@@ -247,15 +251,15 @@ public class Competition extends FragmentActivity {
                         applicationNums.set(index, applicationNums.get(index) + 1);
                         adapter.notifyDataSetChanged();
                         updatePlayerCashlbl();
-                        showAlertDialog("applyCompletedDialog");
+                        showAlertDialog();
                     }else{
                         String reason = result.getString("reason");
                         switch(reason){
                             case "ENDED":
-                                updateAlertDialogMessage("This prize competition has ended.");
+                                updateAlertDialogArgs("default", "This prize competition has ended.");
                                 break;
                             default:
-                                updateAlertDialogMessage("Applicantion failed.");
+                                updateAlertDialogArgs("default", "Applicantion failed.");
                         }
                         showAlertDialog();
                     }
@@ -267,13 +271,8 @@ public class Competition extends FragmentActivity {
             }
         },"Applying");
         // 処理を実行
-        if(player.getBalance() >= points.get(ids.indexOf(competitionId))) {
-            createAlertDialog("Applicantion completed.");
-            asyncJsonLoader.execute(String.format(applyUrl, game.getUserId(), competitionId));
-        }else{
-            createAlertDialog("Your point is not enough");
-            showAlertDialog();
-        }
+        createAlertDialog("applyCompletedDialog", "Applicantion completed.");
+        asyncJsonLoader.execute(String.format(applyUrl, game.getUserId(), competitionId));
     }
 
     int countUpNum;
@@ -317,22 +316,26 @@ public class Competition extends FragmentActivity {
                 public void onAdFailedToLoad(int errorCode) {
                     game.requestNewInterstitial();
                 }
+
                 @Override
-                public void onAdClosed() { game.requestNewInterstitial(); }
+                public void onAdClosed() {
+                    game.requestNewInterstitial();
+                }
             });
             game.mInterstitialAd.show();
         }
     }
 
     // アラートダイアログ作成
-    private void createAlertDialog(String message){
-        alertDialog = AlertDialogFragment.newInstance(message);
+    private void createAlertDialog(String dialogType, String message){
+        alertDialog = AlertDialogFragment.newInstance(dialogType, message);
     }
 
     // アラートダイアログのメッセージを更新
-    private void updateAlertDialogMessage(String message){
+    private void updateAlertDialogArgs(String dialogType, String message){
         if(alertDialog != null) {
             Bundle args = new Bundle();
+            args.putString("dialogType", dialogType);
             args.putString("message", message);
             alertDialog.setArguments(args);
         }
@@ -340,15 +343,9 @@ public class Competition extends FragmentActivity {
 
     // アラートダイアログ表示tag指定なし
     private void showAlertDialog() {
-        if(alertDialog != null) {
+        if(alertDialog != null &&
+                getSupportFragmentManager().findFragmentByTag("alertDialog") == null) {
             alertDialog.show(getSupportFragmentManager(), "alertDialog");
-        }
-    }
-
-    // アラートダイアログ表示
-    private void showAlertDialog(String tag) {
-        if(alertDialog != null) {
-            alertDialog.show(getSupportFragmentManager(), tag);
         }
     }
 
@@ -362,6 +359,19 @@ public class Competition extends FragmentActivity {
             }
         }
         alertDialog = null;
+    }
+
+    // create confirm dialog
+    private void createConfirmDialog(String dialogType, String message, String id){
+        ConfirmDialog = ConfirmDialogFragment.newInstance(dialogType, message, id);
+    }
+
+    // show confirm dialog
+    private void showConfirmDialog() {
+        if (ConfirmDialog != null &&
+                getSupportFragmentManager().findFragmentByTag("confirmDialog") == null) {
+            ConfirmDialog.show(getSupportFragmentManager(), "confirmDialog");
+        }
     }
 
     public void onClickHeader(final View view) {

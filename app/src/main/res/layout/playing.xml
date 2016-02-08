@@ -920,7 +920,7 @@
             android:layout_height="50dp"
             android:textSize="25sp"
             android:text="-1"
-            android:textColor="#565656"
+            android:textColor="#121212"
             android:background="@drawable/coin"
             android:onClick="onClickFreeChipsByCoin"
             android:layout_below="@+id/freeChipsCountDown"

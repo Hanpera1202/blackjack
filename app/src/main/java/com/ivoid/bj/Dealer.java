@@ -119,6 +119,9 @@ public class Dealer extends FragmentActivity implements OnClickListener
     private DialogFragment alertDialog;
     private DialogFragment LevelUpDialog;
     private DialogFragment BonusDialog;
+    private ConfirmDialogFragment ConfirmDialog;
+    private ConfirmAdDialogFragment ConfirmAdDialog;
+    private HintDialogFragment hintDialog;
     private ProgressBar bar;
 
     private boolean backendFlag = false;
@@ -163,7 +166,6 @@ public class Dealer extends FragmentActivity implements OnClickListener
 
         // reset backendFlag
         backendFlag = false;
-
         // reset animation start time
         waittime = 0;
 
@@ -191,6 +193,21 @@ public class Dealer extends FragmentActivity implements OnClickListener
         mInsuranceWin = mSoundPool.load(getApplicationContext(), R.raw.insurance_win, 1);
         mInsuranceLose = mSoundPool.load(getApplicationContext(), R.raw.insurance_lose, 1);
 
+        setPlayerData();
+        if (!betting){
+            // dd,split,insuranceボタン表示の再判定
+            if(insurancingFlg){
+                if(!isInsurable()){
+                    endInsurance();
+                }
+            }else {
+                checkddbutton();
+                checksplitbutton();
+            }
+        }
+    }
+
+    public void setPlayerData(){
         game.setHeaderData(player, (RelativeLayout) findViewById(R.id.header));
         playerMaxBet.setText("MAX " + player.getMaxBet() + "pt");
         setPlayerCoin(RelativeLayout.VISIBLE);
@@ -213,16 +230,6 @@ public class Dealer extends FragmentActivity implements OnClickListener
                 clearBet();
             }
             checkExecInitUI(0);
-        }else{
-            // dd,split,insuranceボタン表示の再判定
-            if(insurancingFlg){
-                if(!isInsurable()){
-                    endInsurance();
-                }
-            }else {
-                checkddbutton();
-                checksplitbutton();
-            }
         }
     }
 
@@ -292,7 +299,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
                     showLevelUpDialog();
                 }
             }, waittime);
-        }else if(getTimeLefOfLoginBonus() == 0L){
+        }else if(getTimeLeftOfLoginBonus() == 0L){
             createBonusDialog("login");
             handler.postDelayed(new Runnable() {
                 public void run() {
@@ -472,6 +479,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
 		currentPlayerHand=player.getHand((byte) 0);
 		betting=true;
 		getNextAction=false;
+        waittime = 0;
         // update playerBet to 0
         updatePlayerBetlbl();
         checkExecInitUI(500);
@@ -1498,23 +1506,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
         }
     }
 
-    public boolean checkCoinBonus(){
-        Integer gotCoinBonusCount = preference.getInt("gotCoinBonusCount", 0);
-        if(gotCoinBonusCount < settings.coninBonusCount){
-            return true;
-        }else {
-            Long coinBonusGetTime = preference.getLong("coinBonusGetTime", 0);
-            Long needTime = 86400 * 1000 - (System.currentTimeMillis() - coinBonusGetTime);
-            if (needTime < 0L) {
-                editor.putInt("gotCoinBonusCount", 0);
-                return true;
-            } else {
-                return false;
-            }
-        }
-    }
-
-    public Long getTimeLefOfLoginBonus(){
+    public Long getTimeLeftOfLoginBonus(){
         Long loginBonusGetTime = preference.getLong("loginBonusGetTime", 0);
         Long needTime = settings.loginBonusSeconds * 1000 - (System.currentTimeMillis() - loginBonusGetTime);
         if(needTime < 0){
@@ -1526,19 +1518,13 @@ public class Dealer extends FragmentActivity implements OnClickListener
 
     public void onClickCoin(final View view){
         if(betting){
-            if(checkCoinBonus()) {
-                String message = "Do you want to get a Hint Coin to see the video ad?";
-                DialogFragment ConfirmAdDialog = ConfirmDialogFragment.newInstance(message);
-                ConfirmAdDialog.show(getSupportFragmentManager(), "confirmAdDialog");
-            }else{
-                createAlertDialog("The only up to " + settings.coninBonusCount + " times can get in one day.");
-                showAlertDialog();
-            }
+            createConfirmAdDialog();
+            showConfirmAdDialog();
         }else{
             if(player.getCoinBalance() > 0) {
                 String message = "Do you use a Hint Coin?";
-                DialogFragment ConfirmDialog = ConfirmDialogFragment.newInstance(message);
-                ConfirmDialog.show(getSupportFragmentManager(), "confirmHintByCoinDialog");
+                createConfirmDialog("confirmHintByCoinDialog", message);
+                showConfirmDialog();
             }else{
                 createAlertDialog("You don't have a Hint Coin.");
                 showAlertDialog();
@@ -1569,6 +1555,9 @@ public class Dealer extends FragmentActivity implements OnClickListener
 
     public void getHint(){
         Card card = shoe.checkNextCard();
+        createHintDialog(card.getImage());
+        showHintDialog();
+        /*
         if(card.getValue() > 7) {
             createAlertDialog("The next card is greater than 7.");
         }else if(card.getValue() == 7){
@@ -1577,6 +1566,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
             createAlertDialog("The next card is less than 7.");
         }
         showAlertDialog();
+        */
         player.withdrawCoin(1);
         updatePlayerCoinlbl();
     }
@@ -1584,8 +1574,8 @@ public class Dealer extends FragmentActivity implements OnClickListener
     public void onClickFreeChipsByCoin(final View view){
         if(player.getCoinBalance() > 0) {
             String message = "Are you sure you want to consume a Hint Coin?";
-            DialogFragment ConfirmAdDialog = ConfirmDialogFragment.newInstance(message);
-            ConfirmAdDialog.show(getSupportFragmentManager(), "confirmFreeChipsByCoinDialog");
+            createConfirmDialog("confirmFreeChipsByCoinDialog", message);
+            showConfirmDialog();
         }else{
             createAlertDialog("You don't have a Hint Coin.");
             showAlertDialog();
@@ -1630,6 +1620,8 @@ public class Dealer extends FragmentActivity implements OnClickListener
         overridePendingTransition(0, 0);
     }
 
+
+
     // create alert dialog
     private void createAlertDialog(String message){
         alertDialog = AlertDialogFragment.newInstance(message);
@@ -1637,7 +1629,8 @@ public class Dealer extends FragmentActivity implements OnClickListener
 
     // show alert dialog
     private void showAlertDialog() {
-        if (alertDialog != null) {
+        if (alertDialog != null &&
+                getSupportFragmentManager().findFragmentByTag("alertDialog") == null) {
             alertDialog.show(getSupportFragmentManager(), "alertDialog");
         }
     }
@@ -1649,7 +1642,8 @@ public class Dealer extends FragmentActivity implements OnClickListener
 
     // show alert dialog
     private void showLevelUpDialog() {
-        if (LevelUpDialog != null) {
+        if (LevelUpDialog != null &&
+                getSupportFragmentManager().findFragmentByTag("levelUpDialog") == null) {
             LevelUpDialog.show(getSupportFragmentManager(), "levelUpDialog");
         }
     }
@@ -1673,7 +1667,8 @@ public class Dealer extends FragmentActivity implements OnClickListener
 
     // show alert dialog
     private void showBonusDialog() {
-        if (BonusDialog != null) {
+        if (BonusDialog != null &&
+                getSupportFragmentManager().findFragmentByTag("bonusDialog") == null) {
             BonusDialog.show(getSupportFragmentManager(), "bonusDialog");
         }
     }
@@ -1688,6 +1683,45 @@ public class Dealer extends FragmentActivity implements OnClickListener
             }
         }
         BonusDialog = null;
+    }
+
+    // create confirm dialog
+    private void createConfirmDialog(String dialogType, String message){
+        ConfirmDialog = ConfirmDialogFragment.newInstance(dialogType, message);
+    }
+
+    // show confirm dialog
+    private void showConfirmDialog() {
+        if (ConfirmDialog != null &&
+                getSupportFragmentManager().findFragmentByTag("confirmDialog") == null) {
+            ConfirmDialog.show(getSupportFragmentManager(), "confirmDialog");
+        }
+    }
+
+    // create confirm ad dialog
+    private void createConfirmAdDialog(){
+        ConfirmAdDialog = ConfirmAdDialogFragment.newInstance();
+    }
+
+    // show confirm ad dialog
+    private void showConfirmAdDialog() {
+        if (ConfirmAdDialog != null &&
+                getSupportFragmentManager().findFragmentByTag("confirmAdDialog") == null) {
+            ConfirmAdDialog.show(getSupportFragmentManager(), "confirmAdDialog");
+        }
+    }
+
+    // create hint dialog
+    private void createHintDialog(Integer cardId){
+        hintDialog = HintDialogFragment.newInstance(cardId);
+    }
+
+    // show hint dialog
+    private void showHintDialog() {
+        if (hintDialog != null &&
+                getSupportFragmentManager().findFragmentByTag("hintDialog") == null) {
+            hintDialog.show(getSupportFragmentManager(), "hintDialog");
+        }
     }
 
     @Override
