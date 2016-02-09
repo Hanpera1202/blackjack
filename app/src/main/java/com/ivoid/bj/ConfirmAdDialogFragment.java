@@ -134,6 +134,7 @@ public class ConfirmAdDialogFragment extends DialogFragment {
             Long needTime = 86400 * 1000 - (System.currentTimeMillis() - coinBonusGetTime);
             if (needTime < 0L) {
                 editor.putInt("gotCoinBonusCount", 0);
+                editor.commit();
                 return true;
             } else {
                 return false;

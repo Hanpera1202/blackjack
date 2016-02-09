@@ -114,10 +114,36 @@
 
     </RelativeLayout>
 
-    <ListView
-        android:id="@+id/listView"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/header" />
+        android:layout_height="match_parent"
+        android:layout_below="@+id/header"
+        android:background="#dc212121">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:orientation="vertical"
+            android:gravity="center|top">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Let's apply to PRIZE COMPETITION!!"
+                android:textSize="18sp"
+                android:textColor="#ED684A"
+                fontPath="fonts/Roboto-Bold.ttf"
+                tools:ignore="MissingPrefix"/>
+
+            <ListView
+                android:id="@+id/listView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:listSelector="@drawable/list_selector"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
 </RelativeLayout>

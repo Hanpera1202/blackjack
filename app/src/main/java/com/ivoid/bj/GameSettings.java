@@ -27,7 +27,8 @@ class GameSettings
 		decks=1; splits=1; burns=(byte)(5.0*Math.random()); shuffleTimes = 3;
 		startCash=1000f; tableMin=10f;
 		ddPostSplit=true; surrender=true; insurance=true; stand17soft=true; aceResplit=true; dd1011=true;
-        loginBonusSeconds=28800;freeChipsSeconds=3600;loginBonusCoins=3;coninBonusCount=3;
+        //loginBonusSeconds=28800;freeChipsSeconds=3600;loginBonusCoins=3;coninBonusCount=3;
+        loginBonusSeconds=28800;freeChipsSeconds=10;loginBonusCoins=3;coninBonusCount=3;
         freeChipsFlips = 3;
         necessaryPoint=10000;
 

@@ -108,15 +108,20 @@ public class Result extends Activity {
     }
 
     public void setAdapter(){
-        // ListViewのインスタンスを生成
-        ListView listView = (ListView)findViewById(R.id.listView);
+        if(ids.isEmpty()){
+            ((TextView) findViewById(R.id.message)).setText("You do not yet apply.");
+        }else {
+            ((TextView) findViewById(R.id.message)).setText("Let's see the results!!");
+            // ListViewのインスタンスを生成
+            ListView listView = (ListView) findViewById(R.id.listView);
 
-        // BaseAdapter を継承したadapterのインスタンスを生成
-        // 子要素のレイアウトファイル competition_list_items.xml を activity_main.xml に inflate するためにadapterに引数として渡す
-        adapter = new ListViewAdapter(this,R.layout.result_list_items);
+            // BaseAdapter を継承したadapterのインスタンスを生成
+            // 子要素のレイアウトファイル competition_list_items.xml を activity_main.xml に inflate するためにadapterに引数として渡す
+            adapter = new ListViewAdapter(this, R.layout.result_list_items);
 
-        // ListViewにadapterをセット
-        listView.setAdapter(adapter);
+            // ListViewにadapterをセット
+            listView.setAdapter(adapter);
+        }
 
         //listView.setOnItemClickListener(this);
     }
