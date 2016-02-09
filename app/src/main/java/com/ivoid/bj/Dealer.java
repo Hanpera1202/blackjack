@@ -1447,6 +1447,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
         Long timeLeft = getTimeLefOfFreeChips();
         freeChips.setVisibility(Button.VISIBLE);
         if(timeLeft > 0L){
+            freeChips.setAnimation(null);
             freeChips.setOnClickListener(null);
             freeChipsTimer.setVisibility(View.VISIBLE);
             // カウントダウンする

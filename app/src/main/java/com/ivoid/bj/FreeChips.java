@@ -117,8 +117,6 @@ public class FreeChips extends Activity implements OnClickListener
             flip((Button) findViewById(v.getId()));
         }
         if(flipCnt == settings.freeChipsFlips) {
-            editor.putLong("freeChipsGetTime", System.currentTimeMillis());
-            editor.commit();
             for (final Integer entry : flipCards.keySet()) {
                 ((Button) findViewById(entry)).setOnClickListener(null);
             }
@@ -161,6 +159,7 @@ public class FreeChips extends Activity implements OnClickListener
 		}
 		getpoints.setText(gotPoint + "pt\nGET!!");
 		editor.putFloat("gotBonusPoint", gotPoint);
+		editor.putLong("freeChipsGetTime", System.currentTimeMillis());
 		editor.commit();
 		button.setOnClickListener(null);
 
