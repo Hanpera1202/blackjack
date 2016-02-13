@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="10dp"
+    android:padding="@dimen/dp320_10dp"
     android:background="#D6D6D6"
     android:gravity="top|center">
 
@@ -12,7 +12,7 @@
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
+        android:textSize="@dimen/dp320_20sp"
         android:textColor="#D68E3C"
         fontPath="fonts/Roboto-Bold.ttf"
         tools:ignore="MissingPrefix"/>
@@ -21,7 +21,7 @@
         android:id="@+id/endDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
+        android:textSize="@dimen/dp320_18sp"
         android:textColor="#8A2A27"
         fontPath="fonts/Roboto-Bold.ttf"
         tools:ignore="MissingPrefix"/>
@@ -30,7 +30,7 @@
         android:id="@+id/winNum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
+        android:textSize="@dimen/dp320_18sp"
         android:textColor="#D7413C"
         fontPath="fonts/Roboto-Bold.ttf"
         tools:ignore="MissingPrefix"/>
@@ -39,8 +39,8 @@
         android:id="@+id/image"
         android:scaleType="centerInside"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginTop="5dp"/>
+        android:layout_height="@dimen/dp320_100dp"
+        android:layout_marginTop="@dimen/dp320_5dp"/>
 
     <LinearLayout
         android:orientation="horizontal"
@@ -52,7 +52,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Currently, Total "
-            android:textSize="15sp"
+            android:textSize="@dimen/dp320_15sp"
             android:textColor="#292929"
             fontPath="fonts/Roboto-Bold.ttf"
             tools:ignore="MissingPrefix"/>
@@ -61,7 +61,7 @@
             android:id="@+id/totalApplicationNum"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
+            android:textSize="@dimen/dp320_20sp"
             android:textColor="#D7413C"
             fontPath="fonts/Roboto-Bold.ttf"
             tools:ignore="MissingPrefix"/>
@@ -70,7 +70,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=" Applications"
-            android:textSize="15sp"
+            android:textSize="@dimen/dp320_15sp"
             android:textColor="#292929"
             fontPath="fonts/Roboto-Bold.ttf"
             tools:ignore="MissingPrefix"/>
@@ -81,7 +81,7 @@
         android:id="@+id/applicationNum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="15sp"
+        android:textSize="@dimen/dp320_15sp"
         android:textColor="#292929"
         fontPath="fonts/Roboto-Bold.ttf"
         tools:ignore="MissingPrefix"/>
@@ -90,19 +90,19 @@
         android:id="@+id/progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
+        android:textSize="@dimen/dp320_20sp"
         android:textColor="#D7413C"
         fontPath="fonts/Roboto-Bold.ttf"
         tools:ignore="MissingPrefix"/>
 
     <Button
         android:id="@+id/checkResult"
-        android:layout_width="170dp"
-        android:layout_height="50dp"
+        android:layout_width="@dimen/dp320_170dp"
+        android:layout_height="@dimen/dp320_50dp"
         android:text="See the result"
-        android:textSize="20sp"
+        android:textSize="@dimen/dp320_20sp"
         android:textColor="#D6D6D6"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="@dimen/dp320_5dp"
         android:background="#D7413C"
         fontPath="fonts/Roboto-Bold.ttf"
         tools:ignore="MissingPrefix"/>

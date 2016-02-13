@@ -9,35 +9,35 @@
     <RelativeLayout
         android:id="@+id/header"
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/dp320_50dp"
         android:background="@drawable/h_wood">
 
         <LinearLayout
             android:id="@+id/playerCashView"
-            android:layout_width="133dp"
+            android:layout_width="@dimen/dp320_133dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="@dimen/dp320_5dp"
             android:layout_centerVertical="true"
             android:background="@drawable/bg_playercash">
 
             <Button
                 android:id="@+id/playerLevel"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                android:layout_width="@dimen/dp320_25dp"
+                android:layout_height="@dimen/dp320_25dp"
                 android:text="1"
                 android:textColor="#000000"
-                android:textSize="14sp"
+                android:textSize="@dimen/dp320_14sp"
                 android:background="@drawable/chip"
                 fontPath="fonts/Roboto-Bold.ttf"
                 tools:ignore="MissingPrefix"/>
 
             <TextView
                 android:id="@+id/playerCash"
-                android:layout_width="100dp"
+                android:layout_width="@dimen/dp320_100dp"
                 android:layout_height="wrap_content"
                 android:text="0"
                 android:textColor="#ffffffff"
-                android:textSize="18sp"
+                android:textSize="@dimen/dp320_18sp"
                 android:gravity="center"
                 android:layout_gravity="center"
                 fontPath="fonts/Roboto-Bold.ttf"
@@ -49,20 +49,20 @@
             android:id="@+id/progressBarNextLevel"
             style="?android:attr/progressBarStyleHorizontal"
             android:progressDrawable="@drawable/progressbar"
-            android:layout_width="133dp"
-            android:layout_height="5dp"
-            android:layout_marginLeft="5dp"
+            android:layout_width="@dimen/dp320_133dp"
+            android:layout_height="@dimen/dp320_5dp"
+            android:layout_marginLeft="@dimen/dp320_5dp"
             android:layout_below="@+id/playerCashView"/>
 
         <TextView
             android:id="@+id/playerNextLevel"
-            android:layout_width="133dp"
+            android:layout_width="@dimen/dp320_133dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="-3dp"
-            android:layout_marginLeft="5dp"
+            android:layout_marginTop="@dimen/dp320_m3dp"
+            android:layout_marginLeft="@dimen/dp320_5dp"
             android:text="0 / 1000"
             android:textColor="#ffffffff"
-            android:textSize="7sp"
+            android:textSize="@dimen/dp320_7sp"
             android:gravity="center"
             android:layout_below="@+id/playerCashView"/>
 
@@ -71,246 +71,263 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
-            android:layout_margin="5dp">
+            android:layout_margin="@dimen/dp320_5dp">
 
             <Button
                 android:id="@+id/game"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginRight="3dp"
+                android:layout_width="@dimen/dp320_40dp"
+                android:layout_height="@dimen/dp320_40dp"
+                android:layout_marginRight="@dimen/dp320_3dp"
                 android:onClick="onClickHeader"
                 android:background="@drawable/h_game"/>
 
             <Button
                 android:id="@+id/competition"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginRight="3dp"
+                android:layout_width="@dimen/dp320_40dp"
+                android:layout_height="@dimen/dp320_40dp"
+                android:layout_marginRight="@dimen/dp320_3dp"
                 android:onClick="onClickHeader"
                 android:background="@drawable/h_prize" />
 
             <Button
                 android:id="@+id/result"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginRight="3dp"
+                android:layout_width="@dimen/dp320_40dp"
+                android:layout_height="@dimen/dp320_40dp"
+                android:layout_marginRight="@dimen/dp320_3dp"
                 android:onClick="onClickHeader"
                 android:background="@drawable/h_result" />
 
             <Button
                 android:id="@+id/checkMyData"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginRight="3dp"
+                android:layout_width="@dimen/dp320_40dp"
+                android:layout_height="@dimen/dp320_40dp"
+                android:layout_marginRight="@dimen/dp320_3dp"
                 android:background="@drawable/h_data_on" />
 
             <Button
                 android:id="@+id/setting"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="@dimen/dp320_40dp"
+                android:layout_height="@dimen/dp320_40dp"
                 android:onClick="onClickHeader"
                 android:background="@drawable/h_setting" />
         </LinearLayout>
 
     </RelativeLayout>
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:orientation="vertical"
-        android:padding="10dp"
-        android:gravity="center|top"
-        android:layout_below="@+id/header">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/header"
+        android:background="#dc212121">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:orientation="horizontal"
-            android:padding="5dp"
-            android:gravity="center"
-            android:background="@drawable/data_bg">
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical"
+            android:padding="@dimen/dp320_10dp"
+            android:gravity="center|top">
 
             <TextView
-                android:layout_width="0dp"
+                android:id="@+id/message"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textSize="22sp"
-                android:textColor="#121212"
-                android:text="Play counts"
-                android:gravity="left" />
+                android:text="Your play data"
+                android:textSize="@dimen/dp320_20sp"
+                android:textColor="#ED684A"
+                fontPath="fonts/Roboto-Bold.ttf"
+                tools:ignore="MissingPrefix"/>
 
-            <TextView
-                android:id="@+id/plays"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="5dp"
-                android:textSize="22sp"
-                android:text="0"
-                android:textColor="#121212"
-                android:gravity="center|right"
-                android:background="@drawable/data_num_bg"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp320_50dp"
+                android:layout_marginTop="@dimen/dp320_10dp"
+                android:orientation="horizontal"
+                android:padding="@dimen/dp320_5dp"
+                android:gravity="center"
+                android:background="@drawable/data_bg">
 
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="@dimen/dp320_22sp"
+                    android:textColor="#121212"
+                    android:text="Play counts"
+                    android:gravity="left" />
+
+                <TextView
+                    android:id="@+id/plays"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="@dimen/dp320_5dp"
+                    android:textSize="@dimen/dp320_22sp"
+                    android:text="0"
+                    android:textColor="#121212"
+                    android:gravity="center|right"
+                    android:background="@drawable/data_num_bg"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp320_50dp"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/dp320_5dp"
+                android:padding="@dimen/dp320_5dp"
+                android:gravity="center"
+                android:background="@drawable/data_bg">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="@dimen/dp320_22sp"
+                    android:textColor="#121212"
+                    android:text="Wins"
+                    android:gravity="left" />
+
+                <TextView
+                    android:id="@+id/wins"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="@dimen/dp320_5dp"
+                    android:textSize="@dimen/dp320_22sp"
+                    android:text="0"
+                    android:textColor="#121212"
+                    android:gravity="center|right"
+                    android:background="@drawable/data_num_bg" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp320_50dp"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/dp320_5dp"
+                android:padding="@dimen/dp320_5dp"
+                android:gravity="center"
+                android:background="@drawable/data_bg">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="@dimen/dp320_22sp"
+                    android:textColor="#121212"
+                    android:text="Blackjacks"
+                    android:gravity="left" />
+
+                <TextView
+                    android:id="@+id/blackjacks"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="@dimen/dp320_5dp"
+                    android:textSize="@dimen/dp320_22sp"
+                    android:text="0"
+                    android:textColor="#121212"
+                    android:gravity="center|right"
+                    android:background="@drawable/data_num_bg" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp320_50dp"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/dp320_5dp"
+                android:padding="@dimen/dp320_5dp"
+                android:gravity="center"
+                android:background="@drawable/data_bg">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="@dimen/dp320_22sp"
+                    android:textColor="#121212"
+                    android:text="Splits"
+                    android:gravity="left"/>
+
+                <TextView
+                    android:id="@+id/splits"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="@dimen/dp320_5dp"
+                    android:textSize="@dimen/dp320_22sp"
+                    android:text="0"
+                    android:textColor="#121212"
+                    android:gravity="center|right"
+                    android:background="@drawable/data_num_bg" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp320_50dp"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/dp320_5dp"
+                android:padding="@dimen/dp320_5dp"
+                android:gravity="center"
+                android:background="@drawable/data_bg">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="@dimen/dp320_22sp"
+                    android:textColor="#121212"
+                    android:text="Doubles"
+                    android:gravity="left" />
+
+                <TextView
+                    android:id="@+id/doubles"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="@dimen/dp320_5dp"
+                    android:textSize="@dimen/dp320_22sp"
+                    android:text="0"
+                    android:textColor="#121212"
+                    android:gravity="center|right"
+                    android:background="@drawable/data_num_bg" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp320_50dp"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/dp320_5dp"
+                android:padding="@dimen/dp320_5dp"
+                android:gravity="center"
+                android:background="@drawable/data_bg">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="@dimen/dp320_22sp"
+                    android:textColor="#121212"
+                    android:text="Double wins"
+                    android:gravity="left" />
+
+                <TextView
+                    android:id="@+id/doublewins"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="@dimen/dp320_5dp"
+                    android:textSize="@dimen/dp320_22sp"
+                    android:text="0"
+                    android:textColor="#121212"
+                    android:gravity="center|right"
+                    android:background="@drawable/data_num_bg" />
+
+            </LinearLayout>
         </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:orientation="horizontal"
-            android:layout_marginTop="5dp"
-            android:padding="5dp"
-            android:gravity="center"
-            android:background="@drawable/data_bg">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textSize="22sp"
-                android:textColor="#121212"
-                android:text="Wins"
-                android:gravity="left" />
-
-            <TextView
-                android:id="@+id/wins"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="5dp"
-                android:textSize="22sp"
-                android:text="0"
-                android:textColor="#121212"
-                android:gravity="center|right"
-                android:background="@drawable/data_num_bg" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:orientation="horizontal"
-            android:layout_marginTop="5dp"
-            android:padding="5dp"
-            android:gravity="center"
-            android:background="@drawable/data_bg">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textSize="22sp"
-                android:textColor="#121212"
-                android:text="Blackjacks"
-                android:gravity="left" />
-
-            <TextView
-                android:id="@+id/blackjacks"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="5dp"
-                android:textSize="22sp"
-                android:text="0"
-                android:textColor="#121212"
-                android:gravity="center|right"
-                android:background="@drawable/data_num_bg" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:orientation="horizontal"
-            android:layout_marginTop="5dp"
-            android:padding="5dp"
-            android:gravity="center"
-            android:background="@drawable/data_bg">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textSize="22sp"
-                android:textColor="#121212"
-                android:text="Splits"
-                android:gravity="left"/>
-
-            <TextView
-                android:id="@+id/splits"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="5dp"
-                android:textSize="22sp"
-                android:text="0"
-                android:textColor="#121212"
-                android:gravity="center|right"
-                android:background="@drawable/data_num_bg" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:orientation="horizontal"
-            android:layout_marginTop="5dp"
-            android:padding="5dp"
-            android:gravity="center"
-            android:background="@drawable/data_bg">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textSize="22sp"
-                android:textColor="#121212"
-                android:text="Doubles"
-                android:gravity="left" />
-
-            <TextView
-                android:id="@+id/doubles"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="5dp"
-                android:textSize="22sp"
-                android:text="0"
-                android:textColor="#121212"
-                android:gravity="center|right"
-                android:background="@drawable/data_num_bg" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:orientation="horizontal"
-            android:layout_marginTop="5dp"
-            android:padding="5dp"
-            android:gravity="center"
-            android:background="@drawable/data_bg">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textSize="22sp"
-                android:textColor="#121212"
-                android:text="Double wins"
-                android:gravity="left" />
-
-            <TextView
-                android:id="@+id/doublewins"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="5dp"
-                android:textSize="22sp"
-                android:text="0"
-                android:textColor="#121212"
-                android:gravity="center|right"
-                android:background="@drawable/data_num_bg" />
-
-        </LinearLayout>
-    </LinearLayout>
+    </RelativeLayout>
 </RelativeLayout>

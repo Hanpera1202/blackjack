@@ -77,6 +77,7 @@ public class ConfirmDialogFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 dismiss();
+                ((Dealer)getActivity()).checkExecInitUI(0);
             }
         });
 

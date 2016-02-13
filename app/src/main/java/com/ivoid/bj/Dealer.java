@@ -610,8 +610,9 @@ public class Dealer extends FragmentActivity implements OnClickListener
 
 			cardImage.setScaleType(ImageView.ScaleType.FIT_XY);
 
-            int w_px = (int) (80f * getResources().getDisplayMetrics().density + 0.5f);
-            int h_px = (int) (120f * getResources().getDisplayMetrics().density + 0.5f);
+            // dp × density + 0.5f（四捨五入)
+            int w_px = (int) (getResources().getInteger(R.integer.dp320_80) * getResources().getDisplayMetrics().density + 0.5f);
+            int h_px = (int) (getResources().getInteger(R.integer.dp320_120) * getResources().getDisplayMetrics().density + 0.5f);
 
 			LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(w_px, h_px);
 			cardImage.setLayoutParams(lp);
@@ -735,8 +736,8 @@ public class Dealer extends FragmentActivity implements OnClickListener
 
 
         int anim_start_y_px = playerBet.getHeight();
-        int bet_px = (int) (25f * getResources().getDisplayMetrics().density + 0.5f);
-        int bet_area_px = (int) (60f * getResources().getDisplayMetrics().density + 0.5f);
+        int bet_px = (int) (getResources().getInteger(R.integer.dp320_25) * getResources().getDisplayMetrics().density + 0.5f);
+        int bet_area_px = (int) (getResources().getInteger(R.integer.dp320_60) * getResources().getDisplayMetrics().density + 0.5f);
 
         int margin_w_px = 0;
         if(bet_px * betImages.size() > bet_area_px){
@@ -912,9 +913,9 @@ public class Dealer extends FragmentActivity implements OnClickListener
         cardImage.setImageResource(card.getImage());
 		cardImage.setScaleType(ImageView.ScaleType.FIT_XY);
 
-        int w_px = (int) (80f * getResources().getDisplayMetrics().density + 0.5f);
-        int h_px = (int) (120f * getResources().getDisplayMetrics().density + 0.5f);
-        int margin_w_px = (int) (12f * getResources().getDisplayMetrics().density + 0.5f) ;
+        int w_px = (int) (getResources().getInteger(R.integer.dp320_80) * getResources().getDisplayMetrics().density + 0.5f);
+        int h_px = (int) (getResources().getInteger(R.integer.dp320_120) * getResources().getDisplayMetrics().density + 0.5f);
+        int margin_w_px = (int) (getResources().getInteger(R.integer.dp320_12) * getResources().getDisplayMetrics().density + 0.5f) ;
 
 		if(hand.getCardCount() > 1) {
 			//マージンを設定
@@ -927,8 +928,8 @@ public class Dealer extends FragmentActivity implements OnClickListener
 			cardImage.setLayoutParams(lp);
 		}
 
-        int w_anim_start_px = (int) (350f * getResources().getDisplayMetrics().density + 0.5f);
-        int h_anim_start_px = (int) (200f * getResources().getDisplayMetrics().density + 0.5f);
+        int w_anim_start_px = (int) (getResources().getInteger(R.integer.dp320_350) * getResources().getDisplayMetrics().density + 0.5f);
+        int h_anim_start_px = (int) (getResources().getInteger(R.integer.dp320_200) * getResources().getDisplayMetrics().density + 0.5f);
 
 		if(!dealerFlg) {
 			TranslateAnimation translate = new TranslateAnimation(w_anim_start_px, 0, -h_anim_start_px, 0);
@@ -964,9 +965,9 @@ public class Dealer extends FragmentActivity implements OnClickListener
         ImageView cardImage=new ImageView(this);
         cardImage.setImageResource(card.getImage());
 
-        int w_px = (int) (80f * getResources().getDisplayMetrics().density + 0.5f);
-        int h_px = (int) (120f * getResources().getDisplayMetrics().density + 0.5f);
-        int margin_w_px = (int) (12f * getResources().getDisplayMetrics().density + 0.5f) ;
+        int w_px = (int) (getResources().getInteger(R.integer.dp320_80) * getResources().getDisplayMetrics().density + 0.5f);
+        int h_px = (int) (getResources().getInteger(R.integer.dp320_120) * getResources().getDisplayMetrics().density + 0.5f);
+        int margin_w_px = (int) (getResources().getInteger(R.integer.dp320_12) * getResources().getDisplayMetrics().density + 0.5f) ;
         //マージンを設定
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(w_px, h_px);
         lp.setMargins(margin_w_px * (hand.getCardCount() - 1), 0, 0, 0);
@@ -1480,6 +1481,12 @@ public class Dealer extends FragmentActivity implements OnClickListener
         Button freeChips = (Button) findViewById(R.id.freeChips);
         LinearLayout freeChipsTimer = (LinearLayout) findViewById(R.id.freeChipsTimer);
 
+        // 以前にタイマーを起動していればリセット
+        if (freeChipsCountDownTimer != null){
+            freeChipsCountDownTimer.cancel();
+            freeChipsCountDownTimer = null;
+        }
+
         freeChips.setAnimation(null);
         freeChips.setOnClickListener(null);
         freeChips.setVisibility(Button.INVISIBLE);
@@ -1527,7 +1534,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
                 createConfirmDialog("confirmHintByCoinDialog", message);
                 showConfirmDialog();
             }else{
-                createAlertDialog("You don't have a Hint Coin.");
+                createAlertDialog("default", "You don't have a Hint Coin.");
                 showAlertDialog();
             }
         }
@@ -1549,7 +1556,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
             });
             game.mMovieAd.show();
         } else {
-            createAlertDialog("Now loading ad.\nPlease Wait a moment.");
+            createAlertDialog("nowLoadingAdDialog", "Now loading ad.\nPlease Wait a moment.");
             showAlertDialog();
         }
     }
@@ -1558,16 +1565,6 @@ public class Dealer extends FragmentActivity implements OnClickListener
         Card card = shoe.checkNextCard();
         createHintDialog(card.getImage());
         showHintDialog();
-        /*
-        if(card.getValue() > 7) {
-            createAlertDialog("The next card is greater than 7.");
-        }else if(card.getValue() == 7){
-            createAlertDialog("The next card is 7.");
-        }else{
-            createAlertDialog("The next card is less than 7.");
-        }
-        showAlertDialog();
-        */
         player.withdrawCoin(1);
         updatePlayerCoinlbl();
     }
@@ -1578,7 +1575,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
             createConfirmDialog("confirmFreeChipsByCoinDialog", message);
             showConfirmDialog();
         }else{
-            createAlertDialog("You don't have a Hint Coin.");
+            createAlertDialog("noHintCoinDialog", "You don't have a Hint Coin.");
             showAlertDialog();
         }
     }
@@ -1590,6 +1587,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
                 public void onAdFailedToLoad(int errorCode) {
                     game.requestNewInterstitial();
                 }
+
                 @Override
                 public void onAdClosed() {
                     game.requestNewInterstitial();
@@ -1622,10 +1620,9 @@ public class Dealer extends FragmentActivity implements OnClickListener
     }
 
 
-
-    // create alert dialog
-    private void createAlertDialog(String message){
-        alertDialog = AlertDialogFragment.newInstance(message);
+    // アラートダイアログ作成
+    private void createAlertDialog(String dialogType, String message){
+        alertDialog = AlertDialogFragment.newInstance(dialogType, message);
     }
 
     // show alert dialog

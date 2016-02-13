@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp"
+    android:padding="@dimen/dp320_10dp"
     android:background="#D6D6D6">
 
     <LinearLayout
@@ -15,8 +15,8 @@
         <ImageView
             android:id="@+id/result"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginBottom="5dp"
+            android:layout_height="@dimen/dp320_40dp"
+            android:layout_marginBottom="@dimen/dp320_5dp"
             android:scaleType="centerInside"
             android:src="@drawable/congratiration"/>
 
@@ -24,9 +24,9 @@
             android:id="@+id/resultMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
+            android:layout_marginBottom="@dimen/dp320_5dp"
             android:text="You got the prize."
-            android:textSize="20sp"
+            android:textSize="@dimen/dp320_20sp"
             android:textColor="#8A2A27"
             fontPath="fonts/Roboto-Bold.ttf"
             tools:ignore="MissingPrefix"/>
@@ -35,7 +35,7 @@
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
+            android:textSize="@dimen/dp320_20sp"
             android:textColor="#D68E3C"
             fontPath="fonts/Roboto-Bold.ttf"
             tools:ignore="MissingPrefix"/>
@@ -43,8 +43,8 @@
         <ImageView
             android:id="@+id/image"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_margin="20dp"
+            android:layout_height="@dimen/dp320_100dp"
+            android:layout_margin="@dimen/dp320_20dp"
             android:scaleType="centerInside"/>
 
         <TextView
@@ -52,19 +52,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="The prize is already receiving."
-            android:textSize="20sp"
+            android:textSize="@dimen/dp320_20sp"
             android:textColor="#D7413C"
             fontPath="fonts/Roboto-Bold.ttf"
             tools:ignore="MissingPrefix"/>
 
         <Button
             android:id="@+id/positive_button"
-            android:layout_width="170dp"
-            android:layout_height="50dp"
+            android:layout_width="@dimen/dp320_170dp"
+            android:layout_height="@dimen/dp320_50dp"
             android:text="Recieve the prize"
-            android:textSize="20sp"
+            android:textSize="@dimen/dp320_20sp"
             android:textColor="#D6D6D6"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="@dimen/dp320_5dp"
             android:background="#D7413C"
             fontPath="fonts/Roboto-Bold.ttf"
             tools:ignore="MissingPrefix"/>

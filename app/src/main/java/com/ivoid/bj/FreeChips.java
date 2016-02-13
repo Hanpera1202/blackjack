@@ -32,6 +32,8 @@ public class FreeChips extends Activity implements OnClickListener
     private SoundPool mSoundPool;
     private int mCardfall;
 
+    private Player player;
+
 	private int flipCnt;
 	private int gotPoint;
 	private FreeChipsDeck shoe;
@@ -52,10 +54,12 @@ public class FreeChips extends Activity implements OnClickListener
 
 		setContentView(R.layout.free_chips);
 
+        player = new Player(getApplicationContext(), "God");
+
 		preference = getSharedPreferences("user_data", MODE_PRIVATE);
 		editor = preference.edit();
         settings = new GameSettings();
-		shoe = new FreeChipsDeck();
+		shoe = new FreeChipsDeck(player.getLevel());
 
 		flipCards = new HashMap<Integer, Button>();
 		flipCards.put((R.id.card1), (Button)findViewById(R.id.card1));
@@ -117,6 +121,8 @@ public class FreeChips extends Activity implements OnClickListener
             flip((Button) findViewById(v.getId()));
         }
         if(flipCnt == settings.freeChipsFlips) {
+            editor.putLong("freeChipsGetTime", System.currentTimeMillis());
+            editor.commit();
             for (final Integer entry : flipCards.keySet()) {
                 ((Button) findViewById(entry)).setOnClickListener(null);
             }

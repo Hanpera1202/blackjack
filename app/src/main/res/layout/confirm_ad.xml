@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="270dp"
+    android:layout_width="@dimen/dp320_270dp"
     android:layout_height="wrap_content"
-    android:padding="10dp"
+    android:padding="@dimen/dp320_10dp"
     android:background="#121212"
     android:layout_gravity="center">
 
@@ -17,7 +17,7 @@
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
+            android:textSize="@dimen/dp320_20sp"
             android:textColor="#ED684A"
             fontPath="fonts/Roboto-Bold.ttf"
             tools:ignore="MissingPrefix"/>
@@ -26,9 +26,9 @@
             android:id="@+id/message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/dp320_10dp"
             android:textColor="#EDEDED"
-            android:textSize="20sp"
+            android:textSize="@dimen/dp320_20sp"
             android:gravity="center"
             fontPath="fonts/Roboto-Bold.ttf"
             tools:ignore="MissingPrefix"/>
@@ -37,16 +37,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/dp320_10dp"
             android:gravity="center">
 
             <Button
                 android:id="@+id/cancel"
-                android:layout_width="100dp"
-                android:layout_height="50dp"
-                android:layout_marginRight="10dp"
+                android:layout_width="@dimen/dp320_100dp"
+                android:layout_height="@dimen/dp320_50dp"
+                android:layout_marginRight="@dimen/dp320_10dp"
                 android:text="CANCEL"
-                android:textSize="18sp"
+                android:textSize="@dimen/dp320_18sp"
                 android:textColor="#ffffffff"
                 android:background="#ED684A"
                 android:gravity="center"
@@ -55,10 +55,10 @@
 
             <Button
                 android:id="@+id/ok"
-                android:layout_width="100dp"
-                android:layout_height="50dp"
+                android:layout_width="@dimen/dp320_100dp"
+                android:layout_height="@dimen/dp320_50dp"
                 android:text="OK"
-                android:textSize="18sp"
+                android:textSize="@dimen/dp320_18sp"
                 android:textColor="#ffffffff"
                 android:background="#ED684A"
                 android:gravity="center"
@@ -69,10 +69,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/dp320_10dp"
             android:text="Time to next login bonus:"
             android:textColor="#EDEDED"
-            android:textSize="15sp"
+            android:textSize="@dimen/dp320_15sp"
             android:textStyle="bold"/>
 
         <TextView
@@ -81,7 +81,7 @@
             android:layout_height="wrap_content"
             android:text="GET NOW!!"
             android:textColor="#EDEDED"
-            android:textSize="15sp"
+            android:textSize="@dimen/dp320_15sp"
             android:textStyle="bold"/>
 
     </LinearLayout>

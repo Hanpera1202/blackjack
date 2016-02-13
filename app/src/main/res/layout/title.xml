@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
@@ -15,23 +14,23 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_margin="10dp"
+        android:layout_margin="@dimen/dp320_10dp"
         android:orientation="vertical"
         android:gravity="center|center"
         android:visibility="visible">
 
         <ImageView
             android:id="@+id/logo"
-            android:layout_width="300dp"
-            android:layout_height="150dp"
+            android:layout_width="@dimen/dp320_300dp"
+            android:layout_height="@dimen/dp320_150dp"
             android:scaleType="centerInside"
             android:src="@drawable/logo" />
 
         <Button
             android:id="@+id/game"
-            android:layout_width="300dp"
-            android:layout_height="60dp"
-            android:layout_marginTop="10dp"
+            android:layout_width="@dimen/dp320_300dp"
+            android:layout_height="@dimen/dp320_60dp"
+            android:layout_marginTop="@dimen/dp320_10dp"
             android:onClick="onClickHeader"
             android:background="@drawable/btn_play"
             android:layout_below="@+id/logo" />
@@ -39,14 +38,16 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/dp320_10dp"
             android:text="You can apply to PRIZE COMPETITION\nusing the point you got in the blackjack game."
+            android:textSize="@dimen/dp320_14sp"
+            android:textColor="#ffffffff"
             android:gravity="center"/>
 
         <LinearLayout
-            android:layout_width="300dp"
-            android:layout_height="259dp"
-            android:layout_marginTop="10dp"
+            android:layout_width="@dimen/dp320_300dp"
+            android:layout_height="@dimen/dp320_259dp"
+            android:layout_marginTop="@dimen/dp320_10dp"
             android:orientation="vertical"
             android:background="@drawable/frame_prize"
             android:layout_below="@id/game"
@@ -54,17 +55,17 @@
 
             <Button
                 android:id="@+id/competition"
-                android:layout_width="250dp"
-                android:layout_height="60dp"
-                android:layout_marginTop="100dp"
+                android:layout_width="@dimen/dp320_250dp"
+                android:layout_height="@dimen/dp320_60dp"
+                android:layout_marginTop="@dimen/dp320_100dp"
                 android:background="@drawable/btn_apply"
                 android:onClick="onClickHeader"/>
 
             <Button
                 android:id="@+id/result"
-                android:layout_width="250dp"
-                android:layout_height="60dp"
-                android:layout_marginTop="15dp"
+                android:layout_width="@dimen/dp320_250dp"
+                android:layout_height="@dimen/dp320_60dp"
+                android:layout_marginTop="@dimen/dp320_15dp"
                 android:background="@drawable/btn_result"
                 android:onClick="onClickHeader"/>
 

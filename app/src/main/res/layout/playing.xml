@@ -9,35 +9,35 @@
     <RelativeLayout
         android:id="@+id/header"
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/dp320_50dp"
         android:background="@drawable/h_wood">
 
         <LinearLayout
             android:id="@+id/playerCashView"
-            android:layout_width="133dp"
+            android:layout_width="@dimen/dp320_133dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="@dimen/dp320_5dp"
             android:layout_centerVertical="true"
             android:background="@drawable/bg_playercash">
 
             <Button
                 android:id="@+id/playerLevel"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                android:layout_width="@dimen/dp320_25dp"
+                android:layout_height="@dimen/dp320_25dp"
                 android:text="1"
                 android:textColor="#121212"
-                android:textSize="14sp"
+                android:textSize="@dimen/dp320_14sp"
                 android:background="@drawable/chip"
                 fontPath="fonts/Roboto-Bold.ttf"
                 tools:ignore="MissingPrefix"/>
 
             <TextView
                 android:id="@+id/playerCash"
-                android:layout_width="100dp"
+                android:layout_width="@dimen/dp320_100dp"
                 android:layout_height="wrap_content"
                 android:text="0"
                 android:textColor="#ffffffff"
-                android:textSize="18sp"
+                android:textSize="@dimen/dp320_18sp"
                 android:gravity="center"
                 android:layout_gravity="center"
                 fontPath="fonts/Roboto-Bold.ttf"
@@ -49,20 +49,20 @@
             android:id="@+id/progressBarNextLevel"
             style="?android:attr/progressBarStyleHorizontal"
             android:progressDrawable="@drawable/progressbar"
-            android:layout_width="133dp"
-            android:layout_height="5dp"
-            android:layout_marginLeft="5dp"
+            android:layout_width="@dimen/dp320_133dp"
+            android:layout_height="@dimen/dp320_5dp"
+            android:layout_marginLeft="@dimen/dp320_5dp"
             android:layout_below="@+id/playerCashView"/>
 
         <TextView
             android:id="@+id/playerNextLevel"
-            android:layout_width="133dp"
+            android:layout_width="@dimen/dp320_133dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="-3dp"
-            android:layout_marginLeft="5dp"
+            android:layout_marginTop="@dimen/dp320_m3dp"
+            android:layout_marginLeft="@dimen/dp320_5dp"
             android:text="0 / 1000"
             android:textColor="#ffffffff"
-            android:textSize="7sp"
+            android:textSize="@dimen/dp320_7sp"
             android:gravity="center"
             android:layout_below="@+id/playerCashView"/>
 
@@ -71,43 +71,43 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
-            android:layout_margin="5dp">
+            android:layout_margin="@dimen/dp320_5dp">
 
             <Button
                 android:id="@+id/game"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginRight="3dp"
+                android:layout_width="@dimen/dp320_40dp"
+                android:layout_height="@dimen/dp320_40dp"
+                android:layout_marginRight="@dimen/dp320_3dp"
                 android:background="@drawable/h_game_on"/>
 
             <Button
                 android:id="@+id/competition"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginRight="3dp"
+                android:layout_width="@dimen/dp320_40dp"
+                android:layout_height="@dimen/dp320_40dp"
+                android:layout_marginRight="@dimen/dp320_3dp"
                 android:onClick="onClickHeader"
                 android:background="@drawable/h_prize" />
 
             <Button
                 android:id="@+id/result"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginRight="3dp"
+                android:layout_width="@dimen/dp320_40dp"
+                android:layout_height="@dimen/dp320_40dp"
+                android:layout_marginRight="@dimen/dp320_3dp"
                 android:onClick="onClickHeader"
                 android:background="@drawable/h_result" />
 
             <Button
                 android:id="@+id/checkMyData"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginRight="3dp"
+                android:layout_width="@dimen/dp320_40dp"
+                android:layout_height="@dimen/dp320_40dp"
+                android:layout_marginRight="@dimen/dp320_3dp"
                 android:onClick="onClickHeader"
                 android:background="@drawable/h_data" />
 
             <Button
                 android:id="@+id/setting"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="@dimen/dp320_40dp"
+                android:layout_height="@dimen/dp320_40dp"
                 android:onClick="onClickHeader"
                 android:background="@drawable/h_setting" />
 
@@ -118,13 +118,13 @@
     <LinearLayout
         android:id="@+id/playerGoal"
         android:layout_width="wrap_content"
-        android:layout_height="25dp"
-        android:layout_marginTop="5dp"
+        android:layout_height="@dimen/dp320_25dp"
+        android:layout_marginTop="@dimen/dp320_5dp"
         android:layout_below="@+id/header"
         android:layout_alignParentLeft="true">
 
         <RelativeLayout
-            android:layout_width="25dp"
+            android:layout_width="@dimen/dp320_25dp"
             android:layout_height="match_parent">
 
             <ImageView
@@ -138,7 +138,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="300"
-                android:textSize="12sp"
+                android:textSize="@dimen/dp320_12sp"
                 android:textColor="#121212"
                 android:gravity="center"/>
 
@@ -148,17 +148,17 @@
             android:id="@+id/progressBar"
             style="?android:attr/progressBarStyleHorizontal"
             android:progressDrawable="@drawable/progressbar"
-            android:layout_width="200dp"
-            android:layout_height="15dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
+            android:layout_width="@dimen/dp320_200dp"
+            android:layout_height="@dimen/dp320_15dp"
+            android:layout_marginLeft="@dimen/dp320_5dp"
+            android:layout_marginRight="@dimen/dp320_5dp"
             android:layout_gravity="center"/>
 
         <TextView
             android:id="@+id/necessaryPoint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
+            android:textSize="@dimen/dp320_12sp"
             android:textColor="#ffffff"
             android:layout_gravity="center"/>
     </LinearLayout>
@@ -180,20 +180,20 @@
     <!-- 空の View -->
     <View
         android:id="@+id/delaerInfoArea"
-        android:layout_width="162dp"
-        android:layout_height="125dp"
-        android:layout_marginTop="5dp"
+        android:layout_width="@dimen/dp320_162dp"
+        android:layout_height="@dimen/dp320_125dp"
+        android:layout_marginTop="@dimen/dp320_5dp"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/playerGoal"/>
 
     <RelativeLayout
         android:id="@+id/dealerHand"
         android:layout_width="match_parent"
-        android:layout_height="120dp"
+        android:layout_height="@dimen/dp320_120dp"
         android:gravity="bottom"
         android:layout_alignLeft="@id/delaerInfoArea"
         android:layout_alignBottom="@id/delaerInfoArea"
-        android:layout_marginLeft="5dp">
+        android:layout_marginLeft="@dimen/dp320_5dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -205,31 +205,31 @@
 
     <RelativeLayout
         android:id="@+id/dealerInfo"
-        android:layout_width="162dp"
-        android:layout_height="125dp"
-        android:layout_marginTop="5dp"
+        android:layout_width="@dimen/dp320_162dp"
+        android:layout_height="@dimen/dp320_125dp"
+        android:layout_marginTop="@dimen/dp320_5dp"
         android:gravity="bottom"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/playerGoal">
 
         <RelativeLayout
             android:id="@+id/dealerSum"
-            android:layout_width="70dp"
+            android:layout_width="@dimen/dp320_70dp"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
             android:visibility="invisible">
 
             <ImageView
-                android:layout_width="70dp"
-                android:layout_height="35dp"
+                android:layout_width="@dimen/dp320_70dp"
+                android:layout_height="@dimen/dp320_35dp"
                 android:scaleType="fitXY"
                 android:src="@drawable/fukidashi"/>
 
             <TextView
-                android:layout_width="62dp"
-                android:layout_height="35dp"
-                android:textSize="20sp"
+                android:layout_width="@dimen/dp320_62dp"
+                android:layout_height="@dimen/dp320_35dp"
+                android:textSize="@dimen/dp320_20sp"
                 android:textColor="#ffffffff"
                 android:gravity="center"
                 android:layout_alignParentRight="true"
@@ -242,7 +242,7 @@
     <!-- 空の View -->
     <View
         android:id="@+id/CenterView"
-        android:layout_width="10dp"
+        android:layout_width="@dimen/dp320_10dp"
         android:layout_height="0dp"
         android:layout_centerInParent="true"
         android:visibility="gone"/>
@@ -250,8 +250,8 @@
     <!-- 空の View -->
     <View
         android:id="@+id/playerInfo1Area"
-        android:layout_width="162dp"
-        android:layout_height="305dp"
+        android:layout_width="@dimen/dp320_162dp"
+        android:layout_height="@dimen/dp320_305dp"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
         android:layout_toRightOf="@+id/CenterView"/>
@@ -262,8 +262,8 @@
         android:layout_height="match_parent"
         android:gravity="bottom"
         android:layout_alignLeft="@id/playerInfo1Area"
-        android:layout_marginBottom="180dp"
-        android:layout_marginLeft="5dp">
+        android:layout_marginBottom="@dimen/dp320_180dp"
+        android:layout_marginLeft="@dimen/dp320_5dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -274,10 +274,10 @@
 
         <Button
             android:id="@+id/splitButton"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginBottom="25dp"
+            android:layout_width="@dimen/dp320_70dp"
+            android:layout_height="@dimen/dp320_70dp"
+            android:layout_marginLeft="@dimen/dp320_10dp"
+            android:layout_marginBottom="@dimen/dp320_25dp"
             android:background="@drawable/split"
             android:layout_alignParentLeft="true"
             android:layout_alignParentBottom="true"
@@ -285,10 +285,10 @@
 
         <Button
             android:id="@+id/surrenderButton"
-            android:layout_width="100dp"
-            android:layout_height="32.5dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginBottom="43.75dp"
+            android:layout_width="@dimen/dp320_100dp"
+            android:layout_height="@dimen/dp320_32.5dp"
+            android:layout_marginLeft="@dimen/dp320_20dp"
+            android:layout_marginBottom="@dimen/dp320_43.75dp"
             android:background="@drawable/btn_surrender"
             android:layout_toRightOf="@+id/splitButton"
             android:layout_alignParentBottom="true"
@@ -298,8 +298,8 @@
 
     <RelativeLayout
         android:id="@+id/playerInfo1"
-        android:layout_width="162dp"
-        android:layout_height="305dp"
+        android:layout_width="@dimen/dp320_162dp"
+        android:layout_height="@dimen/dp320_305dp"
         android:gravity="center|bottom"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
@@ -307,26 +307,26 @@
 
         <LinearLayout
             android:id="@+id/playerBet1"
-            android:layout_width="142dp"
-            android:layout_height="175dp"
-            android:layout_marginTop="5dp"
+            android:layout_width="@dimen/dp320_142dp"
+            android:layout_height="@dimen/dp320_175dp"
+            android:layout_marginTop="@dimen/dp320_5dp"
             android:orientation="horizontal"
             android:layout_centerHorizontal="true"
             android:layout_alignParentBottom="true">
 
             <LinearLayout
-                android:layout_width="61dp"
+                android:layout_width="@dimen/dp320_61dp"
                 android:layout_height="match_parent"
-                android:layout_marginRight="5dp"
-                android:layout_marginLeft="5dp"
+                android:layout_marginRight="@dimen/dp320_5dp"
+                android:layout_marginLeft="@dimen/dp320_5dp"
                 android:orientation="horizontal"
                 android:gravity="center|top"/>
 
             <LinearLayout
-                android:layout_width="61dp"
+                android:layout_width="@dimen/dp320_61dp"
                 android:layout_height="match_parent"
-                android:layout_marginRight="5dp"
-                android:layout_marginLeft="5dp"
+                android:layout_marginRight="@dimen/dp320_5dp"
+                android:layout_marginLeft="@dimen/dp320_5dp"
                 android:orientation="horizontal"
                 android:gravity="center|top"/>
         </LinearLayout>
@@ -334,7 +334,7 @@
         <RelativeLayout
             android:id="@+id/playerCardZone1"
             android:layout_width="match_parent"
-            android:layout_height="125dp"
+            android:layout_height="@dimen/dp320_125dp"
             android:gravity="bottom"
             android:layout_centerHorizontal="true"
             android:layout_above="@id/playerBet1">
@@ -344,13 +344,13 @@
         <RelativeLayout
             android:id="@+id/playerMain1"
             android:layout_width="match_parent"
-            android:layout_height="180dp"
+            android:layout_height="@dimen/dp320_180dp"
             android:layout_centerHorizontal="true"
             android:layout_alignTop="@id/playerCardZone1">
 
             <RelativeLayout
                 android:id="@+id/playerSum1"
-                android:layout_width="70dp"
+                android:layout_width="@dimen/dp320_70dp"
                 android:layout_height="match_parent"
                 android:gravity="top"
                 android:layout_alignParentRight="true"
@@ -360,15 +360,15 @@
                 tools:ignore="MissingPrefix">
 
                 <ImageView
-                    android:layout_width="70dp"
-                    android:layout_height="35dp"
+                    android:layout_width="@dimen/dp320_70dp"
+                    android:layout_height="@dimen/dp320_35dp"
                     android:scaleType="fitXY"
                     android:src="@drawable/fukidashi"/>
 
                 <TextView
-                    android:layout_width="62dp"
-                    android:layout_height="35dp"
-                    android:textSize="20sp"
+                    android:layout_width="@dimen/dp320_62dp"
+                    android:layout_height="@dimen/dp320_35dp"
+                    android:textSize="@dimen/dp320_20sp"
                     android:textColor="#ffffffff"
                     android:gravity="center"
                     android:layout_alignParentRight="true"
@@ -386,7 +386,7 @@
                     android:id="@+id/playerBetNum1"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:textSize="20sp"
+                    android:textSize="@dimen/dp320_20sp"
                     android:textColor="#ffffffff"
                     android:gravity="center|bottom"
                     fontPath="fonts/Roboto-Bold.ttf"
@@ -397,8 +397,8 @@
             <ImageView
                 android:id="@+id/playerResult1"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginBottom="93dp"
+                android:layout_height="@dimen/dp320_40dp"
+                android:layout_marginBottom="@dimen/dp320_93dp"
                 android:scaleType="centerInside"
                 android:visibility="invisible"
                 android:layout_alignParentBottom="true"/>
@@ -410,8 +410,8 @@
     <ImageView
         android:id="@+id/playerBlackjack"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginTop="47dp"
+        android:layout_height="@dimen/dp320_40dp"
+        android:layout_marginTop="@dimen/dp320_47dp"
         android:scaleType="centerInside"
         android:src="@drawable/blackjack"
         android:visibility="invisible"
@@ -421,26 +421,26 @@
         android:id="@+id/insurance"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="@dimen/dp320_5dp"
         android:layout_below="@id/dealerInfo"
         android:layout_centerHorizontal="true"
         android:visibility="invisible">
 
         <ImageView
             android:id="@+id/insuranceBg"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="@dimen/dp320_70dp"
+            android:layout_height="@dimen/dp320_70dp"
             android:scaleType="fitXY"
             android:src="@drawable/tips_insurance"
             android:layout_centerHorizontal="true" />
 
         <LinearLayout
             android:id="@+id/insuranceBet"
-            android:layout_width="60dp"
-            android:layout_height="400dp"
-            android:layout_marginTop="25dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginLeft="5dp"
+            android:layout_width="@dimen/dp320_60dp"
+            android:layout_height="@dimen/dp320_400dp"
+            android:layout_marginTop="@dimen/dp320_25dp"
+            android:layout_marginRight="@dimen/dp320_5dp"
+            android:layout_marginLeft="@dimen/dp320_5dp"
             android:layout_alignTop="@id/insuranceBg"
             android:layout_centerHorizontal="true"
             android:orientation="horizontal"
@@ -452,9 +452,9 @@
             android:id="@+id/insuranceBetNum"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="47dp"
+            android:layout_marginTop="@dimen/dp320_47dp"
             android:textColor="#ffffffff"
-            android:textSize="20sp"
+            android:textSize="@dimen/dp320_20sp"
             android:layout_centerHorizontal="true"
             fontPath="fonts/Roboto-Bold.ttf"
             tools:ignore="MissingPrefix"/>
@@ -462,8 +462,8 @@
         <ImageView
             android:id="@+id/insuranceResult"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_marginTop="22.5dp"
+            android:layout_height="@dimen/dp320_30dp"
+            android:layout_marginTop="@dimen/dp320_22.5dp"
             android:scaleType="centerInside"
             android:layout_centerHorizontal="true"
             android:visibility="invisible" />
@@ -474,7 +474,7 @@
         android:id="@+id/insuranceAskView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="@dimen/dp320_10dp"
         android:layout_below="@id/dealerInfo">
 
         <ImageView
@@ -495,17 +495,17 @@
 
             <Button
                 android:id="@+id/insuranceNo"
-                android:layout_width="120dp"
-                android:layout_height="60dp"
-                android:layout_marginRight="10dp"
+                android:layout_width="@dimen/dp320_120dp"
+                android:layout_height="@dimen/dp320_60dp"
+                android:layout_marginRight="@dimen/dp320_10dp"
                 android:background="@drawable/btn_no"
                 android:visibility="invisible"/>
 
             <Button
                 android:id="@+id/insuranceYes"
-                android:layout_width="120dp"
-                android:layout_height="60dp"
-                android:layout_marginLeft="10dp"
+                android:layout_width="@dimen/dp320_120dp"
+                android:layout_height="@dimen/dp320_60dp"
+                android:layout_marginLeft="@dimen/dp320_10dp"
                 android:background="@drawable/btn_yes"
                 android:visibility="invisible"/>
         </LinearLayout>
@@ -515,8 +515,8 @@
     <!-- 空の View -->
     <View
         android:id="@+id/playerInfo2Area"
-        android:layout_width="162dp"
-        android:layout_height="305dp"
+        android:layout_width="@dimen/dp320_162dp"
+        android:layout_height="@dimen/dp320_305dp"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
         android:layout_toLeftOf="@+id/CenterView"/>
@@ -527,8 +527,8 @@
         android:layout_height="match_parent"
         android:gravity="bottom"
         android:layout_alignLeft="@id/playerInfo2Area"
-        android:layout_marginBottom="180dp"
-        android:layout_marginLeft="5dp">
+        android:layout_marginBottom="@dimen/dp320_180dp"
+        android:layout_marginLeft="@dimen/dp320_5dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -540,8 +540,8 @@
 
     <RelativeLayout
         android:id="@+id/playerInfo2"
-        android:layout_width="162dp"
-        android:layout_height="305dp"
+        android:layout_width="@dimen/dp320_162dp"
+        android:layout_height="@dimen/dp320_305dp"
         android:gravity="center|bottom"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
@@ -549,26 +549,26 @@
 
         <LinearLayout
             android:id="@+id/playerBet2"
-            android:layout_width="142dp"
-            android:layout_height="175dp"
-            android:layout_marginTop="5dp"
+            android:layout_width="@dimen/dp320_142dp"
+            android:layout_height="@dimen/dp320_175dp"
+            android:layout_marginTop="@dimen/dp320_5dp"
             android:orientation="horizontal"
             android:layout_centerHorizontal="true"
             android:layout_alignParentBottom="true">
 
             <LinearLayout
-                android:layout_width="61dp"
+                android:layout_width="@dimen/dp320_61dp"
                 android:layout_height="match_parent"
-                android:layout_marginRight="5dp"
-                android:layout_marginLeft="5dp"
+                android:layout_marginRight="@dimen/dp320_5dp"
+                android:layout_marginLeft="@dimen/dp320_5dp"
                 android:orientation="horizontal"
                 android:gravity="center|top"/>
 
             <LinearLayout
-                android:layout_width="61dp"
+                android:layout_width="@dimen/dp320_61dp"
                 android:layout_height="match_parent"
-                android:layout_marginRight="5dp"
-                android:layout_marginLeft="5dp"
+                android:layout_marginRight="@dimen/dp320_5dp"
+                android:layout_marginLeft="@dimen/dp320_5dp"
                 android:orientation="horizontal"
                 android:gravity="center|top"/>
         </LinearLayout>
@@ -576,7 +576,7 @@
         <RelativeLayout
             android:id="@+id/playerCardZone2"
             android:layout_width="match_parent"
-            android:layout_height="125dp"
+            android:layout_height="@dimen/dp320_125dp"
             android:gravity="bottom"
             android:layout_centerHorizontal="true"
             android:layout_above="@id/playerBet2">
@@ -586,13 +586,13 @@
         <RelativeLayout
             android:id="@+id/playerMain2"
             android:layout_width="match_parent"
-            android:layout_height="180dp"
+            android:layout_height="@dimen/dp320_180dp"
             android:layout_centerHorizontal="true"
             android:layout_alignTop="@id/playerCardZone2">
 
             <RelativeLayout
                 android:id="@+id/playerSum2"
-                android:layout_width="70dp"
+                android:layout_width="@dimen/dp320_70dp"
                 android:layout_height="match_parent"
                 android:gravity="top"
                 android:layout_alignParentRight="true"
@@ -600,15 +600,15 @@
                 android:visibility="invisible">
 
                 <ImageView
-                    android:layout_width="70dp"
-                    android:layout_height="35dp"
+                    android:layout_width="@dimen/dp320_70dp"
+                    android:layout_height="@dimen/dp320_35dp"
                     android:scaleType="fitXY"
                     android:src="@drawable/fukidashi"/>
 
                 <TextView
-                    android:layout_width="62dp"
-                    android:layout_height="35dp"
-                    android:textSize="20sp"
+                    android:layout_width="@dimen/dp320_62dp"
+                    android:layout_height="@dimen/dp320_35dp"
+                    android:textSize="@dimen/dp320_20sp"
                     android:textColor="#ffffffff"
                     android:gravity="center"
                     android:layout_alignParentRight="true"
@@ -626,7 +626,7 @@
                     android:id="@+id/playerBetNum2"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:textSize="20sp"
+                    android:textSize="@dimen/dp320_20sp"
                     android:textColor="#ffffffff"
                     android:gravity="center|bottom"
                     fontPath="fonts/Roboto-Bold.ttf"
@@ -637,8 +637,8 @@
             <ImageView
                 android:id="@+id/playerResult2"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginBottom="93dp"
+                android:layout_height="@dimen/dp320_40dp"
+                android:layout_marginBottom="@dimen/dp320_93dp"
                 android:scaleType="centerInside"
                 android:visibility="invisible"
                 android:layout_alignParentBottom="true"/>
@@ -650,8 +650,8 @@
     <LinearLayout
         android:id="@+id/betting"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:padding="10dp"
+        android:layout_height="@dimen/dp320_100dp"
+        android:padding="@dimen/dp320_10dp"
         android:layout_alignParentBottom="true"
         android:layout_centerInParent="true"
         android:background="@drawable/f_wood"
@@ -660,7 +660,7 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="0dp"
-            android:layout_height="90dp"
+            android:layout_height="@dimen/dp320_90dp"
             android:layout_weight="7"
             android:gravity="center_horizontal">
 
@@ -668,12 +668,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginRight="10dp">
+                android:layout_marginRight="@dimen/dp320_10dp">
 
                 <RelativeLayout
-                    android:layout_width="70dp"
-                    android:layout_height="38dp"
-                    android:layout_marginBottom="4dp">
+                    android:layout_width="@dimen/dp320_70dp"
+                    android:layout_height="@dimen/dp320_38dp"
+                    android:layout_marginBottom="@dimen/dp320_4dp">
 
                     <TextView
                         android:id="@+id/playerBet"
@@ -681,7 +681,7 @@
                         android:layout_height="match_parent"
                         android:text="0"
                         android:background="@drawable/bg_playerbet"
-                        android:textSize="22sp"
+                        android:textSize="@dimen/dp320_22sp"
                         android:textColor="#121212"
                         android:gravity="center"
                         fontPath="fonts/Roboto-Bold.ttf"
@@ -692,7 +692,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Max 10000pt"
-                        android:textSize="8sp"
+                        android:textSize="@dimen/dp320_8sp"
                         android:textColor="#ff0000"
                         android:layout_alignParentBottom="true"
                         android:layout_centerInParent="true"
@@ -703,8 +703,8 @@
 
                 <Button
                     android:id="@+id/clearButton"
-                    android:layout_width="70dp"
-                    android:layout_height="38dp"
+                    android:layout_width="@dimen/dp320_70dp"
+                    android:layout_height="@dimen/dp320_38dp"
                     android:background="@drawable/btn_clear"/>
 
             </LinearLayout>
@@ -713,19 +713,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginRight="10dp">
+                android:layout_marginRight="@dimen/dp320_10dp">
 
                 <Button
                     android:id="@+id/rebet"
-                    android:layout_width="45dp"
-                    android:layout_height="38dp"
+                    android:layout_width="@dimen/dp320_45dp"
+                    android:layout_height="@dimen/dp320_38dp"
                     android:background="@drawable/btn_2"
-                    android:layout_marginBottom="4dp"/>
+                    android:layout_marginBottom="@dimen/dp320_4dp"/>
 
                 <Button
                     android:id="@+id/bet_all"
-                    android:layout_width="45dp"
-                    android:layout_height="38dp"
+                    android:layout_width="@dimen/dp320_45dp"
+                    android:layout_height="@dimen/dp320_38dp"
                     android:background="@drawable/btn_maxbet" />
 
             </LinearLayout>
@@ -734,18 +734,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginRight="10dp">
+                android:layout_marginRight="@dimen/dp320_10dp">
 
                 <Button
                     android:id="@+id/bet_50"
-                    android:layout_width="38dp"
-                    android:layout_height="38dp"
-                    android:layout_marginBottom="4dp"
+                    android:layout_width="@dimen/dp320_38dp"
+                    android:layout_height="@dimen/dp320_38dp"
+                    android:layout_marginBottom="@dimen/dp320_4dp"
                     android:background="@drawable/m50" />
                 <Button
                     android:id="@+id/bet_10"
-                    android:layout_width="38dp"
-                    android:layout_height="38dp"
+                    android:layout_width="@dimen/dp320_38dp"
+                    android:layout_height="@dimen/dp320_38dp"
                     android:background="@drawable/m10" />
 
             </LinearLayout>
@@ -754,18 +754,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginRight="10dp">
+                android:layout_marginRight="@dimen/dp320_10dp">
 
                 <Button
                     android:id="@+id/bet_500"
-                    android:layout_width="38dp"
-                    android:layout_height="38dp"
-                    android:layout_marginBottom="4dp"
+                    android:layout_width="@dimen/dp320_38dp"
+                    android:layout_height="@dimen/dp320_38dp"
+                    android:layout_marginBottom="@dimen/dp320_4dp"
                     android:background="@drawable/m500" />
                 <Button
                     android:id="@+id/bet_100"
-                    android:layout_width="38dp"
-                    android:layout_height="38dp"
+                    android:layout_width="@dimen/dp320_38dp"
+                    android:layout_height="@dimen/dp320_38dp"
                     android:background="@drawable/m100" />
 
             </LinearLayout>
@@ -774,8 +774,8 @@
 
         <Button
             android:id="@+id/dealButton"
-            android:layout_width="100dp"
-            android:layout_height="80dp"
+            android:layout_width="@dimen/dp320_100dp"
+            android:layout_height="@dimen/dp320_80dp"
             android:background="@drawable/btn_dealcard" />
 
     </LinearLayout>
@@ -791,8 +791,8 @@
 
         <Button
             android:id="@+id/ddButton"
-            android:layout_width="150dp"
-            android:layout_height="43dp"
+            android:layout_width="@dimen/dp320_150dp"
+            android:layout_height="@dimen/dp320_43dp"
             android:background="@drawable/btn_double"
             android:visibility="invisible" />
 
@@ -800,21 +800,21 @@
             android:id="@+id/basicButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_margin="@dimen/dp320_10dp"
             android:orientation="horizontal">
 
             <Button
                 android:id="@+id/standButton"
-                android:layout_width="150dp"
-                android:layout_height="60dp"
-                android:layout_marginRight="10dp"
+                android:layout_width="@dimen/dp320_150dp"
+                android:layout_height="@dimen/dp320_60dp"
+                android:layout_marginRight="@dimen/dp320_10dp"
                 android:background="@drawable/btn_stand"
                 android:visibility="invisible"/>
 
             <Button
                 android:id="@+id/hitButton"
-                android:layout_width="150dp"
-                android:layout_height="60dp"
+                android:layout_width="@dimen/dp320_150dp"
+                android:layout_height="@dimen/dp320_60dp"
                 android:background="@drawable/btn_hit"
                 android:visibility="invisible"/>
 
@@ -823,10 +823,10 @@
 
     <RelativeLayout
         android:id="@+id/playerCoin"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_width="@dimen/dp320_50dp"
+        android:layout_height="@dimen/dp320_50dp"
+        android:layout_marginRight="@dimen/dp320_10dp"
+        android:layout_marginTop="@dimen/dp320_10dp"
         android:layout_below="@+id/playerGoal"
         android:layout_alignParentRight="true" >
 
@@ -834,7 +834,7 @@
             android:id="@+id/hintButton"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:textSize="32sp"
+            android:textSize="@dimen/dp320_32sp"
             android:text="\?"
             android:onClick="onClickCoin"
             android:textColor="#121212"
@@ -842,11 +842,11 @@
 
         <TextView
             android:id="@+id/coinNum"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="@dimen/dp320_20dp"
+            android:layout_height="@dimen/dp320_20dp"
             android:text="100"
             android:textColor="#ffffffff"
-            android:textSize="10sp"
+            android:textSize="@dimen/dp320_10sp"
             android:gravity="center"
             android:layout_alignRight="@id/hintButton"
             android:layout_alignBottom="@id/hintButton"
@@ -857,8 +857,8 @@
 
     <Button
         android:id="@+id/freeChips"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="@dimen/dp320_150dp"
+        android:layout_height="@dimen/dp320_150dp"
         android:background="@drawable/freechips"
         android:onClick="onClickFreeChips"
         android:layout_centerHorizontal="true"
@@ -869,7 +869,7 @@
         android:id="@+id/freeChipsTimer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="20dp"
+        android:padding="@dimen/dp320_20dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:background="#dc121212"
@@ -881,19 +881,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Get more chips!"
-            android:layout_marginBottom="5dp"
+            android:layout_marginBottom="@dimen/dp320_5dp"
             android:textColor="#ED684A"
-            android:textSize="25sp"
+            android:textSize="@dimen/dp320_25sp"
             android:textStyle="bold"
             android:layout_alignParentTop="true"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="5dp"
+            android:padding="@dimen/dp320_5dp"
             android:text="Time to next free game:"
             android:textColor="#EDEDED"
-            android:textSize="15sp"
+            android:textSize="@dimen/dp320_15sp"
             android:textStyle="bold"/>
 
         <TextView
@@ -902,23 +902,23 @@
             android:layout_height="wrap_content"
             android:text="0:00:00"
             android:textColor="#EDEDED"
-            android:textSize="25sp"
+            android:textSize="@dimen/dp320_25sp"
             android:textStyle="bold"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="5dp"
+            android:padding="@dimen/dp320_5dp"
             android:text="You can also use Hint Coin!"
             android:textColor="#EDEDED"
-            android:textSize="15sp"
+            android:textSize="@dimen/dp320_15sp"
             android:textStyle="bold"/>
 
         <Button
             android:id="@+id/useCoinToBonus"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:textSize="25sp"
+            android:layout_width="@dimen/dp320_50dp"
+            android:layout_height="@dimen/dp320_50dp"
+            android:textSize="@dimen/dp320_25sp"
             android:text="-1"
             android:textColor="#121212"
             android:background="@drawable/coin"

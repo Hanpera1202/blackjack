@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="270dp"
+    android:layout_width="@dimen/dp320_270dp"
     android:layout_height="wrap_content"
-    android:padding="10dp"
+    android:padding="@dimen/dp320_10dp"
     android:background="#121212"
     android:layout_gravity="center">
 
@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="LEVEL UP!!"
-            android:textSize="25sp"
+            android:textSize="@dimen/dp320_25sp"
             android:textColor="#EDB94A"
             fontPath="fonts/Roboto-Bold.ttf"
             tools:ignore="MissingPrefix"/>
@@ -26,8 +26,8 @@
             android:id="@+id/newLevel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:textSize="20sp"
+            android:layout_marginTop="@dimen/dp320_10dp"
+            android:textSize="@dimen/dp320_20sp"
             android:textColor="#CFF6FF"
             android:gravity="center"
             fontPath="fonts/Roboto-Bold.ttf"
@@ -36,7 +36,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/dp320_10dp"
             android:orientation="horizontal"
             android:gravity="center_vertical">
 
@@ -45,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:text="Max Bet"
-                android:textSize="20sp"
+                android:textSize="@dimen/dp320_20sp"
                 android:textColor="#EDEDED"
                 android:gravity="left"
                 fontPath="fonts/Roboto-Bold.ttf"
@@ -63,7 +63,7 @@
                     android:layout_height="wrap_content"
                     android:text="100pt"
                     android:textColor="#EDEDED"
-                    android:textSize="18sp"
+                    android:textSize="@dimen/dp320_18sp"
                     fontPath="fonts/Roboto-Bold.ttf"
                     tools:ignore="MissingPrefix"/>
 
@@ -72,7 +72,7 @@
                     android:layout_height="wrap_content"
                     android:text=" → "
                     android:textColor="#EDEDED"
-                    android:textSize="18sp"
+                    android:textSize="@dimen/dp320_18sp"
                     fontPath="fonts/Roboto-Bold.ttf"
                     tools:ignore="MissingPrefix"/>
 
@@ -82,7 +82,7 @@
                     android:layout_height="wrap_content"
                     android:text="100pt"
                     android:textColor="#EDEDED"
-                    android:textSize="18sp"
+                    android:textSize="@dimen/dp320_18sp"
                     fontPath="fonts/Roboto-Bold.ttf"
                     tools:ignore="MissingPrefix"/>
 
@@ -93,7 +93,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/dp320_10dp"
             android:orientation="horizontal"
             android:gravity="center_vertical">
 
@@ -102,7 +102,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
                 android:text="Hint Coin"
-                android:textSize="20sp"
+                android:textSize="@dimen/dp320_20sp"
                 android:textColor="#EDEDED"
                 android:gravity="left"
                 android:layout_gravity="center_vertical"
@@ -117,8 +117,8 @@
                 android:background="@drawable/bg_playercash">
 
                 <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="@dimen/dp320_25dp"
+                    android:layout_height="@dimen/dp320_25dp"
                     android:src="@drawable/coin"/>
 
                 <TextView
@@ -127,7 +127,7 @@
                     android:layout_height="wrap_content"
                     android:text="0"
                     android:textColor="#ffffffff"
-                    android:textSize="18sp"
+                    android:textSize="@dimen/dp320_18sp"
                     android:gravity="center"
                     android:layout_gravity="center"
                     fontPath="fonts/Roboto-Bold.ttf"
@@ -139,11 +139,11 @@
 
         <Button
             android:id="@+id/ok"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="10dp"
+            android:layout_width="@dimen/dp320_100dp"
+            android:layout_height="@dimen/dp320_50dp"
+            android:layout_marginTop="@dimen/dp320_10dp"
             android:text="OK"
-            android:textSize="18sp"
+            android:textSize="@dimen/dp320_18sp"
             android:textColor="#ffffffff"
             android:background="#ED684A"
             android:gravity="center"

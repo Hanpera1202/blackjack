@@ -119,15 +119,20 @@ public class Competition extends FragmentActivity {
     }
 
     public void setAdapter(){
-        // ListViewのインスタンスを生成
-        ListView listView = (ListView)findViewById(R.id.listView);
+        if(ids.isEmpty()) {
+            ((TextView) findViewById(R.id.message)).setText("Coming soon.");
+        }else{
+            ((TextView) findViewById(R.id.message)).setText("Let's apply to PRIZE COMPETITION!!");
+            // ListViewのインスタンスを生成
+            ListView listView = (ListView) findViewById(R.id.listView);
 
-        // BaseAdapter を継承したadapterのインスタンスを生成
-        // 子要素のレイアウトファイル competition_list_items.xml を activity_main.xml に inflate するためにadapterに引数として渡す
-        adapter = new ListViewAdapter(this,R.layout.competition_list_items);
+            // BaseAdapter を継承したadapterのインスタンスを生成
+            // 子要素のレイアウトファイル competition_list_items.xml を activity_main.xml に inflate するためにadapterに引数として渡す
+            adapter = new ListViewAdapter(this, R.layout.competition_list_items);
 
-        // ListViewにadapterをセット
-        listView.setAdapter(adapter);
+            // ListViewにadapterをセット
+            listView.setAdapter(adapter);
+        }
     }
 
     class ViewHolder {

@@ -58,6 +58,10 @@ public class AlertDialogFragment extends DialogFragment {
                     case "compRegistMailDialog":
                         getActivity().finish();
                         break;
+                    case "nowLoadingAdDialog":
+                    case "noHintCoinDialog":
+                        ((Dealer) getActivity()).checkExecInitUI(0);
+                        break;
                 }
             }
         });

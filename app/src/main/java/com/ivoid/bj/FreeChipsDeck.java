@@ -1,13 +1,17 @@
 package com.ivoid.bj;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 
 class FreeChipsDeck
 {
 	private ArrayList<Card> deck;   // An array of Cards, representing the Deck.
+    private Integer level;
 
-	FreeChipsDeck()
+	FreeChipsDeck(Integer pLevel)
    	{
+        level = pLevel;
 		deck = new ArrayList<Card>(); // Instantiate the ArrayList.
 
 	   	fillDeck(); // Fill it with Cards.
@@ -30,10 +34,22 @@ class FreeChipsDeck
 	
 	void fillDeck()
 	{
-        for ( byte suit = 0 ; suit < 4 ; suit++ )
-            for ( byte value = 1 ; value < 14 ; value++ ) {
-                deck.add(new Card(value, suit, true));
+        for ( byte value = 1 ; value < 14 ; value++ ) {
+            int cnt = 4;
+            if(value < 4){
+                cnt = value;
             }
+            for (byte suit = 0; suit < cnt; suit++)
+                deck.add(new Card(value, suit, true));
+        }
+        // Level / 5 個分の小さいカードを削除
+        int removeCnt = level / 5;
+        if(removeCnt > 20){
+            removeCnt = 20;
+        }
+        for(byte i = 0; i < removeCnt; i++) {
+            drawCard();
+        }
 	}
 
 	void shuffleDeck()

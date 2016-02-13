@@ -16,8 +16,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="PLEASE CHOOSE 3 CARDS"
-            android:textSize="20sp"
+            android:textSize="@dimen/dp320_20sp"
             android:textColor="#DF4F14"
+            android:gravity="center"
+            fontPath="fonts/Roboto-Bold.ttf"
+            tools:ignore="MissingPrefix"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp320_10dp"
+            android:text=" The higher the level,\nit is likely to be high numbers.."
+            android:textSize="@dimen/dp320_20sp"
+            android:textColor="#CFF6FF"
             android:gravity="center"
             fontPath="fonts/Roboto-Bold.ttf"
             tools:ignore="MissingPrefix"/>
@@ -26,36 +37,36 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp">
+            android:layout_marginTop="@dimen/dp320_20dp">
 
             <Button
                 android:id="@+id/card1"
-                android:layout_width="50dp"
-                android:layout_height="80dp"
+                android:layout_width="@dimen/dp320_50dp"
+                android:layout_height="@dimen/dp320_80dp"
                 android:background="@drawable/back"/>
 
             <Button
                 android:id="@+id/card2"
-                android:layout_width="50dp"
-                android:layout_height="80dp"
+                android:layout_width="@dimen/dp320_50dp"
+                android:layout_height="@dimen/dp320_80dp"
                 android:background="@drawable/back"/>
 
             <Button
                 android:id="@+id/card3"
-                android:layout_width="50dp"
-                android:layout_height="80dp"
+                android:layout_width="@dimen/dp320_50dp"
+                android:layout_height="@dimen/dp320_80dp"
                 android:background="@drawable/back"/>
 
             <Button
                 android:id="@+id/card4"
-                android:layout_width="50dp"
-                android:layout_height="80dp"
+                android:layout_width="@dimen/dp320_50dp"
+                android:layout_height="@dimen/dp320_80dp"
                 android:background="@drawable/back"/>
 
             <Button
                 android:id="@+id/card5"
-                android:layout_width="50dp"
-                android:layout_height="80dp"
+                android:layout_width="@dimen/dp320_50dp"
+                android:layout_height="@dimen/dp320_80dp"
                 android:background="@drawable/back"/>
 
 
@@ -67,32 +78,32 @@
 
             <Button
                 android:id="@+id/card6"
-                android:layout_width="50dp"
-                android:layout_height="80dp"
+                android:layout_width="@dimen/dp320_50dp"
+                android:layout_height="@dimen/dp320_80dp"
                 android:background="@drawable/back"/>
 
             <Button
                 android:id="@+id/card7"
-                android:layout_width="50dp"
-                android:layout_height="80dp"
+                android:layout_width="@dimen/dp320_50dp"
+                android:layout_height="@dimen/dp320_80dp"
                 android:background="@drawable/back"/>
 
             <Button
                 android:id="@+id/card8"
-                android:layout_width="50dp"
-                android:layout_height="80dp"
+                android:layout_width="@dimen/dp320_50dp"
+                android:layout_height="@dimen/dp320_80dp"
                 android:background="@drawable/back"/>
 
             <Button
                 android:id="@+id/card9"
-                android:layout_width="50dp"
-                android:layout_height="80dp"
+                android:layout_width="@dimen/dp320_50dp"
+                android:layout_height="@dimen/dp320_80dp"
                 android:background="@drawable/back"/>
 
             <Button
                 android:id="@+id/card10"
-                android:layout_width="50dp"
-                android:layout_height="80dp"
+                android:layout_width="@dimen/dp320_50dp"
+                android:layout_height="@dimen/dp320_80dp"
                 android:background="@drawable/back"/>
 
 
@@ -104,32 +115,32 @@
 
             <Button
                 android:id="@+id/card11"
-                android:layout_width="50dp"
-                android:layout_height="80dp"
+                android:layout_width="@dimen/dp320_50dp"
+                android:layout_height="@dimen/dp320_80dp"
                 android:background="@drawable/back"/>
 
             <Button
                 android:id="@+id/card12"
-                android:layout_width="50dp"
-                android:layout_height="80dp"
+                android:layout_width="@dimen/dp320_50dp"
+                android:layout_height="@dimen/dp320_80dp"
                 android:background="@drawable/back"/>
 
             <Button
                 android:id="@+id/card13"
-                android:layout_width="50dp"
-                android:layout_height="80dp"
+                android:layout_width="@dimen/dp320_50dp"
+                android:layout_height="@dimen/dp320_80dp"
                 android:background="@drawable/back"/>
 
             <Button
                 android:id="@+id/card14"
-                android:layout_width="50dp"
-                android:layout_height="80dp"
+                android:layout_width="@dimen/dp320_50dp"
+                android:layout_height="@dimen/dp320_80dp"
                 android:background="@drawable/back"/>
 
             <Button
                 android:id="@+id/card15"
-                android:layout_width="50dp"
-                android:layout_height="80dp"
+                android:layout_width="@dimen/dp320_50dp"
+                android:layout_height="@dimen/dp320_80dp"
                 android:background="@drawable/back"/>
 
 
@@ -141,32 +152,32 @@
 
             <Button
                 android:id="@+id/card16"
-                android:layout_width="50dp"
-                android:layout_height="80dp"
+                android:layout_width="@dimen/dp320_50dp"
+                android:layout_height="@dimen/dp320_80dp"
                 android:background="@drawable/back"/>
 
             <Button
                 android:id="@+id/card17"
-                android:layout_width="50dp"
-                android:layout_height="80dp"
+                android:layout_width="@dimen/dp320_50dp"
+                android:layout_height="@dimen/dp320_80dp"
                 android:background="@drawable/back"/>
 
             <Button
                 android:id="@+id/card18"
-                android:layout_width="50dp"
-                android:layout_height="80dp"
+                android:layout_width="@dimen/dp320_50dp"
+                android:layout_height="@dimen/dp320_80dp"
                 android:background="@drawable/back"/>
 
             <Button
                 android:id="@+id/card19"
-                android:layout_width="50dp"
-                android:layout_height="80dp"
+                android:layout_width="@dimen/dp320_50dp"
+                android:layout_height="@dimen/dp320_80dp"
                 android:background="@drawable/back"/>
 
             <Button
                 android:id="@+id/card20"
-                android:layout_width="50dp"
-                android:layout_height="80dp"
+                android:layout_width="@dimen/dp320_50dp"
+                android:layout_height="@dimen/dp320_80dp"
                 android:background="@drawable/back"/>
 
 
@@ -176,17 +187,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_margin="10dp"
-            android:textSize="20sp"
+            android:layout_margin="@dimen/dp320_10dp"
+            android:textSize="@dimen/dp320_18sp"
             android:textColor="#DEDEDE"
-            android:text="The number obtained by multiplying the numerical value of the obtained card is the bonus point."/>
+            android:text="You can get as a point the total value of the multiplying the numerical value of card."/>
 
     </LinearLayout>
 
     <RelativeLayout
         android:id="@+id/getbonus"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="@dimen/dp320_200dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:visibility="invisible" >
@@ -201,9 +212,9 @@
             android:id="@+id/getbonuspoints"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="0pt GET!!"
-            android:textColor="#212121"
-            android:textSize="35sp"
+            android:text="0pt\nGET!!"
+            android:textColor="#DF4F14"
+            android:textSize="@dimen/dp320_40sp"
             android:gravity="center"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
