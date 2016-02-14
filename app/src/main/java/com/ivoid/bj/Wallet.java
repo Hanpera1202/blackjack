@@ -14,20 +14,20 @@ public class Wallet
 		editor = preference.edit();
 	}
 	
-	public void deposit(float amount) 
+	public void deposit(int amount)
 	{
-		editor.putFloat("Balance", preference.getFloat("Balance", 0f) + amount);
+		editor.putInt("Balance", preference.getInt("Balance", 0) + amount);
 		editor.commit();
 
 	}
 	
-	public void withdraw(float amount)
+	public void withdraw(int amount)
 	{
-		editor.putFloat("Balance", preference.getFloat("Balance", 0f) - amount);
+		editor.putInt("Balance", preference.getInt("Balance", 0) - amount);
 		editor.commit();
 	}
 	
 	//Accessors
-	public float getBalance()
-	{ return preference.getFloat("Balance", 0f); }
+	public int getBalance()
+	{ return preference.getInt("Balance", 0); }
 }

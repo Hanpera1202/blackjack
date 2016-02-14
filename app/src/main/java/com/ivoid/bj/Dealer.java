@@ -20,7 +20,6 @@ import android.os.Vibrator;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -138,8 +137,8 @@ public class Dealer extends FragmentActivity implements OnClickListener
 
         settings = new GameSettings();
 		shoe = new Deck( (byte)settings.decks,
-						 (byte)settings.burns, 
-						 (byte)settings.shuffleTimes 
+						 (byte)settings.burns,
+						 (byte)settings.shuffleTimes
 					   ); 
 		dealerHand = new BJHand("Dealer");
 
@@ -211,11 +210,11 @@ public class Dealer extends FragmentActivity implements OnClickListener
         game.setHeaderData(player, (RelativeLayout) findViewById(R.id.header));
         playerMaxBet.setText("MAX " + player.getMaxBet() + "pt");
         setPlayerCoin(RelativeLayout.VISIBLE);
-        setPlayerProgress((int) player.getBalance());
+        setPlayerProgress(player.getBalance());
         if (betting){
-            if (preference.getFloat("gotBonusPoint", 0f) > 0f) {
-                player.deposit(preference.getFloat("gotBonusPoint", 0f));
-                editor.putFloat("gotBonusPoint", 0f);
+            if (preference.getInt("gotBonusPoint", 0) > 0) {
+                player.deposit(preference.getInt("gotBonusPoint", 0));
+                editor.putInt("gotBonusPoint", 0);
                 editor.commit();
                 updatePlayerCashlbl();
                 mSoundPool.play(mCash, game.getSoundVol(), game.getSoundVol(), 0, 0, 1.0F);
@@ -307,7 +306,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
                 }
             }, waittime);
         }else{
-            if(player.getBalance() < 10.0f) {
+            if(player.getBalance() < 10) {
                 handler.postDelayed(new Runnable() {
                     public void run() {
                         showFreeChipsButton();
@@ -382,12 +381,12 @@ public class Dealer extends FragmentActivity implements OnClickListener
 		}
 	}
 
-	void payTransaction ( float betValue, float ratio )
+	void payTransaction ( int betValue, float ratio )
 	{
 		player.deposit(betValue);
 		
 		//calculate reward based on hand's performance in this bj round (indicated by ratio)
-		float reward = betValue * ratio;
+		int reward = (int)(betValue * ratio);
 		
 		player.deposit(reward);
     }
@@ -401,7 +400,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
 			if ( !hand.toBePayed() )	continue; //if the hand still needs to be payed
 
 			byte handValue = hand.getBJValue(); //the hand's hard value
-			float betValue = hand.getBet().getValue(); //the hand's bet
+			int betValue = hand.getBet().getValue(); //the hand's bet
 
 			if ( player.howManyHands() == 1 && hand.hasBJ()){
 				if(!dealerHand.hasBJ()) {
@@ -437,7 +436,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
     void insurancePayout ()
     {
 
-        float insuranceBetValue = player.getInsuranceBetValue();
+        int insuranceBetValue = player.getInsuranceBetValue();
 
         if (dealerHand.hasBJ())
         {
@@ -492,9 +491,9 @@ public class Dealer extends FragmentActivity implements OnClickListener
         updatePlayerBetlbl();
 	}
 	
-	void collectBet(float stake)
+	void collectBet(int stake)
 	{
-        float betValue=currentPlayerHand.getBet().getValue();
+        int betValue=currentPlayerHand.getBet().getValue();
         if( stake > player.getBalance() - betValue ||
                 stake + betValue > player.getMaxBet()
                 ) {
@@ -530,7 +529,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
         if (hand.getCardCount()==2)
         {
             player.setData("surrenders");
-            float betValue = hand.getBet().getValue();
+            int betValue = hand.getBet().getValue();
             payTransaction(betValue, settings.surrenderPay); //player gets half his bet back via negative ratio
             hand.setStatus(Status.SURRENDERED);
             hand.setToBePayed(false);
@@ -555,7 +554,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
 			
 			hand.takeDD();
 			
-			float betValue = hand.getBet().getValue();
+			int betValue = hand.getBet().getValue();
 			
 			hand.incrementBet(betValue);
 			
@@ -587,7 +586,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
 		{
             player.setData("splits");
             //remove the second card from the first hand and make a new hand with it
-			float betValue=hand.getBet().getValue();
+			int betValue=hand.getBet().getValue();
 			Card poppedCard = hand.popCard((byte) 1);
 			((RelativeLayout)(currentPlayerHandView.getChildAt(0))).removeViewAt(1);
             playerSumViews.get(0).setVisibility(RelativeLayout.INVISIBLE);
@@ -821,8 +820,8 @@ public class Dealer extends FragmentActivity implements OnClickListener
 
     void insurance()
     {
-        float betValue=currentPlayerHand.getBet().getValue();
-        float insuranceBetValue = (float)(0.5*betValue); //insurance is a separate bet from the main bet
+        int betValue=currentPlayerHand.getBet().getValue();
+        int insuranceBetValue = (int)(0.5*betValue); //insurance is a separate bet from the main bet
         player.takeInsurance(insuranceBetValue);
         player.withdraw(insuranceBetValue); //withraw the bet from player's wallet
 
@@ -1054,17 +1053,8 @@ public class Dealer extends FragmentActivity implements OnClickListener
 
 
     private void setPlayerProgress(int updateCash){
-        /*
-        if(updateCash > settings.necessaryPoint) {
-            playerProgress.setText(String.valueOf(settings.necessaryPoint));
-            bar.setProgress(settings.necessaryPoint);
-        }else{
-            playerProgress.setText(String.valueOf(updateCash));
-            bar.setProgress(updateCash);
-        }*/
         ((TextView)findViewById(R.id.applyPossibleNum)).setText(String.valueOf(updateCash / settings.necessaryPoint));
         bar.setProgress(updateCash % settings.necessaryPoint);
-
     }
 
     private void setPlayerCoin(int visible) {
@@ -1260,36 +1250,26 @@ public class Dealer extends FragmentActivity implements OnClickListener
         			collectBet(currentPlayerHand.getBet().getValue());
         			break;
         		}
-				case ONE:
-				{
-					collectBet(1f);
-					break;
-				}
 				case TEN:
         		{
-	        		collectBet(10f);
+	        		collectBet(10);
         			break;
         		}
         		case FIFTY:
 	        	{
-        			collectBet(50f);
+        			collectBet(50);
         			break;
         		}
 	        	case ONEHUNDRED:
         		{
-        			collectBet(100f);
+        			collectBet(100);
         			break;
 	        	}
         		case FIVEHUNDRED:
         		{
-        			collectBet(500f);
+        			collectBet(500);
         			break;
 	        	}
-				case ONETHOUSAND:
-				{
-					collectBet(1000f);
-					break;
-				}
             }
 
             vibrator.vibrate(40);
@@ -1725,7 +1705,6 @@ public class Dealer extends FragmentActivity implements OnClickListener
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event){
         if (keyCode == KeyEvent.KEYCODE_BACK){
-            Log.d("onKeyDown", "KEYCODE_BACK");
             backendFlag = true;
             moveTaskToBack(true);
             return true;

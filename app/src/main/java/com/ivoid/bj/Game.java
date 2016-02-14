@@ -129,7 +129,7 @@ public class Game extends Application
         LinearLayout playerCashView = (LinearLayout)header.getChildAt(0);
         TextView playerLevel = (TextView)playerCashView.getChildAt(0);
         TextView playerCash = (TextView)playerCashView.getChildAt(1);
-        playerCash.setText(String.valueOf((int) player.getBalance()));
+        playerCash.setText(String.valueOf(player.getBalance()));
         playerLevel.setText(String.valueOf(player.getLevel()));
         this.setHeaderNextLevel(player, header);
     }

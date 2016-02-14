@@ -2,24 +2,24 @@ package com.ivoid.bj;
 
 class Bet 
 {
-	private float betValue;
+	private int betValue;
 	
 	Bet()
 	{ betValue=0; }
 	
-	Bet(float betValue) //used when splitting
+	Bet(int betValue) //used when splitting
 	{ this.betValue = betValue; }
 	
 	void clear()
-	{ betValue=0f; }
+	{ betValue=0; }
 	
-	void incrementBet(float stake)
+	void incrementBet(int stake)
 	{
 		betValue+=stake;
 	}
 	
 	//Accessors
-	float getValue()
+	int getValue()
 	{ return betValue; }
 
 }

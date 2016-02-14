@@ -12,7 +12,7 @@ class BJHand extends Hand
 	BJHand(String name)
 	{ super(name); }
 	
-	BJHand(String name, Card card, float betValue)
+	BJHand(String name, Card card, int betValue)
 	{ super(name,card,betValue); }
 	
 	void update()

@@ -21,9 +21,9 @@ class Player
 	private ArrayList<BJHand> hands=new ArrayList<BJHand>();
 
     private boolean insurance = false; //did the player make an insurance bet?
-	private float insuranceBetValue = 0f; //did the player make an insurance bet?
+	private int insuranceBetValue = 0; //did the player make an insurance bet?
 	private boolean playing; // all players are either playing or not (if not, they are removed from the Game list of players)
-	private float rebet=0f; // Saved last bet
+	private int rebet=0; // Saved last bet
 
 	Player(Context context, String name)
 	{
@@ -45,7 +45,7 @@ class Player
 	void update()
 	{
 		insurance = false;
-        insuranceBetValue = 0f;
+        insuranceBetValue = 0;
         BJHand firstHand = hands.get(0);
         rebet = firstHand.getBet().getValue();
 		 
@@ -64,22 +64,22 @@ class Player
         editor.commit();
     }
 
-    void deposit(float amount)
+    void deposit(int amount)
     { wallet.deposit(amount); }
 	
-    void withdraw(float amount)
+    void withdraw(int amount)
     { wallet.withdraw(amount); }
 
-    void depositCoin(float amount)
+    void depositCoin(int amount)
     { coinWallet.deposit(amount); }
 
-    void withdrawCoin(float amount)
+    void withdrawCoin(int amount)
     { coinWallet.withdraw(amount); }
 
     void addHand( BJHand hand )
     { hands.add(hand); }
 
-    void takeInsurance(float amount)
+    void takeInsurance(int amount)
     {
         insuranceBetValue = amount;
         insurance=true;
@@ -89,22 +89,22 @@ class Player
     String getName()
     { return name; }
 	
-    float getBalance()
+    int getBalance()
     { return wallet.getBalance(); }
 
-    float getCoinBalance()
+    int getCoinBalance()
     { return coinWallet.getBalance(); }
 
-    float getInsuranceBetValue()
+    int getInsuranceBetValue()
     { return insuranceBetValue; }
 
     boolean tookInsurance()
     { return insurance; }
 
-    float getRebet()
+    int getRebet()
     { return rebet; }
 	 
-    float getInitBet()
+    int getInitBet()
     { return hands.get(0).getBet().getValue(); }
 	
     boolean getPlaying()

@@ -6,7 +6,7 @@ import java.util.Map;
 class GameSettings
 {
 	byte decks, splits, burns, shuffleTimes; 
-	float startCash, tableMin;
+	int startCash, tableMin;
 	float bjPay, surrenderPay, insurancePay, winPay;
 	boolean ddPostSplit, surrender, insurance, stand17soft, aceResplit, dd1011;
     int loginBonusSeconds;
@@ -25,7 +25,7 @@ class GameSettings
 	{
 		bjPay=1.5f; surrenderPay=-0.5f; insurancePay=2f; winPay=1f;
 		decks=1; splits=1; burns=(byte)(5.0*Math.random()); shuffleTimes = 3;
-		startCash=1000f; tableMin=10f;
+		startCash=1000; tableMin=10;
 		ddPostSplit=true; surrender=true; insurance=true; stand17soft=true; aceResplit=true; dd1011=true;
         loginBonusSeconds=28800;freeChipsSeconds=3600;loginBonusCoins=3;coninBonusCount=3;
         //loginBonusSeconds=300;freeChipsSeconds=120;loginBonusCoins=3;coninBonusCount=3;

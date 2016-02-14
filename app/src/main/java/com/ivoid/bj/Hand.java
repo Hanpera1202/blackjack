@@ -31,7 +31,7 @@ abstract class Hand
 	}
 	
 	// Constructor for splitting.
-	Hand(String name, Card card, float betValue)
+	Hand(String name, Card card, int betValue)
 	{
 		ownerName=name;
 		hand=new ArrayList<Card>();
@@ -69,7 +69,7 @@ abstract class Hand
 	void setToBePayed(boolean b)
 	{ toBePayed=b; }
 	
-	void incrementBet(float stake)
+	void incrementBet(int stake)
 	{ bet.incrementBet(stake); }
 	
 	void clearBet()

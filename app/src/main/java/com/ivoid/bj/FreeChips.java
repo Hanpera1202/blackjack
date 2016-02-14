@@ -164,7 +164,7 @@ public class FreeChips extends Activity implements OnClickListener
 			gotPoint *= card.getValue();
 		}
 		getpoints.setText(gotPoint + "pt\nGET!!");
-		editor.putFloat("gotBonusPoint", gotPoint);
+		editor.putInt("gotBonusPoint", gotPoint);
 		editor.putLong("freeChipsGetTime", System.currentTimeMillis());
 		editor.commit();
 		button.setOnClickListener(null);

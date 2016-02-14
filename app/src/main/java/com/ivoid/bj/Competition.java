@@ -61,7 +61,6 @@ public class Competition extends FragmentActivity {
     private Player player;
     private TextView playerCash;
 
-    private int waittime;
     private final Handler handler = new Handler();
 
     AsyncJsonLoader asyncJsonLoader;
@@ -283,8 +282,9 @@ public class Competition extends FragmentActivity {
     int countUpNum;
     void updatePlayerCashlbl()
     {
+        int waittime = 0;
         int beforeCash = Integer.parseInt(String.valueOf(playerCash.getText()));
-        int afterCash = (int) player.getBalance();
+        int afterCash = player.getBalance();
         int loopCnt;
         int countCash;
         int sign = 1;
@@ -301,7 +301,7 @@ public class Competition extends FragmentActivity {
         }
         for (int i = 1; i <= loopCnt; i++) {
             if (i == loopCnt) {
-                countUpNum = (int) player.getBalance();
+                countUpNum = player.getBalance();
             } else {
                 countUpNum = beforeCash + (countCash * i);
             }

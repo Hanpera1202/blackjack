@@ -15,7 +15,6 @@ class Deck
 	   	shuffleTimes = times; // How many times to shuffle the deck
 	   
 	   	fillDeck(); // Fill it with Cards.
-		//fillDeckNaka();
 		shuffleDeck(); //shuffle the deck
 	   	burn(burn); // remove given amount of Cards from the top of the deck
 	}
@@ -60,20 +59,8 @@ class Deck
 		for ( byte decks = 0 ; decks < howManyDecks ; decks++ )
 			for ( byte suit = 0 ; suit < 4 ; suit++ )
 				for ( byte value = 1 ; value < 14 ; value++ ) {
-					//if(value == 1 || value >= 9)
 					deck.add(new Card(value, suit, true));
 				}
-	}
-
-	void fillDeckNaka()
-	{
-		// Fill the deck with 52 Cards, 4 different suits & 13 different cards in each suit.
-		for ( byte decks = 0 ; decks < howManyDecks ; decks++ )
-			for ( byte value = 1 ; value < 14 ; value++ )
-				for ( byte suit = 0 ; suit < 4 ; suit++ ){
-				if(value == 1 || value >= 10)
-				deck.add(new Card(value, suit, true));
-			}
 	}
 
 

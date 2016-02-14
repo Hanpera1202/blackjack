@@ -51,7 +51,7 @@ public class BonusDialogFragment extends DialogFragment {
             // calculate login bonus points
             Long loginBonusGetTime = preference.getLong("loginBonusGetTime", 0);
             if (loginBonusGetTime == 0L) {
-                editor.putFloat("gotBonusPoint", settings.startCash);
+                editor.putInt("gotBonusPoint", settings.startCash);
                 ((TextView) dialog.findViewById(R.id.specialBonus)).setText("+" + (int) settings.startCash);
                 dialog.findViewById(R.id.specialBonusArea).setVisibility(View.VISIBLE);
             }
