@@ -228,7 +228,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
             if(player.getBalance() < player.getInitBet()) {
                 clearBet();
             }
-            checkExecInitUI(0);
+            execInitUIWhenBetting(0);
         }
     }
 
@@ -274,8 +274,8 @@ public class Dealer extends FragmentActivity implements OnClickListener
         playerMaxBet=(TextView)findViewById(R.id.playerMaxBet);
     }
 
-    void checkExecInitUI(int waittime){
-        if(backendFlag){
+    void execInitUIWhenBetting(int waittime){
+        if(backendFlag || !betting){
             return;
         }
 
@@ -481,7 +481,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
         waittime = 0;
         // update playerBet to 0
         updatePlayerBetlbl();
-        checkExecInitUI(500);
+        execInitUIWhenBetting(500);
 	}
 
 	void clearBet()
@@ -1003,13 +1003,13 @@ public class Dealer extends FragmentActivity implements OnClickListener
     { playerBet.setText(String.valueOf((int)player.getInitBet() ) );}
 
     void updatePlayerBetlblForPlaying()
-    { currentPlayerBetNumView.setText(String.valueOf((int) player.getInitBet()));}
+    { currentPlayerBetNumView.setText(String.valueOf(player.getInitBet()));}
 
     void updatePlayerCashlbl()
-    { updatePlayerlbl(playerCash, (int)player.getBalance());}
+    { updatePlayerlbl(playerCash, player.getBalance());}
 
     void updatePlayerCoinlbl()
-    { updatePlayerlbl(playerCoinNum, (int) player.getCoinBalance());}
+    { updatePlayerlbl(playerCoinNum, player.getCoinBalance());}
 
     int countUpNum;
     TextView updateView;
@@ -1060,7 +1060,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
     private void setPlayerCoin(int visible) {
         playerCoin.setVisibility(visible);
         if(visible == RelativeLayout.VISIBLE){
-            playerCoinNum.setText(String.valueOf((int) player.getCoinBalance()));
+            playerCoinNum.setText(String.valueOf(player.getCoinBalance()));
             if (betting) {
                 ((TextView) findViewById(R.id.hintButton)).setText("+");
             }else{
@@ -1237,9 +1237,9 @@ public class Dealer extends FragmentActivity implements OnClickListener
 				{
                     int maxbet;
                     if(player.getBalance() > player.getMaxBet()){
-                        maxbet = (int)(player.getMaxBet() - currentPlayerHand.getBet().getValue());
+                        maxbet = player.getMaxBet() - currentPlayerHand.getBet().getValue();
                     }else{
-                        maxbet=(int)(player.getBalance() - currentPlayerHand.getBet().getValue());
+                        maxbet= player.getBalance() - currentPlayerHand.getBet().getValue();
                     }
                     maxbet = maxbet - (maxbet % (int)settings.tableMin);
                     collectBet(maxbet);
@@ -1390,8 +1390,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
             currentPlayerBetView = playerBetViews.get(nextHandtoPlay);
             currentPlayerBetNumView = playerBetNumViews.get(nextHandtoPlay);
 
-            if (currentPlayerIndex != nextHandtoPlay ||
-                    action == action.SPLIT){
+            if (currentPlayerIndex != nextHandtoPlay || action == action.SPLIT){
                 checksplitbutton();
                 handler.postDelayed(new Runnable() {
                     public void run() {
@@ -1505,6 +1504,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
     }
 
     public void onClickCoin(final View view){
+        waittime = 0;
         if(betting){
             createConfirmAdDialog();
             showConfirmAdDialog();

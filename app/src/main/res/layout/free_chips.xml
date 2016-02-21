@@ -26,7 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp320_10dp"
-            android:text=" The higher the level,\nit is likely to be high numbers.."
+            android:text=" The higher the level,\nit is likely to be high numbers."
             android:textSize="@dimen/dp320_20sp"
             android:textColor="#CFF6FF"
             android:gravity="center"

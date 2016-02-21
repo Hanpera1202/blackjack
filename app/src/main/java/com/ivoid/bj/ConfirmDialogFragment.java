@@ -77,7 +77,12 @@ public class ConfirmDialogFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 dismiss();
-                ((Dealer)getActivity()).checkExecInitUI(0);
+                switch(getArguments().getString("dialogType")) {
+                    case "confirmAdDialog":
+                    case "confirmFreeChipsByCoinDialog":
+                        ((Dealer)getActivity()).execInitUIWhenBetting(0);
+                        break;
+                }
             }
         });
 

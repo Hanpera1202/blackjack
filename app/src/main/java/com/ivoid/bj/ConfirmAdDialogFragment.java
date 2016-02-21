@@ -64,7 +64,7 @@ public class ConfirmAdDialogFragment extends DialogFragment {
                 @Override
                 public void onClick(View v) {
                     dismiss();
-                    ((Dealer) getActivity()).checkExecInitUI(0);
+                    ((Dealer) getActivity()).execInitUIWhenBetting(0);
                 }
             });
         }else{
@@ -75,7 +75,7 @@ public class ConfirmAdDialogFragment extends DialogFragment {
                 @Override
                 public void onClick(View v) {
                     dismiss();
-                    ((Dealer) getActivity()).checkExecInitUI(0);
+                    ((Dealer) getActivity()).execInitUIWhenBetting(0);
                 }
             });
             dialog.findViewById(R.id.cancel).setVisibility(Button.GONE);

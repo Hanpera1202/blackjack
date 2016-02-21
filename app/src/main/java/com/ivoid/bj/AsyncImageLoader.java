@@ -9,7 +9,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.widget.ImageView;
 
 public class AsyncImageLoader extends AsyncTask<String, Integer, Bitmap> {

@@ -4,6 +4,7 @@ import com.bj.R;
 import com.google.android.gms.ads.AdListener;
 
 import android.content.Context;
+import android.media.MediaCodec;
 import android.os.Bundle;
 
 import android.os.Handler;
@@ -26,6 +27,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TimeZone;
@@ -42,8 +45,8 @@ public class Competition extends FragmentActivity {
 
     Game game;
 
-    private final String getActiveUrl = "http://blackjack.uh-oh.jp/active/%s";
-    private final String applyUrl = "http://blackjack.uh-oh.jp/apply/%s/%s";
+    private final String getActiveUrl = "http://blackjack.uh-oh.jp/competitions";
+    private final String applyUrl = "http://blackjack.uh-oh.jp/users/%s/application";
 
     private List<String> ids = new ArrayList<String>();
     private List<String> names = new ArrayList<String>();
@@ -103,9 +106,13 @@ public class Competition extends FragmentActivity {
                 }
                 return true;
             }
+            // error
+            public boolean postError() {
+                return false;
+            }
         });
         // 処理を実行
-        asyncJsonLoader.execute(String.format(getActiveUrl, game.getUserId()));
+        asyncJsonLoader.execute("GET", getActiveUrl + "?user_unique_id=" + game.getUserId());
     }
 
     @Override
@@ -273,10 +280,20 @@ public class Competition extends FragmentActivity {
                 }
                 return true;
             }
+            // error
+            public boolean postError() {
+                return false;
+            }
         },"Applying");
         // 処理を実行
         createAlertDialog("applyCompletedDialog", "Applicantion completed.");
-        asyncJsonLoader.execute(String.format(applyUrl, game.getUserId(), competitionId));
+        String url = String.format(applyUrl, game.getUserId());
+        try {
+            Crypt crypt = new Crypt("competition_id=" + competitionId + "&timestamp=" + System.currentTimeMillis()/1000);
+            asyncJsonLoader.execute("POST", url, "apply_data", crypt.encrypt());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     int countUpNum;

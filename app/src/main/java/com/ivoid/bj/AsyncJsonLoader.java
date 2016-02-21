@@ -8,14 +8,19 @@ import android.widget.Toast;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class AsyncJsonLoader extends AsyncTask<String, Integer, JSONObject> {
 
@@ -26,6 +31,7 @@ public class AsyncJsonLoader extends AsyncTask<String, Integer, JSONObject> {
 
     public interface AsyncCallback {
         boolean postExecute(JSONObject result);
+        boolean postError();
     }
 
     private AsyncCallback mAsyncCallback = null;
@@ -59,11 +65,15 @@ public class AsyncJsonLoader extends AsyncTask<String, Integer, JSONObject> {
         dismissDialog();
         isInProgress = false;
         if (_result == null) {
-            showConnectError();
+            if (!mAsyncCallback.postError()) {
+                showConnectError();
+            }
             return;
         }
         if(!mAsyncCallback.postExecute(_result)){
-            showConnectError();
+            if (!mAsyncCallback.postError()) {
+                showConnectError();
+            }
         }
     }
 
@@ -75,9 +85,23 @@ public class AsyncJsonLoader extends AsyncTask<String, Integer, JSONObject> {
     @Override
     protected JSONObject doInBackground(String... _uri) {
         HttpClient httpClient = new DefaultHttpClient();
-        HttpGet httpGet = new HttpGet(_uri[0]);
+        HttpResponse httpResponse;
         try {
-            HttpResponse httpResponse = httpClient.execute(httpGet);
+            if(_uri[0].equals("GET")) {
+                HttpGet httpGet = new HttpGet(_uri[1]);
+                httpResponse = httpClient.execute(httpGet);
+            }else if(_uri[0].equals("POST")){
+                HttpPost httpPost = new HttpPost(_uri[1]);
+                ArrayList <NameValuePair> params = new ArrayList<NameValuePair>();
+                for(int i = 2; i < _uri.length; i+=2){
+                    params.add( new BasicNameValuePair(_uri[i], _uri[i+1]));
+                }
+                httpPost.setEntity(new UrlEncodedFormEntity(params, "utf-8"));
+                httpResponse = httpClient.execute(httpPost);
+            }else{
+                HttpGet httpGet = new HttpGet(_uri[0]);
+                httpResponse = httpClient.execute(httpGet);
+            }
             if (httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                 httpResponse.getEntity().writeTo(outputStream);

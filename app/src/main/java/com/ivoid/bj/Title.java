@@ -1,12 +1,14 @@
 package com.ivoid.bj;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -18,14 +20,17 @@ import org.json.JSONObject;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class Title extends Activity {
+public class Title extends FragmentActivity {
     Game game;
 
     Bitmap bgBmp;
 
-    private final String registUrl = "http://blackjack.uh-oh.jp/user/regist/%s";
+    private final String registUrl = "http://blackjack.uh-oh.jp/user";
     private SharedPreferences preference;
     private SharedPreferences.Editor editor;
+
+    AsyncJsonLoader asyncJsonLoader;
+    private DialogFragment alertDialog;
 
     @Override
 	public void onCreate(Bundle savedInstanceState)
@@ -61,7 +66,7 @@ public class Title extends Activity {
     }
 
     public void registUser(){
-        AsyncJsonLoader asyncJsonLoader = new AsyncJsonLoader(this, new AsyncJsonLoader.AsyncCallback() {
+        asyncJsonLoader = new AsyncJsonLoader(this, new AsyncJsonLoader.AsyncCallback() {
             // 実行後
             public boolean postExecute(JSONObject result) {
                 try {
@@ -74,8 +79,15 @@ public class Title extends Activity {
                 showActionButton();
                 return true;
             }
+            // error
+            public boolean postError() {
+                showAlertDialog();
+                return true;
+            }
         }, "Registing");
-        asyncJsonLoader.execute(String.format(registUrl, "test"));
+        String message = "Check internet connection.";
+        createAlertDialog("registErrorDialog", message);
+        asyncJsonLoader.execute("POST", registUrl);
     }
     
 	public void onClickHeader(final View view) {
@@ -86,9 +98,34 @@ public class Title extends Activity {
     }
 
     void showActionButton(){
+        (findViewById(R.id.message)).setVisibility(Button.VISIBLE);
         (findViewById(R.id.game)).setVisibility(Button.VISIBLE);
-        (findViewById(R.id.competition)).setVisibility(Button.VISIBLE);
-        (findViewById(R.id.result)).setVisibility(Button.VISIBLE);
+        (findViewById(R.id.prize_competition)).setVisibility(Button.VISIBLE);
+    }
+
+    // アラートダイアログ作成
+    private void createAlertDialog(String dialogType, String message){
+        alertDialog = AlertDialogFragment.newInstance(dialogType, message);
+    }
+
+    // アラートダイアログ表示
+    private void showAlertDialog() {
+        if(alertDialog != null &&
+                getSupportFragmentManager().findFragmentByTag("alertDialog") == null) {
+            alertDialog.show(getSupportFragmentManager(), "alertDialog");
+        }
+    }
+
+    // アラートダイアログ非表示
+    private void dismissAlertDialog() {
+        if (alertDialog !=  null) {
+            Fragment prev = getSupportFragmentManager().findFragmentByTag("alertDialog");
+            if (prev != null) {
+                DialogFragment df = (DialogFragment) prev;
+                df.dismiss();
+            }
+        }
+        alertDialog = null;
     }
 
     @Override
@@ -117,6 +154,15 @@ public class Title extends Activity {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void onUserLeaveHint() {
+        if (asyncJsonLoader != null) {
+            // ダイアログを閉じる（2重表示防止）
+            asyncJsonLoader.dismissDialog();
+            dismissAlertDialog();
+        }
     }
 
     @Override

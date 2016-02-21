@@ -39,7 +39,7 @@ public class Result extends Activity {
 
     Game game;
 
-    private final String getResultsUrl = "http://blackjack.uh-oh.jp/results/%s";
+    private final String getResultsUrl = "http://blackjack.uh-oh.jp/users/%s/results";
 
     private List<String> ids = new ArrayList<String>();
     private List<String> names = new ArrayList<String>();
@@ -92,6 +92,10 @@ public class Result extends Activity {
                     return false;
                 }
                 return true;
+            }
+            // error
+            public boolean postError() {
+                return false;
             }
         });
         // 処理を実行
@@ -198,15 +202,15 @@ public class Result extends Activity {
 
             switch(progresses.get(position)){
                 case "1":
-                    holder.progress.setText("Currently in applying...");
+                    holder.progress.setText("Currently in applying");
                     holder.checkResult.setVisibility(Button.GONE);
                     break;
                 case "2":
-                    holder.progress.setText("Currently in lottery...");
+                    holder.progress.setText("Currently in lottery");
                     holder.checkResult.setVisibility(Button.GONE);
                     break;
                 case "3":
-                    holder.progress.setText("Currently in announcing.");
+                    holder.progress.setText("Currently in announcing");
                     holder.checkResult.setVisibility(Button.VISIBLE);
                     break;
             }

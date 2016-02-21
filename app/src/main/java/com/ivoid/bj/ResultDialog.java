@@ -32,8 +32,8 @@ public class ResultDialog extends FragmentActivity implements View.OnClickListen
 
     Game game;
 
-    private final String getResultUrl = "http://blackjack.uh-oh.jp/result/%s/%s";
-    private final String getMailRegistUrl = "http://blackjack.uh-oh.jp/user/registmail/%s/%s";
+    private final String getResultUrl = "http://blackjack.uh-oh.jp/users/%s/results/%s";
+    private final String getMailRegistUrl = "http://blackjack.uh-oh.jp/users/%s";
 
     private String name;
     private String imageUrl;
@@ -84,6 +84,10 @@ public class ResultDialog extends FragmentActivity implements View.OnClickListen
                     return false;
                 }
                 return true;
+            }
+            // error
+            public boolean postError() {
+                return false;
             }
         });
         // 処理を実行
@@ -153,9 +157,21 @@ public class ResultDialog extends FragmentActivity implements View.OnClickListen
                 }
                 return true;
             }
+            // error
+            public boolean postError() {
+                return false;
+            }
         },"Registing");
 
         createCompRegistMailDialog();
+        String url = String.format(getMailRegistUrl, game.getUserId());
+        try {
+            Crypt crypt = new Crypt(mail_address);
+            asyncJsonLoader.execute("POST", url, "mail_address", crypt.encrypt());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+/*
         try {
             byte[] data = mail_address.getBytes("UTF-8");
             String base64_mail_address = Base64.encodeToString(data, android.util.Base64.URL_SAFE | android.util.Base64.NO_WRAP);
@@ -163,6 +179,7 @@ public class ResultDialog extends FragmentActivity implements View.OnClickListen
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+        */
     }
 
     private void createRegistMailDialog() {
@@ -198,24 +215,23 @@ public class ResultDialog extends FragmentActivity implements View.OnClickListen
 
     // 登録完了ダイアログ作成
     private void createCompRegistMailDialog() {
-        String message = "You completed the registration of the mail address.\n" +
-                "Please wait for the reply.";
-
-        CompRegistMailDialog = AlertDialogFragment.newInstance(message);
-
+        String message = "Registration is complete.\n" +
+                "Please wait for the mail.";
+        CompRegistMailDialog = AlertDialogFragment.newInstance("compRegistMailDialog", message);
     }
 
     // 登録完了ダイアログ表示
     private void showCompRegistMailDialog() {
-        if(CompRegistMailDialog != null) {
-            CompRegistMailDialog.show(getSupportFragmentManager(), "compRegistMailDialog");
+        if(CompRegistMailDialog != null &&
+                getSupportFragmentManager().findFragmentByTag("alertDialog") == null) {
+            CompRegistMailDialog.show(getSupportFragmentManager(), "alertDialog");
         }
     }
 
     // 登録完了ダイアログ非表示
     private void dismissCompRegistMailDialog() {
         if (CompRegistMailDialog !=  null) {
-            Fragment prev = getSupportFragmentManager().findFragmentByTag("compRegistMailDialog");
+            Fragment prev = getSupportFragmentManager().findFragmentByTag("alertDialog");
             if (prev != null) {
                 DialogFragment df = (DialogFragment) prev;
                 df.dismiss();
