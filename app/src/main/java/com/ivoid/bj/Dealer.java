@@ -807,7 +807,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
                 player.getBalance() >= (float)(0.5*currentPlayerHand.getBet().getValue())) {
             return true;
         }else{
-            return true;
+            return false;
         }
     }
 
