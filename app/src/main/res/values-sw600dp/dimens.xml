@@ -8,6 +8,7 @@
     <dimen name="dp320_8dp">12dp</dimen>
     <dimen name="dp320_10dp">15dp</dimen>
     <dimen name="dp320_15dp">22.5dp</dimen>
+    <dimen name="dp320_17dp">25.5dp</dimen>
     <dimen name="dp320_20dp">30dp</dimen>
     <dimen name="dp320_22.5dp">31.25dp</dimen>
     <dimen name="dp320_25dp">37.5dp</dimen>

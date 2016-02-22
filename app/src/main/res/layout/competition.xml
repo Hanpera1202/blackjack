@@ -86,7 +86,7 @@
                 android:layout_width="@dimen/dp320_40dp"
                 android:layout_height="@dimen/dp320_40dp"
                 android:layout_marginRight="@dimen/dp320_3dp"
-                android:background="@drawable/h_prize_on" />
+                android:background="@drawable/h_apply_on" />
 
             <Button
                 android:id="@+id/result"

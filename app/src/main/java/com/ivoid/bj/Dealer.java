@@ -790,7 +790,13 @@ public class Dealer extends FragmentActivity implements OnClickListener
             if (!currentPlayerHand.isPlaying()) {
                 getNextAction=true;
             } else {
-                handler.postDelayed(showActionButton, waittime);
+                //handler.postDelayed(showActionButton, waittime);
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        showBasicActionButton();
+                        checkSpecialActionButton();
+                    }
+                }, waittime);
             }
         }
 	}
@@ -801,7 +807,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
                 player.getBalance() >= (float)(0.5*currentPlayerHand.getBet().getValue())) {
             return true;
         }else{
-            return false;
+            return true;
         }
     }
 
@@ -827,8 +833,8 @@ public class Dealer extends FragmentActivity implements OnClickListener
 
         findViewById(R.id.insurance).setVisibility(RelativeLayout.VISIBLE);
         LinearLayout insuranceBet = (LinearLayout) findViewById(R.id.insuranceBet);
-        setBet(insuranceBet, (int) insuranceBetValue);
-        ((TextView) findViewById(R.id.insuranceBetNum)).setText(String.valueOf((int) insuranceBetValue));
+        setBet(insuranceBet, insuranceBetValue);
+        ((TextView) findViewById(R.id.insuranceBetNum)).setText(String.valueOf(insuranceBetValue));
         updatePlayerCashlbl();
         waittime += 300 + (insuranceBet.getChildCount() - 1) * 50;
     }
@@ -838,25 +844,31 @@ public class Dealer extends FragmentActivity implements OnClickListener
         insurancingFlg = false;
         checkPlayerHand(currentPlayerHand);
         if (currentPlayerHand.isPlaying()) {
-            handler.postDelayed(showActionButton, waittime);
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    showBasicActionButton();
+                    checkSpecialActionButton();
+                }
+            }, waittime);
         }
         findViewById(R.id.insuranceAsk).setVisibility(TextView.INVISIBLE);
         findViewById(R.id.insuranceYes).setVisibility(Button.INVISIBLE);
         findViewById(R.id.insuranceNo).setVisibility(Button.INVISIBLE);
     }
 
-	private final Runnable showActionButton = new Runnable()
+	void showBasicActionButton()
     {
-		@Override
-		public void run() {
-            findViewById(R.id.standButton).setVisibility(Button.VISIBLE);
-            findViewById(R.id.hitButton).setVisibility(Button.VISIBLE);
-            setPlayerCoin(RelativeLayout.VISIBLE);
-            checksurrenderbutton();
-            checkddbutton();
-            checksplitbutton();
-        }
-	};
+        findViewById(R.id.standButton).setVisibility(Button.VISIBLE);
+        findViewById(R.id.hitButton).setVisibility(Button.VISIBLE);
+        setPlayerCoin(RelativeLayout.VISIBLE);
+	}
+
+    void checkSpecialActionButton()
+    {
+        checksurrenderbutton();
+        checkddbutton();
+        checksplitbutton();
+    };
 
     void checksurrenderbutton()
     {
@@ -1289,22 +1301,27 @@ public class Dealer extends FragmentActivity implements OnClickListener
                         }
                     }, waittime);
                     checkPlayerHand(currentPlayerHand);
+                    checkSpecialActionButton();
                     break;
                 }
                 case STAND: {
                     currentPlayerHand.setPlaying(false);
+                    checkSpecialActionButton();
                     break;
                 }
                 case DOUBLEDOWN: {
                     dd(currentPlayerHand);
+                    checkSpecialActionButton();
 					break;
                 }
                 case SPLIT: {
                     split(currentPlayerHand);
+                    checkSpecialActionButton();
                     break;
     			}
                 case SURRENDER: {
                     surrender(currentPlayerHand);
+                    checkSpecialActionButton();
                     break;
                 }
                 case INSURANCE_YES:{
@@ -1319,10 +1336,6 @@ public class Dealer extends FragmentActivity implements OnClickListener
         	}
         	
         	vibrator.vibrate(40);
-
-            checksurrenderbutton();
-            checkddbutton();
-            checksplitbutton();
 
        	}
 

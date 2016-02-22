@@ -2,10 +2,13 @@ package com.ivoid.bj;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -31,9 +34,9 @@ public class Setting extends Activity implements CompoundButton.OnCheckedChangeL
     private SharedPreferences preference;
     private SharedPreferences.Editor editor;
 
-    private Boolean push_on, sound_on;
+    private Boolean notification_on, sound_on;
 
-    ToggleButton tglPush, tglSound;
+    ToggleButton tglNotification, tglSound;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -46,22 +49,22 @@ public class Setting extends Activity implements CompoundButton.OnCheckedChangeL
         preference = getSharedPreferences("user_data", MODE_PRIVATE);
         editor = preference.edit();
 
-        push_on = preference.getBoolean("push_on", true);
+        notification_on = preference.getBoolean("Notification_on", true);
         sound_on = preference.getBoolean("sound_on", true);
 
         player = new Player(getApplicationContext(), "Richard");
         game.setHeaderData(player, (RelativeLayout) findViewById(R.id.header));
 
         // ToggleButtonの取得
-        tglPush = (ToggleButton) findViewById(R.id.tglPush);
+        tglNotification = (ToggleButton) findViewById(R.id.tglNotification);
         tglSound = (ToggleButton) findViewById(R.id.tglSound);
 
         // リスナーの登録
-        tglPush.setOnCheckedChangeListener(this);
+        tglNotification.setOnCheckedChangeListener(this);
         tglSound.setOnCheckedChangeListener(this);
 
         // 初期値の設定
-        tglPush.setChecked(push_on);
+        tglNotification.setChecked(notification_on);
         tglSound.setChecked(sound_on);
     }
 
@@ -72,13 +75,13 @@ public class Setting extends Activity implements CompoundButton.OnCheckedChangeL
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if (buttonView.getId() == R.id.tglPush) {
+        if (buttonView.getId() == R.id.tglNotification) {
             boolean on = buttonView.isChecked();
             if(on) {
                 ParsePush.subscribeInBackground("Blackjack", new SaveCallback() {
                     @Override
                     public void done(ParseException e) {
-                        editor.putBoolean("push_on", true);
+                        editor.putBoolean("notification_on", true);
                         editor.commit();
                     }
                 });
@@ -86,7 +89,7 @@ public class Setting extends Activity implements CompoundButton.OnCheckedChangeL
                 ParsePush.unsubscribeInBackground("Blackjack", new SaveCallback() {
                     @Override
                     public void done(ParseException e) {
-                        editor.putBoolean("push_on", false);
+                        editor.putBoolean("notification_on", false);
                         editor.commit();
                     }
                 });
@@ -101,6 +104,20 @@ public class Setting extends Activity implements CompoundButton.OnCheckedChangeL
                 editor.commit();
             }
         }
+    }
+
+    public void onClickViewButton(final View view) {
+        Uri uri;
+        switch (view.getId()) {
+            case R.id.termOfService:
+                uri = Uri.parse("http://blackjack.uh-oh.jp/contents/terms");
+                break;
+            default:
+                uri = Uri.parse("");
+        }
+        Intent i = new Intent(Intent.ACTION_VIEW,uri);
+        startActivity(i);
+        overridePendingTransition(0, 0);
     }
 
     public void onClickHeader(final View view) {

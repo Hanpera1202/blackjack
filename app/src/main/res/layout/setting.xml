@@ -86,7 +86,7 @@
                 android:layout_height="@dimen/dp320_40dp"
                 android:layout_marginRight="@dimen/dp320_3dp"
                 android:onClick="onClickHeader"
-                android:background="@drawable/h_prize" />
+                android:background="@drawable/h_apply" />
 
             <Button
                 android:id="@+id/result"
@@ -137,7 +137,7 @@
                 tools:ignore="MissingPrefix"/>
 
             <LinearLayout
-                android:id="@+id/settingPush"
+                android:id="@+id/settingNotification"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp320_10dp"
@@ -148,7 +148,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
-                    android:text="Push Notification"
+                    android:text="Notification"
                     android:textSize="@dimen/dp320_22sp"
                     android:textColor="#FFFFFF"
                     android:gravity="left" />
@@ -159,7 +159,7 @@
                     android:layout_weight="1">
 
                     <ToggleButton
-                        android:id="@+id/tglPush"
+                        android:id="@+id/tglNotification"
                         android:layout_width="@dimen/dp320_80dp"
                         android:layout_height="@dimen/dp320_50dp"
                         android:text="ToggleButton"
@@ -176,7 +176,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp320_10dp"
-                android:layout_below="@+id/settingPush"
+                android:layout_below="@+id/settingNotification"
                 android:gravity="center">
 
                 <TextView
@@ -199,6 +199,44 @@
                         android:layout_height="@dimen/dp320_50dp"
                         android:text="ToggleButton"
                         android:textSize="@dimen/dp320_14sp"
+                        android:layout_centerHorizontal="true"/>
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp320_10dp"
+                android:layout_below="@+id/settingSound"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="Terms of service"
+                    android:textSize="@dimen/dp320_22sp"
+                    android:textColor="#FFFFFF"
+                    android:gravity="left" />
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <Button
+                        android:id="@+id/termOfService"
+                        android:layout_width="@dimen/dp320_80dp"
+                        android:layout_height="@dimen/dp320_50dp"
+                        android:text="VIEW"
+                        android:textSize="@dimen/dp320_18sp"
+                        android:textColor="#ffffffff"
+                        android:onClick="onClickViewButton"
+                        android:background="#ED684A"
+                        fontPath="fonts/Roboto-Bold.ttf"
+                        tools:ignore="MissingPrefix"
                         android:layout_centerHorizontal="true"/>
 
                 </RelativeLayout>

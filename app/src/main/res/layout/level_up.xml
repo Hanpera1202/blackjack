@@ -143,7 +143,7 @@
             android:layout_height="@dimen/dp320_50dp"
             android:layout_marginTop="@dimen/dp320_10dp"
             android:text="OK"
-            android:textSize="@dimen/dp320_18sp"
+            android:textSize="@dimen/dp320_20sp"
             android:textColor="#ffffffff"
             android:background="#ED684A"
             android:gravity="center"

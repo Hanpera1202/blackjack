@@ -86,7 +86,7 @@
                 android:layout_height="@dimen/dp320_40dp"
                 android:layout_marginRight="@dimen/dp320_3dp"
                 android:onClick="onClickHeader"
-                android:background="@drawable/h_prize" />
+                android:background="@drawable/h_apply" />
 
             <Button
                 android:id="@+id/result"
@@ -120,26 +120,28 @@
         android:layout_width="wrap_content"
         android:layout_height="@dimen/dp320_25dp"
         android:layout_marginTop="@dimen/dp320_5dp"
+        android:layout_marginLeft="@dimen/dp320_5dp"
         android:layout_below="@+id/header"
         android:layout_alignParentLeft="true">
 
         <RelativeLayout
             android:layout_width="@dimen/dp320_25dp"
-            android:layout_height="match_parent">
+            android:layout_height="@dimen/dp320_25dp">
 
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerInside"
-                android:src="@drawable/competition"/>
+                android:src="@drawable/apply"/>
 
             <TextView
                 android:id="@+id/applyPossibleNum"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="@dimen/dp320_17dp"
                 android:text="300"
                 android:textSize="@dimen/dp320_12sp"
                 android:textColor="#121212"
+                android:layout_alignParentBottom="true"
                 android:gravity="center"/>
 
         </RelativeLayout>
