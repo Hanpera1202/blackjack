@@ -37,7 +37,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp320_100dp"
             android:layout_margin="@dimen/dp320_20dp"
-            android:scaleType="centerInside"/>
+            android:scaleType="fitCenter"/>
 
         <Button
             android:id="@+id/close_button"
