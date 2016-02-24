@@ -457,17 +457,19 @@ public class Dealer extends FragmentActivity implements OnClickListener
                     mSoundPool.play(mInsuranceWin, game.getSoundVol(), game.getSoundVol(), 0, 0, 1.0F);
                 }
             }, waittime);
+            waittime += 300;
         }
         else
         {
             player.setData("insurance_loses");
             handler.postDelayed(new Runnable() {
                 public void run() {
-                    ((ImageView)findViewById(R.id.insuranceResult)).setImageResource(R.drawable.lose);
+                    ((ImageView) findViewById(R.id.insuranceResult)).setImageResource(R.drawable.lose);
                     findViewById(R.id.insuranceResult).setVisibility(ImageView.VISIBLE);
                     mSoundPool.play(mInsuranceLose, game.getSoundVol(), game.getSoundVol(), 0, 0, 1.0F);
                 }
             }, waittime);
+            waittime += 150;
         }
     }
 
@@ -564,13 +566,14 @@ public class Dealer extends FragmentActivity implements OnClickListener
 
             dealCard(hand);
 
-            setBet((LinearLayout) currentPlayerBetView.getChildAt(1), (int) betValue);
+            setBet((LinearLayout) currentPlayerBetView.getChildAt(1), betValue);
 			updatePlayerBetlblForPlaying();
 
 			hand.setPlaying(false);
 
             handler.postDelayed(new Runnable() {
                 int NowIndex = currentPlayerIndex;
+
                 public void run() {
                     updatePlayerSumlbl(NowIndex);
                 }
@@ -658,33 +661,20 @@ public class Dealer extends FragmentActivity implements OnClickListener
 	{
         faceUpCard(dealerHand, faceDownCard);
         updateDealerSumlbl(dealerHand.getSoftBJValue(), dealerHand.getHardBJValue());
-        waittime += 300;
+        waittime += 150;
         if (!(player.howManyHands() == 1 && currentPlayerHand.hasBJ())) {
-            if (settings.stand17soft)
-                while (dealerHand.getHardBJValue() < 17) {
-                    if (dealerHand.getSoftBJValue() >= 17) break;    // stand on soft 17
-                    dealCard(dealerHand, true);
-                    handler.postDelayed(new Runnable() {
-                        byte soft = dealerHand.getSoftBJValue();
-                        byte hard = dealerHand.getHardBJValue();
-
-                        public void run() {
-                            updateDealerSumlbl(soft, hard);
-                        }
-                    }, waittime);
-                }
-            else
-                while (dealerHand.getHardBJValue() < 17) {
-                    dealCard(dealerHand, true);
-                    handler.postDelayed(new Runnable() {
-                        byte soft = dealerHand.getSoftBJValue();
-                        byte hard = dealerHand.getHardBJValue();
-
-                        public void run() {
-                            updateDealerSumlbl(soft, hard);
-                        }
-                    }, waittime);
-                }
+            while (dealerHand.getHardBJValue() < 17) {
+                // stand on soft 17
+                if (settings.stand17soft && dealerHand.getSoftBJValue() >= 17) break;
+                dealCard(dealerHand, true);
+                handler.postDelayed(new Runnable() {
+                    byte soft = dealerHand.getSoftBJValue();
+                    byte hard = dealerHand.getHardBJValue();
+                    public void run() {
+                        updateDealerSumlbl(soft, hard);
+                    }
+                }, waittime);
+            }
         }
 
 		dealerHand.checkIfHasBJ();
@@ -1082,8 +1072,8 @@ public class Dealer extends FragmentActivity implements OnClickListener
     }
 
     void updatePlayerResultlbl() {
-        int animWaittime = waittime + 500;
-        int soundWaittime = waittime + 500;
+        int animWaittime = waittime + 300;
+        int soundWaittime = waittime + 300;
         boolean winSoundFlg = false;
         boolean loseSoundFlg = false;
         boolean pushSoundFlg = false;
@@ -1099,7 +1089,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
                             playerResults.get(index).setImageResource(R.drawable.surrender);
                             playerResults.get(index).setVisibility(ImageView.VISIBLE);
                         }
-                    }, animWaittime);
+                    }, waittime);
                     player.getHand(global_b).setStatus(Status.FINISHED);
                     break;
     			}
@@ -1190,7 +1180,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
     		}
     	}
         if(animWaittime != soundWaittime){
-            waittime += 500;
+            waittime += 300;
         }
     }
     
