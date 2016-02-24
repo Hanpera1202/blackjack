@@ -125,6 +125,8 @@ public class Dealer extends FragmentActivity implements OnClickListener
 
     private boolean backendFlag = false;
 
+    private int playCount;
+
     @Override
 	public void onCreate(Bundle savedInstanceState)
 	{
@@ -147,6 +149,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
         currentPlayerHand = player.getHand((byte) 0);
         betting = true;
         clickable = true;
+        playCount = 0;
 
         setContentView(R.layout.playing);
         setViews();
@@ -228,7 +231,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
             if(player.getBalance() < player.getInitBet()) {
                 clearBet();
             }
-            execInitUIWhenBetting(0);
+            execInitUIWhenBetting(0 ,false);
         }
     }
 
@@ -274,7 +277,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
         playerMaxBet=(TextView)findViewById(R.id.playerMaxBet);
     }
 
-    void execInitUIWhenBetting(int waittime){
+    void execInitUIWhenBetting(int waittime, boolean displayAdFlag){
         if(backendFlag || !betting){
             return;
         }
@@ -305,6 +308,25 @@ public class Dealer extends FragmentActivity implements OnClickListener
                     showBonusDialog();
                 }
             }, waittime);
+        }else if(displayAdFlag &&
+                playCount >= settings.playCountUpAds &&
+                game.mInterstitialAd.isLoaded()) {
+            game.mInterstitialAd.setAdListener(new AdListener() {
+                @Override
+                public void onAdFailedToLoad(int errorCode) {
+                    game.requestNewInterstitial();
+                }
+                @Override
+                public void onAdClosed() {
+                    game.requestNewInterstitial();
+                }
+            });
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    game.mInterstitialAd.show();
+                }
+            }, waittime + 500);
+            playCount = 0;
         }else{
             if(player.getBalance() < 10) {
                 handler.postDelayed(new Runnable() {
@@ -475,6 +497,8 @@ public class Dealer extends FragmentActivity implements OnClickListener
 
 	void newGame()
 	{
+        int beforeHandCnt = player.howManyHands();
+        Status beforeStatus = player.getHand((byte) 0).getStatus();
         dealerHand.update();
 		player.update();
 		currentPlayerHand=player.getHand((byte) 0);
@@ -483,7 +507,11 @@ public class Dealer extends FragmentActivity implements OnClickListener
         waittime = 0;
         // update playerBet to 0
         updatePlayerBetlbl();
-        execInitUIWhenBetting(500);
+        if(beforeHandCnt == 1 && beforeStatus == Status.LOST) {
+            execInitUIWhenBetting(500, true);
+        }else{
+            execInitUIWhenBetting(500, false);
+        }
 	}
 
 	void clearBet()
@@ -1090,19 +1118,22 @@ public class Dealer extends FragmentActivity implements OnClickListener
         boolean loseSoundFlg = false;
         boolean pushSoundFlg = false;
         for (global_b = 0; global_b < player.howManyHands(); global_b++){
+            if(player.getHand(global_b).finished()){
+                continue;
+            }
 			switch (player.getHand(global_b).getStatus()) {
     			case PLAYING:break;
-                case FINISHED:break;
     			case SURRENDERED:
     			{
                     handler.postDelayed(new Runnable() {
                         byte index = global_b;
+
                         public void run() {
                             playerResults.get(index).setImageResource(R.drawable.surrender);
                             playerResults.get(index).setVisibility(ImageView.VISIBLE);
                         }
                     }, waittime);
-                    player.getHand(global_b).setStatus(Status.FINISHED);
+                    player.getHand(global_b).setFinished(true);
                     break;
     			}
 				case BLACKJACK:
@@ -1122,7 +1153,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
                         }
                     },animWaittime);
                     soundWaittime += 1000;
-                    player.getHand(global_b).setStatus(Status.FINISHED);
+                    player.getHand(global_b).setFinished(true);
                     break;
 				}
 				case WON:
@@ -1144,18 +1175,19 @@ public class Dealer extends FragmentActivity implements OnClickListener
                         soundWaittime += 800;
                         winSoundFlg = true;
                     }
-                    player.getHand(global_b).setStatus(Status.FINISHED);
+                    player.getHand(global_b).setFinished(true);
     				break;
     			}
     			case PUSH:
     			{
                     handler.postDelayed(new Runnable() {
                         byte index = global_b;
+
                         public void run() {
                             playerResults.get(index).setImageResource(R.drawable.push);
                             playerResults.get(index).setVisibility(ImageView.VISIBLE);
                         }
-                    },animWaittime);
+                    }, animWaittime);
                     if(!pushSoundFlg) {
                         handler.postDelayed(new Runnable() {
                             public void run() {
@@ -1165,7 +1197,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
                         soundWaittime += 600;
                         pushSoundFlg = true;
                     }
-                    player.getHand(global_b).setStatus(Status.FINISHED);
+                    player.getHand(global_b).setFinished(true);
     				break;
     			}
     			case LOST:
@@ -1186,7 +1218,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
                         soundWaittime += 900;
                         loseSoundFlg = true;
                     }
-                    player.getHand(global_b).setStatus(Status.FINISHED);
+                    player.getHand(global_b).setFinished(true);
 					break;
 				}
     		}
@@ -1215,6 +1247,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
 					if (player.getInitBet()>=settings.tableMin && player.getInitBet()<=player.getMaxBet()) {
                         player.setData("plays");
                         player.experience(1);
+                        playCount++;
                         game.setHeaderNextLevel(player,(RelativeLayout) findViewById(R.id.header));
         				betting= false;
                         // dealer view reset

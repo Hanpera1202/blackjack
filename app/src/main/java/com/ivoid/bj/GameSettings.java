@@ -11,10 +11,11 @@ class GameSettings
 	boolean ddPostSplit, surrender, insurance, stand17soft, aceResplit, dd1011;
     int loginBonusSeconds;
 	int loginBonusCoins;
-	int coninBonusCount;
+	int coinBonusCount;
     int necessaryPoint;
     int freeChipsSeconds;
     int freeChipsFlips;
+    int playCountUpAds;
 	
 	private boolean[] bools={true,false};
 	private byte[] bytes={6,8};
@@ -27,10 +28,10 @@ class GameSettings
 		decks=1; splits=1; burns=(byte)(5.0*Math.random()); shuffleTimes = 3;
 		startCash=1000; tableMin=10;
 		ddPostSplit=true; surrender=true; insurance=true; stand17soft=true; aceResplit=true; dd1011=true;
-        loginBonusSeconds=28800;freeChipsSeconds=3600;loginBonusCoins=3;coninBonusCount=3;
-        //loginBonusSeconds=300;freeChipsSeconds=120;loginBonusCoins=3;coninBonusCount=3;
+        loginBonusSeconds=28800;freeChipsSeconds=3600;loginBonusCoins=3;coinBonusCount=3;
         freeChipsFlips = 3;
         necessaryPoint=10000;
+        playCountUpAds = 20;
 
         levels = new HashMap<Integer, LevelInfo>();
         levels.put(  1,new LevelInfo(  1,13  ,13   ,3 ,  50));

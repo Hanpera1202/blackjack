@@ -64,18 +64,18 @@ public class ConfirmAdDialogFragment extends DialogFragment {
                 @Override
                 public void onClick(View v) {
                     dismiss();
-                    ((Dealer) getActivity()).execInitUIWhenBetting(0);
+                    ((Dealer) getActivity()).execInitUIWhenBetting(0, false);
                 }
             });
         }else{
-            title = "Up to " + settings.coninBonusCount + " times a day!";
+            title = "Up to " + settings.coinBonusCount + " times a day!";
             message = "Please wait until tomorrow.";
             // OK ボタンのリスナ
             dialog.findViewById(R.id.ok).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     dismiss();
-                    ((Dealer) getActivity()).execInitUIWhenBetting(0);
+                    ((Dealer) getActivity()).execInitUIWhenBetting(0, false);
                 }
             });
             dialog.findViewById(R.id.cancel).setVisibility(Button.GONE);
@@ -129,7 +129,7 @@ public class ConfirmAdDialogFragment extends DialogFragment {
 
     public boolean checkCoinBonus(){
         Integer gotCoinBonusCount = preference.getInt("gotCoinBonusCount", 0);
-        if(gotCoinBonusCount < settings.coninBonusCount){
+        if(gotCoinBonusCount < settings.coinBonusCount){
             return true;
         }else {
             Long coinBonusGetTime = preference.getLong("coinBonusGetTime", 0);

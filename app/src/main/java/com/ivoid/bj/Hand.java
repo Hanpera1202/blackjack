@@ -20,7 +20,8 @@ abstract class Hand
 	
 	boolean playing   = true, 
 			toBePayed = true, 
-			hasAce	  = false; 
+			hasAce	  = false,
+			finished  = false;
 	
 	Hand(String name)
 	{
@@ -68,6 +69,9 @@ abstract class Hand
 	
 	void setToBePayed(boolean b)
 	{ toBePayed=b; }
+
+	void setFinished(boolean b)
+	{ finished=b; }
 	
 	void incrementBet(int stake)
 	{ bet.incrementBet(stake); }
@@ -87,6 +91,9 @@ abstract class Hand
 	
 	boolean toBePayed()
 	{ return toBePayed; }
+
+	boolean finished()
+	{ return finished; }
 	
 	Bet getBet()
 	{ return bet; }
