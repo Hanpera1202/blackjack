@@ -25,7 +25,7 @@ public class Title extends FragmentActivity {
 
     Bitmap bgBmp;
 
-    private final String registUrl = "http://blackjack.uh-oh.jp/user";
+    private final String registUrl = "http://blackjack.uh-oh.jp/users";
     private SharedPreferences preference;
     private SharedPreferences.Editor editor;
 
