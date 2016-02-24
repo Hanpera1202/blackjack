@@ -647,7 +647,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
 	}
 
 	void disableButtons()
-	{	
+	{
 		for (final Integer entry : buttons.keySet())
 		{
             ((Button) findViewById(entry)).setVisibility(Button.INVISIBLE);
@@ -780,11 +780,9 @@ public class Dealer extends FragmentActivity implements OnClickListener
             if (!currentPlayerHand.isPlaying()) {
                 getNextAction=true;
             } else {
-                //handler.postDelayed(showActionButton, waittime);
                 handler.postDelayed(new Runnable() {
                     public void run() {
-                        showBasicActionButton();
-                        checkSpecialActionButton();
+                        checkActionButton();
                     }
                 }, waittime);
             }
@@ -836,8 +834,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
         if (currentPlayerHand.isPlaying()) {
             handler.postDelayed(new Runnable() {
                 public void run() {
-                    showBasicActionButton();
-                    checkSpecialActionButton();
+                    checkActionButton();
                 }
             }, waittime);
         }
@@ -846,12 +843,24 @@ public class Dealer extends FragmentActivity implements OnClickListener
         findViewById(R.id.insuranceNo).setVisibility(Button.INVISIBLE);
     }
 
-	void showBasicActionButton()
+    void checkActionButton()
     {
-        findViewById(R.id.standButton).setVisibility(Button.VISIBLE);
-        findViewById(R.id.hitButton).setVisibility(Button.VISIBLE);
-        setPlayerCoin(RelativeLayout.VISIBLE);
-	}
+        checkBasicActionButton();
+        checkSpecialActionButton();
+    }
+
+    void checkBasicActionButton()
+    {
+        if (currentPlayerHand.isPlaying()){
+            findViewById(R.id.standButton).setVisibility(Button.VISIBLE);
+            findViewById(R.id.hitButton).setVisibility(Button.VISIBLE);
+            setPlayerCoin(RelativeLayout.VISIBLE);
+        }else{
+            findViewById(R.id.standButton).setVisibility(Button.INVISIBLE);
+            findViewById(R.id.hitButton).setVisibility(Button.INVISIBLE);
+            setPlayerCoin(RelativeLayout.INVISIBLE);
+        }
+    }
 
     void checkSpecialActionButton()
     {
@@ -862,7 +871,8 @@ public class Dealer extends FragmentActivity implements OnClickListener
 
     void checksurrenderbutton()
     {
-        if (player.howManyHands() == 1 &&
+        if (currentPlayerHand.isPlaying() &&
+                player.howManyHands() == 1 &&
                 currentPlayerHand.getCardCount() == 2 &&
                 dealerHand.getCard((byte)0).getValue() != 1){
             findViewById(R.id.surrenderButton).setVisibility(Button.VISIBLE);
@@ -873,7 +883,8 @@ public class Dealer extends FragmentActivity implements OnClickListener
 
     void checkddbutton()
     {
-        if (currentPlayerHand.getCardCount() == 2 &&
+        if (currentPlayerHand.isPlaying() &&
+                currentPlayerHand.getCardCount() == 2 &&
                 !currentPlayerHand.hasBJ() &&
                 player.getBalance() >= currentPlayerHand.getBet().getValue()){
             findViewById(R.id.ddButton).setVisibility(Button.VISIBLE);
@@ -884,7 +895,8 @@ public class Dealer extends FragmentActivity implements OnClickListener
 
     void checksplitbutton()
     {
-        if(currentPlayerHand.splitable(settings.aceResplit) &&
+        if(currentPlayerHand.isPlaying() &&
+                currentPlayerHand.splitable(settings.aceResplit) &&
                 player.howManyHands() <= settings.splits &&
                 player.getBalance() >= currentPlayerHand.getBet().getValue()){
             findViewById(R.id.splitButton).setVisibility(Button.VISIBLE);
@@ -1296,22 +1308,20 @@ public class Dealer extends FragmentActivity implements OnClickListener
                 }
                 case STAND: {
                     currentPlayerHand.setPlaying(false);
-                    checkSpecialActionButton();
                     break;
                 }
                 case DOUBLEDOWN: {
                     dd(currentPlayerHand);
-                    checkSpecialActionButton();
+                    checkActionButton();
 					break;
                 }
                 case SPLIT: {
                     split(currentPlayerHand);
-                    checkSpecialActionButton();
+                    checkActionButton();
                     break;
     			}
                 case SURRENDER: {
                     surrender(currentPlayerHand);
-                    checkSpecialActionButton();
                     break;
                 }
                 case INSURANCE_YES:{
@@ -1394,10 +1404,9 @@ public class Dealer extends FragmentActivity implements OnClickListener
             currentPlayerBetNumView = playerBetNumViews.get(nextHandtoPlay);
 
             if (currentPlayerIndex != nextHandtoPlay || action == action.SPLIT){
-                checksplitbutton();
                 handler.postDelayed(new Runnable() {
                     public void run() {
-                        checkddbutton();
+                        checkActionButton();
                         playerOverViews.get(currentPlayerIndex).setBackgroundResource(0);
                         playerOverViews.get(nextHandtoPlay).setBackgroundResource(R.drawable.layout_shape);
                         currentPlayerIndex = nextHandtoPlay;

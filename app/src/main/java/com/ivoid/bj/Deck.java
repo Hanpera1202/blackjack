@@ -59,7 +59,6 @@ class Deck
 		for ( byte decks = 0 ; decks < howManyDecks ; decks++ )
 			for ( byte suit = 0 ; suit < 4 ; suit++ )
 				for ( byte value = 1 ; value < 14 ; value++ ) {
-				//for ( byte value = 1 ; value < 14 ; value+=3 ) {
 					deck.add(new Card(value, suit, true));
 				}
 	}
