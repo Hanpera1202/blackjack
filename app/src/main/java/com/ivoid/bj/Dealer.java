@@ -308,9 +308,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
                     showBonusDialog();
                 }
             }, waittime);
-        }else if(displayAdFlag &&
-                playCount >= settings.playCountUpAds &&
-                game.mInterstitialAd.isLoaded()) {
+        }else if(displayAdFlag && game.mInterstitialAd.isLoaded()) {
             game.mInterstitialAd.setAdListener(new AdListener() {
                 @Override
                 public void onAdFailedToLoad(int errorCode) {
@@ -507,7 +505,8 @@ public class Dealer extends FragmentActivity implements OnClickListener
         waittime = 0;
         // update playerBet to 0
         updatePlayerBetlbl();
-        if(beforeHandCnt == 1 && beforeStatus == Status.LOST) {
+        if (playCount >= settings.playCountUpAds &&
+                beforeHandCnt == 1 && beforeStatus == Status.LOST) {
             execInitUIWhenBetting(500, true);
         }else{
             execInitUIWhenBetting(500, false);
@@ -1200,10 +1199,10 @@ public class Dealer extends FragmentActivity implements OnClickListener
                     player.getHand(global_b).setFinished(true);
     				break;
     			}
-    			case LOST:
-    			{
+    			case LOST: {
                     handler.postDelayed(new Runnable() {
                         byte index = global_b;
+
                         public void run() {
                             playerResults.get(index).setImageResource(R.drawable.lose);
                             playerResults.get(index).setVisibility(ImageView.VISIBLE);
