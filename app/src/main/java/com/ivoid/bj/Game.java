@@ -28,9 +28,6 @@ public class Game extends Application
     InterstitialAd mInterstitialAd;
     InterstitialAd mMovieAd;
 
-    private long lastTimeAdShown=0L;
-    private long lastTimeAdFail=0L;
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -58,22 +55,18 @@ public class Game extends Application
 
         //動画広告の読み込み
         mMovieAd = new InterstitialAd(this);
-        mMovieAd.setAdUnitId(getString(R.string.inters_ad_unit_id));
+        mMovieAd.setAdUnitId(getString(R.string.movie_ad_unit_id));
         requestNewMovie();
 
     }
 
     public void requestNewInterstitial() {
-        AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice("YOUR_DEVICE_HASH")
-                .build();
+        AdRequest adRequest = new AdRequest.Builder().build();
         mInterstitialAd.loadAd(adRequest);
     }
 
     public void requestNewMovie() {
-        AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice("YOUR_DEVICE_HASH")
-                .build();
+        AdRequest adRequest = new AdRequest.Builder().build();
         mMovieAd.loadAd(adRequest);
     }
 
