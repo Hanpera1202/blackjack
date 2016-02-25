@@ -49,7 +49,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
  *  
  */
 
-public class Dealer extends FragmentActivity implements OnClickListener
+public class Playing extends FragmentActivity implements OnClickListener
 {
     Game game;
 
@@ -121,7 +121,6 @@ public class Dealer extends FragmentActivity implements OnClickListener
     private ConfirmDialogFragment ConfirmDialog;
     private ConfirmAdDialogFragment ConfirmAdDialog;
     private HintDialogFragment hintDialog;
-    private ProgressBar bar;
 
     private boolean backendFlag = false;
 
@@ -153,11 +152,6 @@ public class Dealer extends FragmentActivity implements OnClickListener
 
         setContentView(R.layout.playing);
         setViews();
-
-        bar = (ProgressBar)findViewById(R.id.progressBar);
-        bar.setMax(settings.necessaryPoint);
-        ((TextView)findViewById(R.id.necessaryPoint)).
-                setText(settings.necessaryPoint + "pt");
 
     }
 
@@ -213,7 +207,6 @@ public class Dealer extends FragmentActivity implements OnClickListener
         game.setHeaderData(player, (RelativeLayout) findViewById(R.id.header));
         playerMaxBet.setText("MAX " + player.getMaxBet() + "pt");
         setPlayerCoin(RelativeLayout.VISIBLE);
-        setPlayerProgress(player.getBalance());
         if (betting){
             if (preference.getInt("gotBonusPoint", 0) > 0) {
                 player.deposit(preference.getInt("gotBonusPoint", 0));
@@ -1084,18 +1077,9 @@ public class Dealer extends FragmentActivity implements OnClickListener
                 TextView updateTextView = updateView;
                 public void run() {
                     updateTextView.setText(String.valueOf(updateCash));
-                    if(updateTextView.getId() == R.id.playerCash) {
-                        setPlayerProgress(updateCash);
-                    }
                 }
             }, waittime + (i * 15));
         }
-    }
-
-
-    private void setPlayerProgress(int updateCash){
-        ((TextView)findViewById(R.id.applyPossibleNum)).setText(String.valueOf(updateCash / settings.necessaryPoint));
-        bar.setProgress(updateCash % settings.necessaryPoint);
     }
 
     private void setPlayerCoin(int visible) {

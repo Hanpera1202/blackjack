@@ -54,14 +54,11 @@ public class Title extends FragmentActivity {
             if ((preference.getString("user_id", "")).equals("")) {
                 registUser();
             } else {
-                showActionButton();
+                startPlaying();
             }
             setBackgroundImage(R.drawable.bg);
         }else {
-            Intent intent = new Intent(this, Dealer.class);
-            startActivity(intent);
-            finish();
-            overridePendingTransition(0, 0);
+            startPlaying();
         }
     }
 
@@ -76,7 +73,7 @@ public class Title extends FragmentActivity {
                     e.printStackTrace();
                     return false;
                 }
-                showActionButton();
+                startPlaying();
                 return true;
             }
             // error
@@ -97,10 +94,11 @@ public class Title extends FragmentActivity {
         overridePendingTransition(0, 0);
     }
 
-    void showActionButton(){
-        (findViewById(R.id.message)).setVisibility(Button.VISIBLE);
-        (findViewById(R.id.game)).setVisibility(Button.VISIBLE);
-        (findViewById(R.id.prize_competition)).setVisibility(Button.VISIBLE);
+    public void startPlaying(){
+        Intent intent = new Intent(this, Playing.class);
+        startActivity(intent);
+        finish();
+        overridePendingTransition(0, 0);
     }
 
     // アラートダイアログ作成

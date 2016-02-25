@@ -92,15 +92,7 @@ public class Game extends Application
         Intent newIntent;
         switch (view.getId()) {
             case R.id.game: {
-                newIntent = new Intent(this, Dealer.class);
-                break;
-            }
-            case R.id.competition: {
-                newIntent = new Intent(this, Competition.class);
-                break;
-            }
-            case R.id.result: {
-                newIntent = new Intent(this, Result.class);
+                newIntent = new Intent(this, Playing.class);
                 break;
             }
             case R.id.checkMyData: {

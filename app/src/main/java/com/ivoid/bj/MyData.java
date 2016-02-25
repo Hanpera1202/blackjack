@@ -56,36 +56,8 @@ public class MyData extends Activity {
     }
 
 	public void onClickHeader(View view) {
-        switch (view.getId()) {
-            case R.id.game: {
-                Intent intent = new Intent(this, Dealer.class);
-                startActivity(intent);
-                finish();
-                overridePendingTransition(0, 0);
-                break;
-            }
-            case R.id.competition: {
-                Intent intent = new Intent(this, Competition.class);
-                startActivity(intent);
-                finish();
-                overridePendingTransition(0, 0);
-                break;
-            }
-            case R.id.result: {
-                Intent intent = new Intent(this, Result.class);
-                startActivity(intent);
-                finish();
-                overridePendingTransition(0, 0);
-                break;
-            }
-            case R.id.setting: {
-                Intent intent = new Intent(this, Setting.class);
-                startActivity(intent);
-                finish();
-                overridePendingTransition(0, 0);
-                break;
-            }
-        }
+        startActivity(game.getNewIntent(view));
+        overridePendingTransition(0, 0);
 	}
 
     @Override

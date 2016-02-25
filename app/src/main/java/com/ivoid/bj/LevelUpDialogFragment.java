@@ -66,7 +66,7 @@ public class LevelUpDialogFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 dismiss();
-                ((Dealer)getActivity()).setPlayerData();
+                ((Playing)getActivity()).setPlayerData();
             }
         });
 

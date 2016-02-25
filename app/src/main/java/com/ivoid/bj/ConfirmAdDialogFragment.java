@@ -56,7 +56,7 @@ public class ConfirmAdDialogFragment extends DialogFragment {
                 @Override
                 public void onClick(View v) {
                     dismiss();
-                    ((Dealer) getActivity()).showMovieAd();
+                    ((Playing) getActivity()).showMovieAd();
                 }
             });
             // CANCEL ボタンのリスナ
@@ -64,7 +64,7 @@ public class ConfirmAdDialogFragment extends DialogFragment {
                 @Override
                 public void onClick(View v) {
                     dismiss();
-                    ((Dealer) getActivity()).execInitUIWhenBetting(0, false);
+                    ((Playing) getActivity()).execInitUIWhenBetting(0, false);
                 }
             });
         }else{
@@ -75,7 +75,7 @@ public class ConfirmAdDialogFragment extends DialogFragment {
                 @Override
                 public void onClick(View v) {
                     dismiss();
-                    ((Dealer) getActivity()).execInitUIWhenBetting(0, false);
+                    ((Playing) getActivity()).execInitUIWhenBetting(0, false);
                 }
             });
             dialog.findViewById(R.id.cancel).setVisibility(Button.GONE);
@@ -96,7 +96,7 @@ public class ConfirmAdDialogFragment extends DialogFragment {
             bonusCountDownTimer.cancel();
             bonusCountDownTimer = null;
         }
-        Long timeLeft = ((Dealer) getActivity()).getTimeLeftOfLoginBonus();
+        Long timeLeft = ((Playing) getActivity()).getTimeLeftOfLoginBonus();
         if(timeLeft == 0L){
             ((TextView)dialog.findViewById(R.id.CountDown)).setText("Get Now!!");
         } else {

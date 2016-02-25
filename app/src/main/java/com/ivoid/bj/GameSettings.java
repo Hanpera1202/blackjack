@@ -12,7 +12,6 @@ class GameSettings
     int loginBonusSeconds;
 	int loginBonusCoins;
 	int coinBonusCount;
-    int necessaryPoint;
     int freeChipsSeconds;
     int freeChipsFlips;
     int playCountUpAds;
@@ -29,9 +28,7 @@ class GameSettings
 		startCash=1000; tableMin=10;
 		ddPostSplit=true; surrender=true; insurance=true; stand17soft=true; aceResplit=true; dd1011=true;
         loginBonusSeconds=28800;freeChipsSeconds=3600;loginBonusCoins=3;coinBonusCount=3;
-        freeChipsFlips = 3;
-        necessaryPoint=10000;
-        playCountUpAds = 20;
+        freeChipsFlips=3;playCountUpAds=10;
 
         levels = new HashMap<Integer, LevelInfo>();
         levels.put(  1,new LevelInfo(  1,13  ,13   ,3 ,  50));

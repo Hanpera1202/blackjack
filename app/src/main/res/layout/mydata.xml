@@ -82,22 +82,6 @@
                 android:background="@drawable/h_game"/>
 
             <Button
-                android:id="@+id/competition"
-                android:layout_width="@dimen/dp320_40dp"
-                android:layout_height="@dimen/dp320_40dp"
-                android:layout_marginRight="@dimen/dp320_3dp"
-                android:onClick="onClickHeader"
-                android:background="@drawable/h_apply" />
-
-            <Button
-                android:id="@+id/result"
-                android:layout_width="@dimen/dp320_40dp"
-                android:layout_height="@dimen/dp320_40dp"
-                android:layout_marginRight="@dimen/dp320_3dp"
-                android:onClick="onClickHeader"
-                android:background="@drawable/h_result" />
-
-            <Button
                 android:id="@+id/checkMyData"
                 android:layout_width="@dimen/dp320_40dp"
                 android:layout_height="@dimen/dp320_40dp"

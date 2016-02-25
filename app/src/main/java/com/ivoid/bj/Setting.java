@@ -103,20 +103,6 @@ public class Setting extends Activity implements CompoundButton.OnCheckedChangeL
         }
     }
 
-    public void onClickViewButton(final View view) {
-        Uri uri;
-        switch (view.getId()) {
-            case R.id.termOfService:
-                uri = Uri.parse("http://blackjack.uh-oh.jp/contents/terms");
-                break;
-            default:
-                uri = Uri.parse("");
-        }
-        Intent i = new Intent(Intent.ACTION_VIEW,uri);
-        startActivity(i);
-        overridePendingTransition(0, 0);
-    }
-
     public void onClickHeader(final View view) {
         startActivity(game.getNewIntent(view));
         finish();

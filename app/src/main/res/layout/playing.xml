@@ -81,22 +81,6 @@
                 android:background="@drawable/h_game_on"/>
 
             <Button
-                android:id="@+id/competition"
-                android:layout_width="@dimen/dp320_40dp"
-                android:layout_height="@dimen/dp320_40dp"
-                android:layout_marginRight="@dimen/dp320_3dp"
-                android:onClick="onClickHeader"
-                android:background="@drawable/h_apply" />
-
-            <Button
-                android:id="@+id/result"
-                android:layout_width="@dimen/dp320_40dp"
-                android:layout_height="@dimen/dp320_40dp"
-                android:layout_marginRight="@dimen/dp320_3dp"
-                android:onClick="onClickHeader"
-                android:background="@drawable/h_result" />
-
-            <Button
                 android:id="@+id/checkMyData"
                 android:layout_width="@dimen/dp320_40dp"
                 android:layout_height="@dimen/dp320_40dp"
@@ -115,78 +99,14 @@
 
     </RelativeLayout>
 
-    <LinearLayout
-        android:id="@+id/playerGoal"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/dp320_25dp"
-        android:layout_marginTop="@dimen/dp320_5dp"
-        android:layout_marginLeft="@dimen/dp320_5dp"
-        android:layout_below="@+id/header"
-        android:layout_alignParentLeft="true">
-
-        <RelativeLayout
-            android:layout_width="@dimen/dp320_25dp"
-            android:layout_height="@dimen/dp320_25dp">
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerInside"
-                android:src="@drawable/apply"/>
-
-            <TextView
-                android:id="@+id/applyPossibleNum"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp320_17dp"
-                android:text="300"
-                android:textSize="@dimen/dp320_12sp"
-                android:textColor="#121212"
-                android:layout_alignParentBottom="true"
-                android:gravity="center"/>
-
-        </RelativeLayout>
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:progressDrawable="@drawable/progressbar"
-            android:layout_width="@dimen/dp320_200dp"
-            android:layout_height="@dimen/dp320_15dp"
-            android:layout_marginLeft="@dimen/dp320_5dp"
-            android:layout_marginRight="@dimen/dp320_5dp"
-            android:layout_gravity="center"/>
-
-        <TextView
-            android:id="@+id/necessaryPoint"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/dp320_12sp"
-            android:textColor="#ffffff"
-            android:layout_gravity="center"/>
-    </LinearLayout>
-
-    <!--
-    <com.google.android.gms.ads.AdView
-        android:id="@+id/adView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/checkMyData"
-        ads:adSize="BANNER"
-        ads:adUnitId="@string/banner_ad_unit_id"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="3dp">
-    </com.google.android.gms.ads.AdView>
-    -->
-
     <!-- 空の View -->
     <View
         android:id="@+id/delaerInfoArea"
         android:layout_width="@dimen/dp320_162dp"
         android:layout_height="@dimen/dp320_125dp"
-        android:layout_marginTop="@dimen/dp320_5dp"
+        android:layout_marginTop="@dimen/dp320_35dp"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/playerGoal"/>
+        android:layout_below="@+id/header"/>
 
     <RelativeLayout
         android:id="@+id/dealerHand"
@@ -209,10 +129,10 @@
         android:id="@+id/dealerInfo"
         android:layout_width="@dimen/dp320_162dp"
         android:layout_height="@dimen/dp320_125dp"
-        android:layout_marginTop="@dimen/dp320_5dp"
+        android:layout_marginTop="@dimen/dp320_35dp"
         android:gravity="bottom"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/playerGoal">
+        android:layout_below="@+id/header">
 
         <RelativeLayout
             android:id="@+id/dealerSum"
@@ -829,7 +749,7 @@
         android:layout_height="@dimen/dp320_50dp"
         android:layout_marginRight="@dimen/dp320_10dp"
         android:layout_marginTop="@dimen/dp320_10dp"
-        android:layout_below="@+id/playerGoal"
+        android:layout_below="@+id/header"
         android:layout_alignParentRight="true" >
 
         <Button
