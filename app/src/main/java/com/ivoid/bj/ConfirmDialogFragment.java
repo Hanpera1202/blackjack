@@ -54,17 +54,17 @@ public class ConfirmDialogFragment extends DialogFragment {
                 dismiss();
                 switch(getArguments().getString("dialogType")) {
                     case "confirmAdDialog":
-                        ((Dealer) getActivity()).showMovieAd();
+                        ((Playing) getActivity()).showMovieAd();
                         break;
                     case "confirmHintByCoinDialog":
-                        ((Dealer)getActivity()).getHint();
+                        ((Playing)getActivity()).getHint();
                         break;
                     case "confirmApplyDialog":
                         String competitionId = getArguments().getString("id");
                         ((Competition)getActivity()).applyCompetition(competitionId);
                         break;
                     case "confirmFreeChipsByCoinDialog":
-                        ((Dealer)getActivity()).beginFreeChipsByCoin();
+                        ((Playing)getActivity()).beginFreeChipsByCoin();
                         break;
                 }
             }
@@ -78,7 +78,7 @@ public class ConfirmDialogFragment extends DialogFragment {
                 switch(getArguments().getString("dialogType")) {
                     case "confirmAdDialog":
                     case "confirmFreeChipsByCoinDialog":
-                        ((Dealer)getActivity()).execInitUIWhenBetting(0, false);
+                        ((Playing)getActivity()).execInitUIWhenBetting(0, false);
                         break;
                 }
             }

@@ -92,7 +92,7 @@ public class Game extends Application
         Intent newIntent;
         switch (view.getId()) {
             case R.id.game: {
-                newIntent = new Intent(this, Dealer.class);
+                newIntent = new Intent(this, Playing.class);
                 break;
             }
             case R.id.competition: {
@@ -116,6 +116,13 @@ public class Game extends Application
             }
         }
         return newIntent;
+    }
+
+    public void setHeaderDataForPlaying(Player player, RelativeLayout header) {
+        LinearLayout playerCashView = (LinearLayout)header.getChildAt(0);
+        TextView playerLevel = (TextView)playerCashView.getChildAt(0);
+        playerLevel.setText(String.valueOf(player.getLevel()));
+        this.setHeaderNextLevel(player, header);
     }
 
     public void setHeaderData(Player player, RelativeLayout header) {

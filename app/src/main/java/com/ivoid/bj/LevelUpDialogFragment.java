@@ -5,8 +5,10 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bj.R;
@@ -15,9 +17,8 @@ public class LevelUpDialogFragment extends DialogFragment {
 
     private GameSettings settings;
     private Player player;
-    private SharedPreferences preference;
-    private SharedPreferences.Editor editor;
     private int getBonusCoin;
+    private int getBonusChip;
 
     public static LevelUpDialogFragment newInstance() {
         LevelUpDialogFragment frag = new LevelUpDialogFragment();
@@ -40,33 +41,33 @@ public class LevelUpDialogFragment extends DialogFragment {
         player = new Player(getActivity(), "God");
         settings = new GameSettings();
 
-        preference = getActivity().getSharedPreferences("user_data", getActivity().MODE_PRIVATE);
-        editor = preference.edit();
-
-        ((TextView) dialog.findViewById(R.id.prevMaxBet)).setText(player.getMaxBet() + "pt");
+        ((TextView) dialog.findViewById(R.id.prevMaxBet)).setText(String.valueOf(player.getMaxBet()));
 
         if(player.isLevelUp()) {
             player.levelUp();
             if(player.getLevel() > settings.levels.size()){
+                getBonusChip = settings.levels.get(settings.levels.size()).getChipCnt;
                 getBonusCoin = settings.levels.get(settings.levels.size()).getCoinCnt;
+                dialog.findViewById(R.id.maxBet).setVisibility(LinearLayout.GONE);
             }else {
+                getBonusChip = settings.levels.get(player.getLevel()).getChipCnt;
                 getBonusCoin = settings.levels.get(player.getLevel()).getCoinCnt;
+                ((TextView) dialog.findViewById(R.id.newMaxBet)).setText(String.valueOf(player.getMaxBet()));
             }
-            editor.putInt("gotBonusCoin", getBonusCoin);
+            player.deposit(getBonusChip);
+            player.depositCoin(getBonusCoin);
         }
 
         ((TextView) dialog.findViewById(R.id.newLevel)).setText("You are now level " + player.getLevel() + ".");
-        ((TextView) dialog.findViewById(R.id.newMaxBet)).setText(player.getMaxBet() + "pt");
-        ((TextView) dialog.findViewById(R.id.loginBonus)).setText("+" + String.valueOf(getBonusCoin));
-
-        editor.commit();
+        ((TextView) dialog.findViewById(R.id.getBonusChip)).setText("+" + String.valueOf(getBonusChip));
+        ((TextView) dialog.findViewById(R.id.getBonusCoin)).setText("+" + String.valueOf(getBonusCoin));
 
         // OK ボタンのリスナ
         dialog.findViewById(R.id.ok).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dismiss();
-                ((Dealer)getActivity()).setPlayerData();
+                ((Playing)getActivity()).setPlayerDataWhenReturnDialog();
             }
         });
 

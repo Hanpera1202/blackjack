@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">BlackJack</string>
-    <string name="busted">BUSTED!</string>
-    <string name="blackjack">BLACKJACK!</string>
-    <string name="winner">WINNER!</string>
+    <string name="app_name">Blackjack21</string>
 
     <string name="inters_ad_unit_id">ca-app-pub-1732979523408979/5351715843</string>
     <string name="movie_ad_unit_id">ca-app-pub-1732979523408979/8305182245</string>

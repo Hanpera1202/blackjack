@@ -60,7 +60,7 @@ public class AlertDialogFragment extends DialogFragment {
                         break;
                     case "nowLoadingAdDialog":
                     case "noHintCoinDialog":
-                        ((Dealer) getActivity()).execInitUIWhenBetting(0, false);
+                        ((Playing) getActivity()).execInitUIWhenBetting(0, false);
                         break;
                     case "registErrorDialog":
                         ((Title) getActivity()).onResume();

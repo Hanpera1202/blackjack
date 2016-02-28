@@ -19,6 +19,7 @@ public class BonusDialogFragment extends DialogFragment {
     private GameSettings settings;
     private SharedPreferences preference;
     private SharedPreferences.Editor editor;
+    private Player player;
 
     public static BonusDialogFragment newInstance(String bonusType) {
         BonusDialogFragment frag = new BonusDialogFragment();
@@ -42,27 +43,30 @@ public class BonusDialogFragment extends DialogFragment {
 
         dialog.setContentView(R.layout.bonus);
 
-        settings = new GameSettings();
         preference = getActivity().getSharedPreferences("user_data", getActivity().MODE_PRIVATE);
         editor = preference.edit();
+
+        settings = new GameSettings();
+        player = new Player(getActivity(), "God");
 
         if(getArguments().getString("bonusType").equals("login")) {
             ((TextView) dialog.findViewById(R.id.bonusMessage)).setText("YOU GOT BONUS!");
             // calculate login bonus points
             Long loginBonusGetTime = preference.getLong("loginBonusGetTime", 0);
             if (loginBonusGetTime == 0L) {
-                editor.putInt("gotBonusPoint", settings.startCash);
+                player.deposit(settings.startCash);
                 ((TextView) dialog.findViewById(R.id.specialBonus)).setText("+" + (int) settings.startCash);
                 dialog.findViewById(R.id.specialBonusArea).setVisibility(View.VISIBLE);
             }
-            editor.putInt("gotBonusCoin", settings.loginBonusCoins);
+            player.depositCoin(settings.loginBonusCoins);
+
             ((TextView) dialog.findViewById(R.id.loginBonus)).setText("+" + settings.loginBonusCoins);
 
             editor.putLong("loginBonusGetTime", System.currentTimeMillis());
 
         }else{
             ((TextView) dialog.findViewById(R.id.bonusMessage)).setText("YOU GOT COIN!");
-            editor.putInt("gotBonusCoin", 1);
+            player.depositCoin(1);
             ((TextView) dialog.findViewById(R.id.loginBonus)).setText("+1");
             editor.putInt("gotCoinBonusCount", preference.getInt("gotCoinBonusCount", 0) + 1);
             try {
@@ -81,7 +85,7 @@ public class BonusDialogFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 dismiss();
-                ((Dealer)getActivity()).setPlayerData();
+                ((Playing)getActivity()).setPlayerDataWhenReturnDialog();
             }
         });
 

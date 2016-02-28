@@ -51,16 +51,12 @@ public class Competition extends FragmentActivity {
     private List<String> endDates = new ArrayList<String>();
     private List<Integer> totalApplicationNums = new ArrayList<Integer>();
     private List<Integer> applicationNums = new ArrayList<Integer>();
-    private List<Integer> points = new ArrayList<Integer>();
     private BaseAdapter adapter;
 
     private DialogFragment alertDialog;
     private ConfirmDialogFragment ConfirmDialog;
 
     private Player player;
-    private TextView playerCash;
-
-    private final Handler handler = new Handler();
 
     AsyncJsonLoader asyncJsonLoader;
 
@@ -74,8 +70,6 @@ public class Competition extends FragmentActivity {
 
         player = new Player(getApplicationContext(), "God");
         game.setHeaderData(player,(RelativeLayout)findViewById(R.id.header));
-
-        playerCash=(TextView)findViewById(R.id.playerCash);
 
         asyncJsonLoader = new AsyncJsonLoader(this, new AsyncJsonLoader.AsyncCallback() {
             // 実行後
@@ -92,7 +86,6 @@ public class Competition extends FragmentActivity {
                         endDates.add(competition.getString("end_date"));
                         totalApplicationNums.add(competition.getInt("total_application_num"));
                         applicationNums.add(competition.getInt("application_num"));
-                        points.add(competition.getInt("point"));
                     }
                     setAdapter();
 
@@ -124,7 +117,7 @@ public class Competition extends FragmentActivity {
         if(ids.isEmpty()) {
             ((TextView) findViewById(R.id.message)).setText("Coming soon.");
         }else{
-            ((TextView) findViewById(R.id.message)).setText("Let's apply to PRIZE COMPETITION!!");
+            ((TextView) findViewById(R.id.message)).setText("Let's apply to Prize Competition!!");
             // ListViewのインスタンスを生成
             ListView listView = (ListView) findViewById(R.id.listView);
 
@@ -135,6 +128,29 @@ public class Competition extends FragmentActivity {
             // ListViewにadapterをセット
             listView.setAdapter(adapter);
         }
+        setTicketNumber();
+    }
+
+    public void setTicketNumber(){
+        String ticketMessage;
+        String ticketNum;
+        String ticketUnit;
+        if(player.getTicketBalance() > 0) {
+            ticketMessage = "You have ";
+            ticketNum = String.valueOf(player.getTicketBalance());
+            if (player.getTicketBalance() == 1) {
+                ticketUnit = " ticket.";
+            } else {
+                ticketUnit = " tickets.";
+            }
+        }else {
+            ticketMessage = "You don't have a ticket.";
+            ticketNum = "";
+            ticketUnit = "";
+        }
+        ((TextView) findViewById(R.id.ticketMessage)).setText(ticketMessage);
+        ((TextView) findViewById(R.id.ticketNum)).setText(ticketNum);
+        ((TextView) findViewById(R.id.ticketUnit)).setText(ticketUnit);
     }
 
     class ViewHolder {
@@ -144,7 +160,6 @@ public class Competition extends FragmentActivity {
         TextView endDate;
         TextView totalApplicationNum;
         TextView applicationNum;
-        TextView point;
         Button apply;
     }
 
@@ -174,7 +189,6 @@ public class Competition extends FragmentActivity {
                 holder.endDate = (TextView) convertView.findViewById(R.id.endDate);
                 holder.totalApplicationNum = (TextView) convertView.findViewById(R.id.totalApplicationNum);
                 holder.applicationNum = (TextView) convertView.findViewById(R.id.applicationNum);
-                holder.point = (TextView) convertView.findViewById(R.id.point);
                 holder.apply = (Button)convertView.findViewById(R.id.apply);
                 holder.apply.setOnClickListener(this);
                 convertView.setTag(holder);
@@ -206,7 +220,6 @@ public class Competition extends FragmentActivity {
             }
             holder.totalApplicationNum.setText(String.valueOf(totalApplicationNums.get(position)));
             holder.applicationNum.setText("Your Application Number : " + applicationNums.get(position));
-            holder.point.setText("Use Point : " + points.get(position));
             holder.apply.setTag(ids.get(position));
 
             return convertView;
@@ -233,13 +246,12 @@ public class Competition extends FragmentActivity {
          */
         public void onClick(View view) {
             String competitionId = (String) view.getTag();
-            if(player.getBalance() >= points.get(ids.indexOf(competitionId))) {
-                Integer point = points.get(ids.indexOf(competitionId));
-                String message = "Are you sure you want to apply using the " + point + "pt?";
+            if(player.getTicketBalance() >= 1) {
+                String message = "Are you sure you want to apply using a ticket?";
                 createConfirmDialog("confirmApplyDialog", message, competitionId);
                 showConfirmDialog();
             }else{
-                createAlertDialog("default", "Your point is not enough");
+                createAlertDialog("default", "You don't have a ticket.");
                 showAlertDialog();
             }
         }
@@ -253,11 +265,11 @@ public class Competition extends FragmentActivity {
                     if(result.getBoolean("result")) {
                         String applyCompetitionId = result.getString("competition_id");
                         Integer index = ids.indexOf(applyCompetitionId);
-                        player.withdraw(points.get(index));
+                        player.withdrawTicket(1);
                         totalApplicationNums.set(index, totalApplicationNums.get(index) + 1);
                         applicationNums.set(index, applicationNums.get(index) + 1);
                         adapter.notifyDataSetChanged();
-                        updatePlayerCashlbl();
+                        setTicketNumber();
                         showAlertDialog();
                     }else{
                         String reason = result.getString("reason");
@@ -289,41 +301,6 @@ public class Competition extends FragmentActivity {
             asyncJsonLoader.execute("POST", url, "apply_data", crypt.encrypt());
         } catch (Exception e) {
             e.printStackTrace();
-        }
-    }
-
-    int countUpNum;
-    void updatePlayerCashlbl()
-    {
-        int waittime = 0;
-        int beforeCash = Integer.parseInt(String.valueOf(playerCash.getText()));
-        int afterCash = player.getBalance();
-        int loopCnt;
-        int countCash;
-        int sign = 1;
-        if(afterCash - beforeCash < 0){
-            sign = -1;
-        }
-
-        if((afterCash - beforeCash) * sign < 30){
-            countCash = sign;
-            loopCnt = (afterCash - beforeCash) * sign;
-        }else{
-            countCash = (afterCash - beforeCash) / 30;
-            loopCnt = 30;
-        }
-        for (int i = 1; i <= loopCnt; i++) {
-            if (i == loopCnt) {
-                countUpNum = player.getBalance();
-            } else {
-                countUpNum = beforeCash + (countCash * i);
-            }
-            handler.postDelayed(new Runnable() {
-                int updateCash = countUpNum;
-                public void run() {
-                    playerCash.setText(String.valueOf(updateCash));
-                }
-            }, waittime + (i * 15));
         }
     }
 

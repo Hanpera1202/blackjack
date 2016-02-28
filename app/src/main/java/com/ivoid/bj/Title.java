@@ -58,7 +58,7 @@ public class Title extends FragmentActivity {
             }
             setBackgroundImage(R.drawable.bg);
         }else {
-            Intent intent = new Intent(this, Dealer.class);
+            Intent intent = new Intent(this, Playing.class);
             startActivity(intent);
             finish();
             overridePendingTransition(0, 0);

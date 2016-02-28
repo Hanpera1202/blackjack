@@ -33,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp320_10dp"
-            android:text="You can apply to PRIZE COMPETITION\nusing the point you got in the blackjack game."
+            android:text="Play for free. Earn for prize.\nEarn APPLY TICKTS by playing game."
             android:textSize="@dimen/dp320_14sp"
             android:textColor="#ffffffff"
             android:gravity="center"

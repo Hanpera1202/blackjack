@@ -86,14 +86,14 @@ public class FreeChips extends Activity implements OnClickListener
 		for (final Integer entry : flipCards.keySet()) {
 			((Button) findViewById(entry)).setOnClickListener(this);
 		}
-
-		flipCnt = 0;
-		gotPoint = 0;
 	}
 
     @Override
     protected void onResume(){
         super.onResume();
+
+		flipCnt = 0;
+		gotPoint = 0;
 
         // 予め音声データを読み込む
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
@@ -121,11 +121,12 @@ public class FreeChips extends Activity implements OnClickListener
             flip((Button) findViewById(v.getId()));
         }
         if(flipCnt == settings.freeChipsFlips) {
-            editor.putLong("freeChipsGetTime", System.currentTimeMillis());
-            editor.commit();
+            player.deposit(gotPoint);
             for (final Integer entry : flipCards.keySet()) {
                 ((Button) findViewById(entry)).setOnClickListener(null);
             }
+            TextView getpoints = (TextView) findViewById(R.id.getbonuspoints);
+            getpoints.setText(gotPoint + "chips\nGET!!");
             RelativeLayout getBonus = (RelativeLayout) findViewById(R.id.getbonus);
             getBonus.setVisibility(TextView.VISIBLE);
             ScaleAnimation buttonanim =
@@ -154,17 +155,14 @@ public class FreeChips extends Activity implements OnClickListener
 			}while(gotPoint * card.getValue() < 10);
 		}else{
 			card = shoe.drawCard();
-		}
-		button.setBackgroundResource(card.getImage());
-		TextView getpoints = (TextView) findViewById(R.id.getbonuspoints);
+        }
+        button.setBackgroundResource(card.getImage());
 
 		if(gotPoint == 0) {
 			gotPoint = card.getValue();
 		}else{
 			gotPoint *= card.getValue();
-		}
-		getpoints.setText(gotPoint + "pt\nGET!!");
-		editor.putInt("gotBonusPoint", gotPoint);
+        }
 		editor.putLong("freeChipsGetTime", System.currentTimeMillis());
 		editor.commit();
 		button.setOnClickListener(null);

@@ -20,6 +20,7 @@ import android.os.Vibrator;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -49,7 +50,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
  *  
  */
 
-public class Dealer extends FragmentActivity implements OnClickListener
+public class Playing extends FragmentActivity implements OnClickListener
 {
     Game game;
 
@@ -118,6 +119,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
     private DialogFragment alertDialog;
     private DialogFragment LevelUpDialog;
     private DialogFragment BonusDialog;
+    private DialogFragment TicketDialog;
     private ConfirmDialogFragment ConfirmDialog;
     private ConfirmAdDialogFragment ConfirmAdDialog;
     private HintDialogFragment hintDialog;
@@ -155,9 +157,8 @@ public class Dealer extends FragmentActivity implements OnClickListener
         setViews();
 
         bar = (ProgressBar)findViewById(R.id.progressBar);
-        bar.setMax(settings.necessaryPoint);
-        ((TextView)findViewById(R.id.necessaryPoint)).
-                setText(settings.necessaryPoint + "pt");
+        bar.setMax(settings.ticketExchangePoint);
+        game.setHeaderData(player, (RelativeLayout) findViewById(R.id.header));
 
     }
 
@@ -168,8 +169,6 @@ public class Dealer extends FragmentActivity implements OnClickListener
 
         // reset backendFlag
         backendFlag = false;
-        // reset animation start time
-        waittime = 0;
 
         // 予め音声データを読み込む
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
@@ -209,30 +208,19 @@ public class Dealer extends FragmentActivity implements OnClickListener
         }
     }
 
-    public void setPlayerData(){
-        game.setHeaderData(player, (RelativeLayout) findViewById(R.id.header));
-        playerMaxBet.setText("MAX " + player.getMaxBet() + "pt");
+    public void setPlayerData() {
+        waittime = 0;
+        playerMaxBet.setText("MAX " + player.getMaxBet());
         setPlayerCoin(RelativeLayout.VISIBLE);
-        setPlayerProgress(player.getBalance());
-        if (betting){
-            if (preference.getInt("gotBonusPoint", 0) > 0) {
-                player.deposit(preference.getInt("gotBonusPoint", 0));
-                editor.putInt("gotBonusPoint", 0);
-                editor.commit();
-                updatePlayerCashlbl();
-                mSoundPool.play(mCash, game.getSoundVol(), game.getSoundVol(), 0, 0, 1.0F);
-            }
-            if (preference.getInt("gotBonusCoin", 0) > 0) {
-                player.depositCoin(preference.getInt("gotBonusCoin", 0));
-                editor.putInt("gotBonusCoin", 0);
-                editor.commit();
-                updatePlayerCoinlbl();
-            }
-            if(player.getBalance() < player.getInitBet()) {
-                clearBet();
-            }
-            execInitUIWhenBetting(0 ,false);
-        }
+        setPlayerProgress(player.getPointBalance());
+        updatePlayerCashlbl();
+        updatePlayerCoinlbl();
+        execInitUIWhenBetting(0, false);
+    }
+
+    public void setPlayerDataWhenReturnDialog() {
+        game.setHeaderDataForPlaying(player, (RelativeLayout) findViewById(R.id.header));
+        setPlayerData();
     }
 
     @Override
@@ -275,6 +263,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
         playerCoinNum=(TextView)findViewById(R.id.coinNum);
         playerCoin=(RelativeLayout)findViewById(R.id.playerCoin);
         playerMaxBet=(TextView)findViewById(R.id.playerMaxBet);
+        playerBet=(TextView) findViewById(R.id.playerBet);
     }
 
     void execInitUIWhenBetting(int waittime, boolean displayAdFlag){
@@ -306,6 +295,13 @@ public class Dealer extends FragmentActivity implements OnClickListener
             handler.postDelayed(new Runnable() {
                 public void run() {
                     showBonusDialog();
+                }
+            }, waittime);
+        }else if(player.getPointBalance() >= settings.ticketExchangePoint){
+            createTicketDialog();
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    showTicketDialog();
                 }
             }, waittime);
         }else if(displayAdFlag && game.mInterstitialAd.isLoaded()) {
@@ -357,8 +353,6 @@ public class Dealer extends FragmentActivity implements OnClickListener
             buttons.put(R.id.bet_all, Action.ALL);
             buttons.put(R.id.rebet, Action.REBET);
 
-			playerBet=(TextView) findViewById(R.id.playerBet);
-
             collectBet(player.getRebet());
 
 		}
@@ -366,6 +360,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
 		{
 			getNextAction=true;
             player.withdraw(currentPlayerHand.getBet().getValue());
+            addPlayerPoint(currentPlayerHand.getBet().getValue() / settings.pointDivisor);
 			
 			buttons.put(R.id.standButton, Action.STAND);
 			buttons.put(R.id.hitButton, Action.HIT);
@@ -407,7 +402,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
 		
 		//calculate reward based on hand's performance in this bj round (indicated by ratio)
 		int reward = (int)(betValue * ratio);
-		
+
 		player.deposit(reward);
     }
 
@@ -588,6 +583,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
 			hand.incrementBet(betValue);
 			
 			player.withdraw(betValue);
+            addPlayerPoint(currentPlayerHand.getBet().getValue() / settings.pointDivisor);
 
 			updatePlayerCashlbl();
 
@@ -624,12 +620,13 @@ public class Dealer extends FragmentActivity implements OnClickListener
 			BJHand splitHand = new BJHand(hand.ownerName, poppedCard, betValue);
             player.addHand(splitHand);
             player.withdraw(betValue);
+            addPlayerPoint(currentPlayerHand.getBet().getValue() / settings.pointDivisor);
             updatePlayerCashlbl();
 
             hands.put(splitHand, playerHandViews.get(1));
             findViewById(R.id.CenterView).setVisibility(View.VISIBLE);
 
-			setBet((LinearLayout) playerBetViews.get(1).getChildAt(0), (int) player.getInitBet());
+			setBet((LinearLayout) playerBetViews.get(1).getChildAt(0), player.getInitBet());
             currentPlayerBetNumView=playerBetNumViews.get(1);
             updatePlayerBetlblForPlaying();
             currentPlayerBetNumView=playerBetNumViews.get(0);
@@ -845,6 +842,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
         int insuranceBetValue = (int)(0.5*betValue); //insurance is a separate bet from the main bet
         player.takeInsurance(insuranceBetValue);
         player.withdraw(insuranceBetValue); //withraw the bet from player's wallet
+        addPlayerPoint(currentPlayerHand.getBet().getValue() / settings.pointDivisor);
 
         findViewById(R.id.insurance).setVisibility(RelativeLayout.VISIBLE);
         LinearLayout insuranceBet = (LinearLayout) findViewById(R.id.insuranceBet);
@@ -1041,61 +1039,88 @@ public class Dealer extends FragmentActivity implements OnClickListener
 	}
 
 	void updatePlayerBetlbl()
-    { playerBet.setText(String.valueOf((int)player.getInitBet() ) );}
+    {playerBet.setText(String.valueOf(player.getInitBet()));}
 
     void updatePlayerBetlblForPlaying()
     { currentPlayerBetNumView.setText(String.valueOf(player.getInitBet()));}
 
-    void updatePlayerCashlbl()
-    { updatePlayerlbl(playerCash, player.getBalance());}
-
     void updatePlayerCoinlbl()
-    { updatePlayerlbl(playerCoinNum, player.getCoinBalance());}
+    { playerCoinNum.setText(String.valueOf(player.getCoinBalance()));}
 
     int countUpNum;
-    TextView updateView;
-    void updatePlayerlbl(TextView view, int afterCash)
-    {
-        updateView = view;
-        int beforeCash = Integer.parseInt(String.valueOf(updateView.getText()));
-
+    void updatePlayerCashlbl() {
+        int beforeCash = Integer.parseInt(String.valueOf(playerCash.getText()));
         int loopCnt;
         int countCash;
         int sign = 1;
-        if(afterCash - beforeCash < 0){
+        if (player.getBalance() - beforeCash < 0) {
             sign = -1;
         }
 
-        if((afterCash - beforeCash) * sign < 30){
+        if ((player.getBalance() - beforeCash) * sign < 30) {
             countCash = sign;
-            loopCnt = (afterCash - beforeCash) * sign;
-        }else{
-            countCash = (afterCash - beforeCash) / 30;
+            loopCnt = (player.getBalance() - beforeCash) * sign;
+        } else {
+            countCash = (player.getBalance() - beforeCash) / 30;
             loopCnt = 30;
         }
         for (int i = 1; i <= loopCnt; i++) {
             if (i == loopCnt) {
-                countUpNum = afterCash;
+                countUpNum = player.getBalance();
             } else {
                 countUpNum = beforeCash + (countCash * i);
             }
             handler.postDelayed(new Runnable() {
                 int updateCash = countUpNum;
-                TextView updateTextView = updateView;
+                TextView updateTextView = playerCash;
                 public void run() {
                     updateTextView.setText(String.valueOf(updateCash));
-                    if(updateTextView.getId() == R.id.playerCash) {
-                        setPlayerProgress(updateCash);
-                    }
                 }
             }, waittime + (i * 15));
         }
+        if (player.getBalance() > beforeCash) {
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    mSoundPool.play(mCash, game.getSoundVol(), game.getSoundVol(), 0, 0, 1.0F);
+                }
+            }, waittime);
+        }
     }
 
+    void addPlayerPoint(int addPoint)
+    {
+        int beforePoint = player.getPointBalance();
+        int loopCnt;
+        float countPoint;
+        if(addPoint < 30){
+            countPoint = 1;
+            loopCnt = addPoint;
+        }else{
+            countPoint = addPoint / 30f;
+            loopCnt = 30;
+        }
 
-    private void setPlayerProgress(int updateCash){
-        ((TextView)findViewById(R.id.applyPossibleNum)).setText(String.valueOf(updateCash / settings.necessaryPoint));
-        bar.setProgress(updateCash % settings.necessaryPoint);
+        for (int i = 1; i <= loopCnt; i++) {
+            if (i == loopCnt) {
+                countUpNum = beforePoint + addPoint;
+            } else {
+                countUpNum = (int)(beforePoint + (countPoint * i));
+            }
+            handler.postDelayed(new Runnable() {
+                int updatePoint = countUpNum;
+                public void run() {
+                    setPlayerProgress(updatePoint);
+                }
+            }, i * 15);
+        }
+        player.depositPoint(addPoint);
+    }
+
+    private void setPlayerProgress(int updatePoint){
+        //((TextView)findViewById(R.id.applyPossibleNum)).setText(String.valueOf(updatePoint / settings.ticketExchangePoint));
+        //bar.setProgress(updatePoint % settings.ticketExchangePoint);
+        ((TextView)findViewById(R.id.applyPossibleNum)).setText(String.valueOf(player.getTicketBalance()));
+        bar.setProgress(updatePoint);
     }
 
     private void setPlayerCoin(int visible) {
@@ -1147,7 +1172,6 @@ public class Dealer extends FragmentActivity implements OnClickListener
                                             findViewById(R.id.playerBlackjack).getHeight()/2);
                             buttonanim.setDuration(300);
                             findViewById(R.id.playerBlackjack).startAnimation(buttonanim);
-
                             mSoundPool.play(mBlackjack, game.getSoundVol(), game.getSoundVol(), 0, 0, 1.0F);
                         }
                     },animWaittime);
@@ -1159,7 +1183,6 @@ public class Dealer extends FragmentActivity implements OnClickListener
     			{
                     handler.postDelayed(new Runnable() {
                         byte index = global_b;
-
                         public void run() {
                             playerResults.get(index).setImageResource(R.drawable.win);
                             playerResults.get(index).setVisibility(ImageView.VISIBLE);
@@ -1243,7 +1266,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
         	{
         		case DEAL:
         		{
-					if (player.getInitBet()>=settings.tableMin && player.getInitBet()<=player.getMaxBet()) {
+					if (player.getInitBet()>=settings.tableMin && player.getInitBet() <= player.getMaxBet()) {
                         player.setData("plays");
                         player.experience(1);
                         playCount++;
@@ -1687,7 +1710,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
         BonusDialog = BonusDialogFragment.newInstance(type);
     }
 
-    // show alert dialog
+    // show bonus dialog
     private void showBonusDialog() {
         if (BonusDialog != null &&
                 getSupportFragmentManager().findFragmentByTag("bonusDialog") == null) {
@@ -1695,7 +1718,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
         }
     }
 
-    // hide alert bonus dialog
+    // hide bonus dialog
     private void dismissBonusDialog() {
         if (BonusDialog !=  null) {
             Fragment prev = getSupportFragmentManager().findFragmentByTag("bonusDialog");
@@ -1705,6 +1728,31 @@ public class Dealer extends FragmentActivity implements OnClickListener
             }
         }
         BonusDialog = null;
+    }
+
+    // create ticket dialog
+    private void createTicketDialog(){
+        TicketDialog = TicketDialogFragment.newInstance();
+    }
+
+    // show ticket dialog
+    private void showTicketDialog() {
+        if (TicketDialog != null &&
+                getSupportFragmentManager().findFragmentByTag("ticketDialog") == null) {
+            TicketDialog.show(getSupportFragmentManager(), "ticketDialog");
+        }
+    }
+
+    // hide ticket dialog
+    private void dismissTicketDialog() {
+        if (TicketDialog !=  null) {
+            Fragment prev = getSupportFragmentManager().findFragmentByTag("ticketDialog");
+            if (prev != null) {
+                DialogFragment df = (DialogFragment) prev;
+                df.dismiss();
+            }
+        }
+        TicketDialog = null;
     }
 
     // create confirm dialog
@@ -1760,6 +1808,7 @@ public class Dealer extends FragmentActivity implements OnClickListener
     public void onUserLeaveHint() {
         dismissLevelUpDialog();
         dismissBonusDialog();
+        dismissTicketDialog();
         backendFlag = true;
     }
 

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="@dimen/dp320_270dp"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/dp320_10dp"
+    android:background="#121212"
+    android:layout_gravity="center">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="top|center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TICKET FOR THE PRIZE"
+            android:textSize="@dimen/dp320_20sp"
+            android:textColor="#EDB94A"
+            fontPath="fonts/Roboto-Bold.ttf"
+            tools:ignore="MissingPrefix"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp320_10dp"
+            android:textSize="@dimen/dp320_20sp"
+            android:textColor="#CFF6FF"
+            android:text="You got APPLY TICKET."
+            android:gravity="center"
+            fontPath="fonts/Roboto-Bold.ttf"
+            tools:ignore="MissingPrefix"/>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp320_10dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="Apply Ticket"
+                android:textSize="@dimen/dp320_20sp"
+                android:textColor="#EDEDED"
+                android:gravity="left"
+                android:layout_gravity="center_vertical"
+                fontPath="fonts/Roboto-Bold.ttf"
+                tools:ignore="MissingPrefix"/>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:background="@drawable/bg_playercash">
+
+                <ImageView
+                    android:layout_width="@dimen/dp320_25dp"
+                    android:layout_height="@dimen/dp320_25dp"
+                    android:src="@drawable/apply"/>
+
+                <TextView
+                    android:id="@+id/gotTicket"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textColor="#ffffffff"
+                    android:textSize="@dimen/dp320_18sp"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    fontPath="fonts/Roboto-Bold.ttf"
+                    tools:ignore="MissingPrefix"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp320_10dp"
+            android:padding="@dimen/dp320_10dp"
+            android:textSize="@dimen/dp320_20sp"
+            android:textColor="#ffffffff"
+            android:text="With this ticket,\nLet's apply for the prize."
+            android:gravity="center"
+            fontPath="fonts/Roboto-Bold.ttf"
+            tools:ignore="MissingPrefix"
+            android:background="@color/wallet_hint_foreground_holo_dark"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/dp320_10dp"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/close"
+                android:layout_width="@dimen/dp320_100dp"
+                android:layout_height="@dimen/dp320_50dp"
+                android:layout_marginRight="@dimen/dp320_10dp"
+                android:text="CLOSE"
+                android:textSize="@dimen/dp320_20sp"
+                android:textColor="#ffffffff"
+                android:background="#ED684A"
+                android:gravity="center"
+                fontPath="fonts/Roboto-Bold.ttf"
+                tools:ignore="MissingPrefix"/>
+
+            <Button
+                android:id="@+id/apply"
+                android:layout_width="@dimen/dp320_100dp"
+                android:layout_height="@dimen/dp320_50dp"
+                android:text="APPLY"
+                android:textSize="@dimen/dp320_20sp"
+                android:textColor="#ffffffff"
+                android:background="#ED684A"
+                android:gravity="center"
+                fontPath="fonts/Roboto-Bold.ttf"
+                tools:ignore="MissingPrefix"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

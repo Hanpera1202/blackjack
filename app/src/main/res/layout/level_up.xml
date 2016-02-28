@@ -34,6 +34,7 @@
             tools:ignore="MissingPrefix"/>
 
         <LinearLayout
+            android:id="@+id/maxBet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp320_10dp"
@@ -61,7 +62,7 @@
                     android:id="@+id/prevMaxBet"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="100pt"
+                    android:text="100"
                     android:textColor="#EDEDED"
                     android:textSize="@dimen/dp320_18sp"
                     fontPath="fonts/Roboto-Bold.ttf"
@@ -80,9 +81,56 @@
                     android:id="@+id/newMaxBet"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="100pt"
+                    android:text="100"
                     android:textColor="#EDEDED"
                     android:textSize="@dimen/dp320_18sp"
+                    fontPath="fonts/Roboto-Bold.ttf"
+                    tools:ignore="MissingPrefix"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp320_10dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="Special Bonus"
+                android:textSize="@dimen/dp320_20sp"
+                android:textColor="#EDEDED"
+                android:gravity="left"
+                android:layout_gravity="center_vertical"
+                fontPath="fonts/Roboto-Bold.ttf"
+                tools:ignore="MissingPrefix"/>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:background="@drawable/bg_playercash">
+
+                <ImageView
+                    android:layout_width="@dimen/dp320_25dp"
+                    android:layout_height="@dimen/dp320_25dp"
+                    android:src="@drawable/chip"/>
+
+                <TextView
+                    android:id="@+id/getBonusChip"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textColor="#ffffffff"
+                    android:textSize="@dimen/dp320_18sp"
+                    android:gravity="center"
+                    android:layout_gravity="center"
                     fontPath="fonts/Roboto-Bold.ttf"
                     tools:ignore="MissingPrefix"/>
 
@@ -122,7 +170,7 @@
                     android:src="@drawable/coin"/>
 
                 <TextView
-                    android:id="@+id/loginBonus"
+                    android:id="@+id/getBonusCoin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="0"

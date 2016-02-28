@@ -149,20 +149,13 @@
         <ProgressBar
             android:id="@+id/progressBar"
             style="?android:attr/progressBarStyleHorizontal"
-            android:progressDrawable="@drawable/progressbar"
-            android:layout_width="@dimen/dp320_200dp"
+            android:progressDrawable="@drawable/progressbar_point"
+            android:layout_width="@dimen/dp320_250dp"
             android:layout_height="@dimen/dp320_15dp"
             android:layout_marginLeft="@dimen/dp320_5dp"
             android:layout_marginRight="@dimen/dp320_5dp"
             android:layout_gravity="center"/>
 
-        <TextView
-            android:id="@+id/necessaryPoint"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/dp320_12sp"
-            android:textColor="#ffffff"
-            android:layout_gravity="center"/>
     </LinearLayout>
 
     <!--
@@ -693,7 +686,7 @@
                         android:id="@+id/playerMaxBet"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Max 10000pt"
+                        android:text="Max 10000"
                         android:textSize="@dimen/dp320_8sp"
                         android:textColor="#ff0000"
                         android:layout_alignParentBottom="true"

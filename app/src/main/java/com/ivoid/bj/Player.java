@@ -13,8 +13,10 @@ class Player
     private GameSettings settings;
 
     private final String name;
-	private CoinWallet coinWallet;
     private Wallet wallet;
+	private Wallet coinWallet;
+    private Wallet pointWallet;
+    private Wallet ticketWallet;
 
 	private ArrayList<BJHand> hands=new ArrayList<BJHand>();
 
@@ -31,8 +33,10 @@ class Player
         settings = new GameSettings();
 
 		this.name=name;
-		wallet=new Wallet(context);
-        coinWallet=new CoinWallet(context);
+		wallet=new Wallet(context, "Balance");
+        coinWallet=new Wallet(context, "CoinBalance");
+        pointWallet=new Wallet(context, "PointBalance");
+        ticketWallet=new Wallet(context, "TicketBalance");
 		playing = true;
 		addHand(new BJHand(name));
 	}
@@ -74,6 +78,18 @@ class Player
     void withdrawCoin(int amount)
     { coinWallet.withdraw(amount); }
 
+    void depositPoint(int amount)
+    { pointWallet.deposit(amount); }
+
+    void withdrawPoint(int amount)
+    { pointWallet.withdraw(amount); }
+
+    void depositTicket(int amount)
+    { ticketWallet.deposit(amount); }
+
+    void withdrawTicket(int amount)
+    { ticketWallet.withdraw(amount); }
+
     void addHand( BJHand hand )
     { hands.add(hand); }
 
@@ -92,6 +108,12 @@ class Player
 
     int getCoinBalance()
     { return coinWallet.getBalance(); }
+
+    int getPointBalance()
+    { return pointWallet.getBalance(); }
+
+    int getTicketBalance()
+    { return ticketWallet.getBalance(); }
 
     int getInsuranceBetValue()
     { return insuranceBetValue; }

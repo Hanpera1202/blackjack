@@ -32,10 +32,10 @@ class FreeChipsDeck
 	
 	void fillDeck()
 	{
-        for ( byte value = 1 ; value < 14 ; value++ ) {
+        for ( byte value = 2 ; value < 14 ; value++ ) {
             int cnt = 4;
-            if(value < 4){
-                cnt = value;
+            if(value < 5){
+                cnt = value - 1;
             }
             for (byte suit = 0; suit < cnt; suit++)
                 deck.add(new Card(value, suit, true));

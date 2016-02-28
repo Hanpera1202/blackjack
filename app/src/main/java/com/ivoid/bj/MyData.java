@@ -58,7 +58,7 @@ public class MyData extends Activity {
 	public void onClickHeader(View view) {
         switch (view.getId()) {
             case R.id.game: {
-                Intent intent = new Intent(this, Dealer.class);
+                Intent intent = new Intent(this, Playing.class);
                 startActivity(intent);
                 finish();
                 overridePendingTransition(0, 0);
