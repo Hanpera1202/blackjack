@@ -37,15 +37,15 @@ public class Result extends Activity {
 
     Game game;
 
-    private final String getResultsUrl = "http://blackjack.uh-oh.jp/users/%s/results";
+    private final String getResultsUrl = "http://sweepstakes.uh-oh.jp/users/%s/results";
 
     private List<String> ids = new ArrayList<String>();
     private List<String> names = new ArrayList<String>();
     private List<String> imageUrls = new ArrayList<String>();
     private List<Integer> winNums = new ArrayList<Integer>();
     private List<String> endDates = new ArrayList<String>();
-    private List<Integer> totalApplicationNums = new ArrayList<Integer>();
-    private List<Integer> applicationNums = new ArrayList<Integer>();
+    private List<Integer> totalEntryNums = new ArrayList<Integer>();
+    private List<Integer> entryNums = new ArrayList<Integer>();
     private List<String> progresses = new ArrayList<String>();
     private List<String> results = new ArrayList<String>();
     private BaseAdapter adapter;
@@ -71,16 +71,16 @@ public class Result extends Activity {
                     // 各 ATND イベントのタイトルを配列へ格納
                     JSONArray resultArray = result.getJSONArray("results");
                     for (int i = 0; i < resultArray.length(); i++) {
-                        JSONObject competition = resultArray.getJSONObject(i);
-                        ids.add(competition.getString("id"));
-                        names.add(competition.getString("name"));
-                        imageUrls.add(competition.getString("image_url"));
-                        winNums.add(competition.getInt("win_num"));
-                        endDates.add(competition.getString("end_date"));
-                        totalApplicationNums.add(competition.getInt("total_application_num"));
-                        applicationNums.add(competition.getInt("application_num"));
-                        progresses.add(competition.getString("progress"));
-                        results.add(competition.getString("result"));
+                        JSONObject sweepstakes = resultArray.getJSONObject(i);
+                        ids.add(sweepstakes.getString("id"));
+                        names.add(sweepstakes.getString("name"));
+                        imageUrls.add(sweepstakes.getString("image_url"));
+                        winNums.add(sweepstakes.getInt("win_num"));
+                        endDates.add(sweepstakes.getString("end_date"));
+                        totalEntryNums.add(sweepstakes.getInt("total_entry_num"));
+                        entryNums.add(sweepstakes.getInt("entry_num"));
+                        progresses.add(sweepstakes.getString("progress"));
+                        results.add(sweepstakes.getString("result"));
                     }
 
                     setAdapter();
@@ -111,14 +111,14 @@ public class Result extends Activity {
 
     public void setAdapter(){
         if(ids.isEmpty()){
-            ((TextView) findViewById(R.id.message)).setText("You do not yet apply.");
+            ((TextView) findViewById(R.id.message)).setText("You don't enter.");
         }else {
             ((TextView) findViewById(R.id.message)).setText("Let's see the results!!");
             // ListViewのインスタンスを生成
             ListView listView = (ListView) findViewById(R.id.listView);
 
             // BaseAdapter を継承したadapterのインスタンスを生成
-            // 子要素のレイアウトファイル competition_list_items.xml を activity_main.xml に inflate するためにadapterに引数として渡す
+            // 子要素のレイアウトファイル result_list_items.xml を activity_main.xml に inflate するためにadapterに引数として渡す
             adapter = new ListViewAdapter(this, R.layout.result_list_items);
 
             // ListViewにadapterをセット
@@ -133,8 +133,8 @@ public class Result extends Activity {
         ImageView image;
         TextView winNum;
         TextView endDate;
-        TextView totalApplicationNum;
-        TextView applicationNum;
+        TextView totalEntryNum;
+        TextView entryNum;
         TextView progress;
         Button checkResult;
     }
@@ -163,8 +163,8 @@ public class Result extends Activity {
                 holder.image = (ImageView) convertView.findViewById(R.id.image);
                 holder.winNum = (TextView) convertView.findViewById(R.id.winNum);
                 holder.endDate = (TextView) convertView.findViewById(R.id.endDate);
-                holder.totalApplicationNum = (TextView) convertView.findViewById(R.id.totalApplicationNum);
-                holder.applicationNum = (TextView) convertView.findViewById(R.id.applicationNum);
+                holder.totalEntryNum = (TextView) convertView.findViewById(R.id.totalEntryNum);
+                holder.entryNum = (TextView) convertView.findViewById(R.id.entryNum);
                 holder.progress = (TextView) convertView.findViewById(R.id.progress);
                 holder.checkResult = (Button)convertView.findViewById(R.id.checkResult);
                 holder.checkResult.setOnClickListener(this);
@@ -195,12 +195,12 @@ public class Result extends Activity {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            holder.totalApplicationNum.setText(String.valueOf(totalApplicationNums.get(position)));
-            holder.applicationNum.setText("Your Application Number : " + applicationNums.get(position));
+            holder.totalEntryNum.setText(String.valueOf(totalEntryNums.get(position)));
+            holder.entryNum.setText("Your Entry Number : " + entryNums.get(position));
 
             switch(progresses.get(position)){
                 case "1":
-                    holder.progress.setText("Currently in applying");
+                    holder.progress.setText("Currently in entry");
                     holder.checkResult.setVisibility(Button.GONE);
                     break;
                 case "2":
@@ -237,9 +237,9 @@ public class Result extends Activity {
          * リスト内のボタンがクリックされたら呼ばれる
          */
         public void onClick(View view) {
-            String competition_id = (String) view.getTag();
+            String sweepstakes_id = (String) view.getTag();
             Intent intent = new Intent(getApplicationContext(), ResultDialog.class);
-            intent.putExtra("competition_id", competition_id);
+            intent.putExtra("sweepstakes_id", sweepstakes_id);
             startActivity(intent);
             overridePendingTransition(0, 0);
         }

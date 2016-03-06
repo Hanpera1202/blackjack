@@ -59,9 +59,9 @@ public class ConfirmDialogFragment extends DialogFragment {
                     case "confirmHintByCoinDialog":
                         ((Playing)getActivity()).getHint();
                         break;
-                    case "confirmApplyDialog":
-                        String competitionId = getArguments().getString("id");
-                        ((Competition)getActivity()).applyCompetition(competitionId);
+                    case "confirmEntryDialog":
+                        String sweepstakesId = getArguments().getString("id");
+                        ((Sweepstakes)getActivity()).entrySweepstakes(sweepstakesId);
                         break;
                     case "confirmFreeChipsByCoinDialog":
                         ((Playing)getActivity()).beginFreeChipsByCoin();

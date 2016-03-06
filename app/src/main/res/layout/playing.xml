@@ -86,7 +86,7 @@
                 android:layout_height="@dimen/dp320_40dp"
                 android:layout_marginRight="@dimen/dp320_3dp"
                 android:onClick="onClickHeader"
-                android:background="@drawable/h_apply" />
+                android:background="@drawable/h_entry" />
 
             <Button
                 android:id="@+id/result"

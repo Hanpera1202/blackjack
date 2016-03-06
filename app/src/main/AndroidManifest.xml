@@ -49,7 +49,7 @@
             android:configChanges="orientation|keyboardHidden"
             android:launchMode="singleTask">
         </activity>
-        <activity android:name="com.ivoid.bj.Competition"
+        <activity android:name="com.ivoid.bj.Sweepstakes"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden"

@@ -52,8 +52,8 @@ public class AlertDialogFragment extends DialogFragment {
             public void onClick(View v) {
                 dismiss();
                 switch(getArguments().getString("dialogType")) {
-                    case "applyCompletedDialog":
-                        ((Competition) getActivity()).showAd();
+                    case "entryCompletedDialog":
+                        ((Sweepstakes) getActivity()).showAd();
                         break;
                     case "compRegistMailDialog":
                         getActivity().finish();

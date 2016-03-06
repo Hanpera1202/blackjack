@@ -25,7 +25,7 @@ public class Title extends FragmentActivity {
 
     Bitmap bgBmp;
 
-    private final String registUrl = "http://blackjack.uh-oh.jp/users";
+    private final String registUrl = "http://sweepstakes.uh-oh.jp/users";
     private SharedPreferences preference;
     private SharedPreferences.Editor editor;
 
@@ -100,7 +100,7 @@ public class Title extends FragmentActivity {
     void showActionButton(){
         (findViewById(R.id.message)).setVisibility(Button.VISIBLE);
         (findViewById(R.id.game)).setVisibility(Button.VISIBLE);
-        (findViewById(R.id.prize_competition)).setVisibility(Button.VISIBLE);
+        (findViewById(R.id.sweepstakes)).setVisibility(Button.VISIBLE);
     }
 
     // アラートダイアログ作成

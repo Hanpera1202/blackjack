@@ -58,7 +58,7 @@
             tools:ignore="MissingPrefix"/>
 
         <TextView
-            android:id="@+id/totalApplicationNum"
+            android:id="@+id/totalEntryNum"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/dp320_20sp"
@@ -69,7 +69,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=" Applications"
+            android:text=" Entries"
             android:textSize="@dimen/dp320_15sp"
             android:textColor="#292929"
             fontPath="fonts/Roboto-Bold.ttf"
@@ -78,7 +78,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/applicationNum"
+        android:id="@+id/entryNum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/dp320_15sp"

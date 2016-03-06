@@ -16,7 +16,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TICKET FOR THE PRIZE"
+            android:text="TICKET FOR ENTRY"
             android:textSize="@dimen/dp320_20sp"
             android:textColor="#EDB94A"
             fontPath="fonts/Roboto-Bold.ttf"
@@ -28,7 +28,7 @@
             android:layout_marginTop="@dimen/dp320_10dp"
             android:textSize="@dimen/dp320_20sp"
             android:textColor="#CFF6FF"
-            android:text="You got APPLY TICKET."
+            android:text="You got a Entry Ticket."
             android:gravity="center"
             fontPath="fonts/Roboto-Bold.ttf"
             tools:ignore="MissingPrefix"/>
@@ -45,7 +45,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
-                android:text="Apply Ticket"
+                android:text="Entry Ticket"
                 android:textSize="@dimen/dp320_20sp"
                 android:textColor="#EDEDED"
                 android:gravity="left"
@@ -86,9 +86,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp320_10dp"
             android:padding="@dimen/dp320_10dp"
-            android:textSize="@dimen/dp320_20sp"
+            android:textSize="@dimen/dp320_18sp"
             android:textColor="#ffffffff"
-            android:text="With this ticket,\nLet's apply for the prize."
+            android:text="With this ticket,\nLet's entry a sweepstakes."
             android:gravity="center"
             fontPath="fonts/Roboto-Bold.ttf"
             tools:ignore="MissingPrefix"
@@ -115,10 +115,10 @@
                 tools:ignore="MissingPrefix"/>
 
             <Button
-                android:id="@+id/apply"
+                android:id="@+id/entry"
                 android:layout_width="@dimen/dp320_100dp"
                 android:layout_height="@dimen/dp320_50dp"
-                android:text="APPLY"
+                android:text="ENTRY"
                 android:textSize="@dimen/dp320_20sp"
                 android:textColor="#ffffffff"
                 android:background="#ED684A"

@@ -30,8 +30,8 @@ public class ResultDialog extends FragmentActivity implements View.OnClickListen
 
     Game game;
 
-    private final String getResultUrl = "http://blackjack.uh-oh.jp/users/%s/results/%s";
-    private final String getMailRegistUrl = "http://blackjack.uh-oh.jp/users/%s";
+    private final String getResultUrl = "http://sweepstakes.uh-oh.jp/users/%s/results/%s";
+    private final String getMailRegistUrl = "http://sweepstakes.uh-oh.jp/users/%s";
 
     private String name;
     private String imageUrl;
@@ -62,7 +62,7 @@ public class ResultDialog extends FragmentActivity implements View.OnClickListen
         mail_address = preference.getString("mail_address", "");
 
         Intent i = getIntent();
-        String competition_id = i.getStringExtra("competition_id");
+        String sweepstakes_id = i.getStringExtra("sweepstakes_id");
 
         asyncJsonLoader = new AsyncJsonLoader(this, new AsyncJsonLoader.AsyncCallback() {
 
@@ -89,7 +89,7 @@ public class ResultDialog extends FragmentActivity implements View.OnClickListen
             }
         });
         // 処理を実行
-        asyncJsonLoader.execute(String.format(getResultUrl, game.getUserId(), competition_id));
+        asyncJsonLoader.execute(String.format(getResultUrl, game.getUserId(), sweepstakes_id));
     }
 
     @Override

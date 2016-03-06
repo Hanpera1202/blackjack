@@ -12,9 +12,6 @@ import android.widget.TextView;
 
 import com.bj.R;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-
 public class TicketDialogFragment extends DialogFragment {
 
     private GameSettings settings;
@@ -56,12 +53,12 @@ public class TicketDialogFragment extends DialogFragment {
         }
 
         // APPLY ボタンのリスナ
-        dialog.findViewById(R.id.apply).setOnClickListener(new View.OnClickListener() {
+        dialog.findViewById(R.id.entry).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dismiss();
                 Intent newIntent;
-                newIntent = new Intent(getActivity(), Competition.class);
+                newIntent = new Intent(getActivity(), Sweepstakes.class);
                 startActivity(newIntent);
                 getActivity().overridePendingTransition(0, 0);
             }

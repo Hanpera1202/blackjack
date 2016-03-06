@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/dp320_10dp"
-    android:background="#D6D6D6">
+    android:background="#121212">
 
     <LinearLayout
         android:orientation="vertical"
@@ -24,10 +24,9 @@
             android:id="@+id/resultMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/dp320_5dp"
             android:text="You got the prize."
             android:textSize="@dimen/dp320_20sp"
-            android:textColor="#8A2A27"
+            android:textColor="#EDB94A"
             fontPath="fonts/Roboto-Bold.ttf"
             tools:ignore="MissingPrefix"/>
 
@@ -35,8 +34,9 @@
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/dp320_20sp"
-            android:textColor="#D68E3C"
+            android:layout_marginTop="@dimen/dp320_10dp"
+            android:textSize="@dimen/dp320_18sp"
+            android:textColor="#D6D6D6"
             fontPath="fonts/Roboto-Bold.ttf"
             tools:ignore="MissingPrefix"/>
 
@@ -44,13 +44,14 @@
             android:id="@+id/image"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp320_100dp"
-            android:layout_margin="@dimen/dp320_20dp"
+            android:layout_marginTop="@dimen/dp320_10dp"
             android:scaleType="fitCenter"/>
 
         <TextView
             android:id="@+id/receive_msg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp320_10dp"
             android:text="The prize is already receiving."
             android:textSize="@dimen/dp320_20sp"
             android:textColor="#D7413C"
@@ -61,10 +62,10 @@
             android:id="@+id/positive_button"
             android:layout_width="@dimen/dp320_170dp"
             android:layout_height="@dimen/dp320_50dp"
+            android:layout_marginTop="@dimen/dp320_10dp"
             android:text="Recieve the prize"
             android:textSize="@dimen/dp320_20sp"
             android:textColor="#D6D6D6"
-            android:layout_marginTop="@dimen/dp320_5dp"
             android:background="#D7413C"
             fontPath="fonts/Roboto-Bold.ttf"
             tools:ignore="MissingPrefix"/>

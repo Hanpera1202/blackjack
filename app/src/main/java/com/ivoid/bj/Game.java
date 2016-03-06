@@ -96,7 +96,7 @@ public class Game extends Application
                 break;
             }
             case R.id.competition: {
-                newIntent = new Intent(this, Competition.class);
+                newIntent = new Intent(this, Sweepstakes.class);
                 break;
             }
             case R.id.result: {

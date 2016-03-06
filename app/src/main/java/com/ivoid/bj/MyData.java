@@ -65,7 +65,7 @@ public class MyData extends Activity {
                 break;
             }
             case R.id.competition: {
-                Intent intent = new Intent(this, Competition.class);
+                Intent intent = new Intent(this, Sweepstakes.class);
                 startActivity(intent);
                 finish();
                 overridePendingTransition(0, 0);

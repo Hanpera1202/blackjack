@@ -33,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp320_10dp"
-            android:text="Play for free. Earn for prize.\nEarn APPLY TICKTS by playing game."
+            android:text="Play for free. Enter a sweepstakes.\nEarn ENTRY TICKTS by playing game."
             android:textSize="@dimen/dp320_14sp"
             android:textColor="#ffffffff"
             android:gravity="center"
@@ -53,12 +53,12 @@
             android:visibility="invisible"/>
 
         <LinearLayout
-            android:id="@+id/prize_competition"
+            android:id="@+id/sweepstakes"
             android:layout_width="@dimen/dp320_300dp"
             android:layout_height="@dimen/dp320_259dp"
             android:layout_marginTop="@dimen/dp320_10dp"
             android:orientation="vertical"
-            android:background="@drawable/frame_prize"
+            android:background="@drawable/frame_sweepstakes"
             android:layout_below="@id/game"
             android:gravity="top|center"
             android:visibility="invisible">
@@ -68,7 +68,7 @@
                 android:layout_width="@dimen/dp320_250dp"
                 android:layout_height="@dimen/dp320_60dp"
                 android:layout_marginTop="@dimen/dp320_100dp"
-                android:background="@drawable/btn_apply"
+                android:background="@drawable/btn_entry"
                 android:onClick="onClickHeader"/>
 
             <Button
