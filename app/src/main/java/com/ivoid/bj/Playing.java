@@ -39,22 +39,11 @@ import com.google.android.gms.ads.AdListener;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-
-/*
- * I'm God.
- */
-
-/*TODO
- * Pause in between dealCard()s in act()
- * Show amount in pot
- *  
- */
-
 public class Playing extends FragmentActivity implements OnClickListener
 {
     Game game;
 
-	private Vibrator vibrator;
+    private Vibrator vibrator;
     private SoundPool mSoundPool;
     private int mCardfall;
     private int mCash;
@@ -65,44 +54,44 @@ public class Playing extends FragmentActivity implements OnClickListener
     private int mInsuranceWin;
     private int mInsuranceLose;
 
-	private GameSettings settings; 
-	private Deck shoe;
-	private BJHand dealerHand;
-	private TextView dealerSum;
+    private GameSettings settings; 
+    private Deck shoe;
+    private BJHand dealerHand;
+    private TextView dealerSum;
     private Card faceDownCard;
 
-	private Player player; 
-	private BJHand currentPlayerHand;
-	private RelativeLayout currentPlayerHandView;
+    private Player player; 
+    private BJHand currentPlayerHand;
+    private RelativeLayout currentPlayerHandView;
     private RelativeLayout currentPlayerSumView;
-	private LinearLayout currentPlayerBetView;
-	private TextView currentPlayerBetNumView;
-	private boolean betting, getNextAction;
-	
-	private RelativeLayout dealerHandView;
+    private LinearLayout currentPlayerBetView;
+    private TextView currentPlayerBetNumView;
+    private boolean betting, getNextAction;
+    
+    private RelativeLayout dealerHandView;
     private RelativeLayout dealerSumView;
 
-	private ArrayList<RelativeLayout> playerHandViews;
+    private ArrayList<RelativeLayout> playerHandViews;
     private ArrayList<RelativeLayout> playerSumViews;
-	private ArrayList<LinearLayout> playerBetViews;
-	private ArrayList<TextView> playerBetNumViews;
-	private ArrayList<RelativeLayout> playerOverViews;
-	private ArrayList<ImageView> playerResults;
+    private ArrayList<LinearLayout> playerBetViews;
+    private ArrayList<TextView> playerBetNumViews;
+    private ArrayList<RelativeLayout> playerOverViews;
+    private ArrayList<ImageView> playerResults;
 
-	private TextView playerBet;
-	private TextView playerSum;
-	private TextView playerCash;
+    private TextView playerBet;
+    private TextView playerSum;
+    private TextView playerCash;
     private TextView playerCoinNum;
     private TextView playerMaxBet;
 
     private RelativeLayout playerCoin;
 
-	private Map<Integer, Action> buttons;
-	private Map<BJHand, RelativeLayout> hands;
+    private Map<Integer, Action> buttons;
+    private Map<BJHand, RelativeLayout> hands;
 
-	private final Handler handler = new Handler();
+    private final Handler handler = new Handler();
 
-	private byte currentPlayerIndex;
+    private byte currentPlayerIndex;
     private byte nextHandtoPlay;
 
     private SharedPreferences preference;
@@ -130,9 +119,9 @@ public class Playing extends FragmentActivity implements OnClickListener
     private int playCount;
 
     @Override
-	public void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
+    public void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
         game = (Game) this.getApplication();
 
         //プリファレンスの準備
@@ -140,11 +129,11 @@ public class Playing extends FragmentActivity implements OnClickListener
         editor = preference.edit();
 
         settings = new GameSettings();
-		shoe = new Deck( (byte)settings.decks,
-						 (byte)settings.burns,
-						 (byte)settings.shuffleTimes
-					   ); 
-		dealerHand = new BJHand("Dealer");
+        shoe = new Deck( (byte)settings.decks,
+                         (byte)settings.burns,
+                         (byte)settings.shuffleTimes
+                       ); 
+        dealerHand = new BJHand("Dealer");
 
         player = new Player(getApplicationContext(), "God");
 
@@ -338,115 +327,115 @@ public class Playing extends FragmentActivity implements OnClickListener
     }
 
     private void initUI()
-	{
+    {
         buttons = new HashMap<Integer, Action>();
 
         if (betting)
-		{
-			buttons.put(R.id.clearButton, Action.CLEAR);
-			buttons.put(R.id.dealButton, Action.DEAL);
+        {
+            buttons.put(R.id.clearButton, Action.CLEAR);
+            buttons.put(R.id.dealButton, Action.DEAL);
 
-			buttons.put(R.id.bet_10, Action.TEN);
-			buttons.put(R.id.bet_50, Action.FIFTY);
-			buttons.put(R.id.bet_100, Action.ONEHUNDRED);
-			buttons.put(R.id.bet_500, Action.FIVEHUNDRED);
+            buttons.put(R.id.bet_10, Action.TEN);
+            buttons.put(R.id.bet_50, Action.FIFTY);
+            buttons.put(R.id.bet_100, Action.ONEHUNDRED);
+            buttons.put(R.id.bet_500, Action.FIVEHUNDRED);
             buttons.put(R.id.bet_all, Action.ALL);
             buttons.put(R.id.rebet, Action.REBET);
 
             collectBet(player.getRebet());
 
-		}
-		else
-		{
-			getNextAction=true;
+        }
+        else
+        {
+            getNextAction=true;
             player.withdraw(currentPlayerHand.getBet().getValue());
             addPlayerPoint(currentPlayerHand.getBet().getValue() / settings.pointDivisor);
-			
-			buttons.put(R.id.standButton, Action.STAND);
-			buttons.put(R.id.hitButton, Action.HIT);
+            
+            buttons.put(R.id.standButton, Action.STAND);
+            buttons.put(R.id.hitButton, Action.HIT);
             buttons.put(R.id.surrenderButton, Action.SURRENDER);
-			buttons.put(R.id.ddButton, Action.DOUBLEDOWN);
-			buttons.put(R.id.splitButton, Action.SPLIT);
+            buttons.put(R.id.ddButton, Action.DOUBLEDOWN);
+            buttons.put(R.id.splitButton, Action.SPLIT);
             buttons.put(R.id.insuranceYes, Action.INSURANCE_YES);
             buttons.put(R.id.insuranceNo, Action.INSURANCE_NO);
 
             hands=new HashMap<BJHand, RelativeLayout>();
 
-			hands.put(player.getHand((byte) 0), playerHandViews.get(0));
-			hands.put(dealerHand, dealerHandView);
+            hands.put(player.getHand((byte) 0), playerHandViews.get(0));
+            hands.put(dealerHand, dealerHandView);
 
-			currentPlayerIndex = 0;
-			currentPlayerHandView=playerHandViews.get(currentPlayerIndex);
+            currentPlayerIndex = 0;
+            currentPlayerHandView=playerHandViews.get(currentPlayerIndex);
             currentPlayerSumView=playerSumViews.get(currentPlayerIndex);
-			currentPlayerBetView=playerBetViews.get(currentPlayerIndex);
-			currentPlayerBetNumView=playerBetNumViews.get(currentPlayerIndex);
+            currentPlayerBetView=playerBetViews.get(currentPlayerIndex);
+            currentPlayerBetNumView=playerBetNumViews.get(currentPlayerIndex);
 
-			dealerSum=(TextView) dealerSumView.getChildAt(1);
+            dealerSum=(TextView) dealerSumView.getChildAt(1);
 
             setBet((LinearLayout) currentPlayerBetView.getChildAt(0), (int) player.getInitBet());
-			updatePlayerBetlblForPlaying();
+            updatePlayerBetlblForPlaying();
             updatePlayerCashlbl();
 
         }
 
-		vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
-		for (final Integer entry : buttons.keySet()) {
-			((Button) findViewById(entry)).setOnClickListener(this);
-		}
-	}
+        for (final Integer entry : buttons.keySet()) {
+            ((Button) findViewById(entry)).setOnClickListener(this);
+        }
+    }
 
-	void payTransaction ( int betValue, float ratio )
-	{
-		player.deposit(betValue);
-		
-		//calculate reward based on hand's performance in this bj round (indicated by ratio)
-		int reward = (int)(betValue * ratio);
+    void payTransaction ( int betValue, float ratio )
+    {
+        player.deposit(betValue);
+        
+        //calculate reward based on hand's performance in this bj round (indicated by ratio)
+        int reward = (int)(betValue * ratio);
 
-		player.deposit(reward);
+        player.deposit(reward);
     }
 
     void payout ()
-	{
-		byte dealerValue=dealerHand.getBJValue(); // the dealer's hand's value
-		
-		for ( BJHand hand: player.getHands() )
-		{	
-			if ( !hand.toBePayed() )	continue; //if the hand still needs to be payed
+    {
+        byte dealerValue=dealerHand.getBJValue(); // the dealer's hand's value
+        
+        for ( BJHand hand: player.getHands() )
+        {    
+            if ( !hand.toBePayed() )    continue; //if the hand still needs to be payed
 
-			byte handValue = hand.getBJValue(); //the hand's hard value
-			int betValue = hand.getBet().getValue(); //the hand's bet
+            byte handValue = hand.getBJValue(); //the hand's hard value
+            int betValue = hand.getBet().getValue(); //the hand's bet
 
-			if ( player.howManyHands() == 1 && hand.hasBJ()){
-				if(!dealerHand.hasBJ()) {
-					payTransaction(betValue, settings.bjPay);
-					hand.setStatus(Status.BLACKJACK);
+            if ( player.howManyHands() == 1 && hand.hasBJ()){
+                if(!dealerHand.hasBJ()) {
+                    payTransaction(betValue, settings.bjPay);
+                    hand.setStatus(Status.BLACKJACK);
                     player.setData("blackjacks");
-				}else{
-					payTransaction(betValue, 0f);
-					hand.setStatus(Status.PUSH);
+                }else{
+                    payTransaction(betValue, 0f);
+                    hand.setStatus(Status.PUSH);
                     player.setData("pushs");
                 }
-			}
-			else if ( dealerHand.didBust() || handValue > dealerValue ) {
-				payTransaction(betValue, settings.winPay);
-				hand.setStatus(Status.WON);
+            }
+            else if ( dealerHand.didBust() || handValue > dealerValue ) {
+                payTransaction(betValue, settings.winPay);
+                hand.setStatus(Status.WON);
                 player.setData("wins");
                 if(hand.didDD()){
                     player.setData("doublewins");
                 }
-			}
-			else if( dealerHand.hasBJ() || handValue < dealerValue) {
-				hand.setStatus(Status.LOST);
-			}
-			else {
-				payTransaction(betValue, 0f); /* if the hands tie in value, the player simply get his money back */
-				hand.setStatus(Status.PUSH);
+            }
+            else if( dealerHand.hasBJ() || handValue < dealerValue) {
+                hand.setStatus(Status.LOST);
+            }
+            else {
+                payTransaction(betValue, 0f); /* if the hands tie in value, the player simply get his money back */
+                hand.setStatus(Status.PUSH);
                 player.setData("pushs");
-			}
-		}
+            }
+        }
         updatePlayerResultlbl();
-	}
+    }
 
     void insurancePayout ()
     {
@@ -488,15 +477,15 @@ public class Playing extends FragmentActivity implements OnClickListener
         }
     }
 
-	void newGame()
-	{
+    void newGame()
+    {
         int beforeHandCnt = player.howManyHands();
         Status beforeStatus = player.getHand((byte) 0).getStatus();
         dealerHand.update();
-		player.update();
-		currentPlayerHand=player.getHand((byte) 0);
-		betting=true;
-		getNextAction=false;
+        player.update();
+        currentPlayerHand=player.getHand((byte) 0);
+        betting=true;
+        getNextAction=false;
         waittime = 0;
         // update playerBet to 0
         updatePlayerBetlbl();
@@ -506,44 +495,44 @@ public class Playing extends FragmentActivity implements OnClickListener
         }else{
             execInitUIWhenBetting(500, false);
         }
-	}
+    }
 
-	void clearBet()
-	{
-		BJHand hand = player.getHand((byte) 0);
-		hand.clearBet(); //remove the bet from the table
+    void clearBet()
+    {
+        BJHand hand = player.getHand((byte) 0);
+        hand.clearBet(); //remove the bet from the table
         updatePlayerBetlbl();
-	}
-	
-	void collectBet(int stake)
-	{
+    }
+    
+    void collectBet(int stake)
+    {
         int betValue=currentPlayerHand.getBet().getValue();
         if( stake > player.getBalance() - betValue ||
                 stake + betValue > player.getMaxBet()
                 ) {
             return;
-		}
+        }
 
-		player.getHand((byte) 0).incrementBet(stake);
+        player.getHand((byte) 0).incrementBet(stake);
 
         updatePlayerBetlbl();
     }
 
-	void checkPlayerHand(BJHand hand)
-	{
-		hand.checkIfBusted();
-		hand.checkIfHasBJ();
+    void checkPlayerHand(BJHand hand)
+    {
+        hand.checkIfBusted();
+        hand.checkIfHasBJ();
         hand.checkIfHas21();
 
-		if(hand.didBust()) // bust animation
-		{
+        if(hand.didBust()) // bust animation
+        {
             hand.setStatus(Status.LOST);
             hand.setToBePayed(false);
-			hand.setPlaying(false);
+            hand.setPlaying(false);
 
             updatePlayerResultlbl();
-		} 
-		else if(hand.hasBJ() || hand.has21()) {
+        } 
+        else if(hand.hasBJ() || hand.has21()) {
             hand.setPlaying(false);
         }
     }
@@ -563,36 +552,36 @@ public class Playing extends FragmentActivity implements OnClickListener
         }
     }
 
-	void dd(BJHand hand)
-	{
-		if (hand.getCardCount()==2)
-		{
+    void dd(BJHand hand)
+    {
+        if (hand.getCardCount()==2)
+        {
             player.setData("doubles");
 
             //check 10/11
-			byte handHardBJValue = hand.getHardBJValue(); 
-			
-			if (handHardBJValue == 10 || handHardBJValue==11)
-				if (!settings.dd1011)
-					return;
-			
-			hand.takeDD();
-			
-			int betValue = hand.getBet().getValue();
-			
-			hand.incrementBet(betValue);
-			
-			player.withdraw(betValue);
+            byte handHardBJValue = hand.getHardBJValue(); 
+            
+            if (handHardBJValue == 10 || handHardBJValue==11)
+                if (!settings.dd1011)
+                    return;
+            
+            hand.takeDD();
+            
+            int betValue = hand.getBet().getValue();
+            
+            hand.incrementBet(betValue);
+            
+            player.withdraw(betValue);
             addPlayerPoint(currentPlayerHand.getBet().getValue() / settings.pointDivisor);
 
-			updatePlayerCashlbl();
+            updatePlayerCashlbl();
 
             dealCard(hand);
 
             setBet((LinearLayout) currentPlayerBetView.getChildAt(1), betValue);
-			updatePlayerBetlblForPlaying();
+            updatePlayerBetlblForPlaying();
 
-			hand.setPlaying(false);
+            hand.setPlaying(false);
 
             handler.postDelayed(new Runnable() {
                 int NowIndex = currentPlayerIndex;
@@ -603,21 +592,21 @@ public class Playing extends FragmentActivity implements OnClickListener
             }, waittime);
 
             checkPlayerHand(hand);
-		}
-	}
-	
-	void split(BJHand hand)
-	{
-		if (hand.splitable(settings.aceResplit) && player.howManyHands()<(settings.splits+1))
-		{
+        }
+    }
+    
+    void split(BJHand hand)
+    {
+        if (hand.splitable(settings.aceResplit) && player.howManyHands()<(settings.splits+1))
+        {
             player.setData("splits");
             //remove the second card from the first hand and make a new hand with it
-			int betValue=hand.getBet().getValue();
-			Card poppedCard = hand.popCard((byte) 1);
-			((RelativeLayout)(currentPlayerHandView.getChildAt(0))).removeViewAt(1);
+            int betValue=hand.getBet().getValue();
+            Card poppedCard = hand.popCard((byte) 1);
+            ((RelativeLayout)(currentPlayerHandView.getChildAt(0))).removeViewAt(1);
             playerSumViews.get(0).setVisibility(RelativeLayout.INVISIBLE);
 
-			BJHand splitHand = new BJHand(hand.ownerName, poppedCard, betValue);
+            BJHand splitHand = new BJHand(hand.ownerName, poppedCard, betValue);
             player.addHand(splitHand);
             player.withdraw(betValue);
             addPlayerPoint(currentPlayerHand.getBet().getValue() / settings.pointDivisor);
@@ -626,26 +615,26 @@ public class Playing extends FragmentActivity implements OnClickListener
             hands.put(splitHand, playerHandViews.get(1));
             findViewById(R.id.CenterView).setVisibility(View.VISIBLE);
 
-			setBet((LinearLayout) playerBetViews.get(1).getChildAt(0), player.getInitBet());
+            setBet((LinearLayout) playerBetViews.get(1).getChildAt(0), player.getInitBet());
             currentPlayerBetNumView=playerBetNumViews.get(1);
             updatePlayerBetlblForPlaying();
             currentPlayerBetNumView=playerBetNumViews.get(0);
 
-	    	ImageView cardImage=new ImageView(this);
-	    	cardImage.setImageResource(poppedCard.getImage());
+            ImageView cardImage=new ImageView(this);
+            cardImage.setImageResource(poppedCard.getImage());
 
-			cardImage.setScaleType(ImageView.ScaleType.FIT_XY);
+            cardImage.setScaleType(ImageView.ScaleType.FIT_XY);
 
             // dp × density + 0.5f（四捨五入)
             int w_px = (int) (getResources().getInteger(R.integer.dp320_80) * getResources().getDisplayMetrics().density + 0.5f);
             int h_px = (int) (getResources().getInteger(R.integer.dp320_120) * getResources().getDisplayMetrics().density + 0.5f);
 
-			LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(w_px, h_px);
-			cardImage.setLayoutParams(lp);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(w_px, h_px);
+            cardImage.setLayoutParams(lp);
 
-	    	((RelativeLayout)(hands.get(splitHand).getChildAt(0))).addView(cardImage);
+            ((RelativeLayout)(hands.get(splitHand).getChildAt(0))).addView(cardImage);
 
-			dealCard(hand);
+            dealCard(hand);
             handler.postDelayed(new Runnable() {
                 public void run() {
                     updatePlayerSumlbl(0);
@@ -661,28 +650,28 @@ public class Playing extends FragmentActivity implements OnClickListener
                     playerSumViews.get(1).setVisibility(RelativeLayout.VISIBLE);
                 }
             }, waittime);
-			checkPlayerHand(splitHand);
+            checkPlayerHand(splitHand);
 
             if(poppedCard.getValue() == 1){
-				for ( byte b=0 ; b < player.howManyHands() ; b++ )
-					player.getHand(b).setPlaying(false);
-			}
-		}
-	}
+                for ( byte b=0 ; b < player.howManyHands() ; b++ )
+                    player.getHand(b).setPlaying(false);
+            }
+        }
+    }
 
-	void disableButtons()
-	{
-		for (final Integer entry : buttons.keySet())
-		{
+    void disableButtons()
+    {
+        for (final Integer entry : buttons.keySet())
+        {
             ((Button) findViewById(entry)).setVisibility(Button.INVISIBLE);
             ((Button) findViewById(entry)).setOnClickListener(null);
-		}
+        }
         buttons = null;
         setPlayerCoin(RelativeLayout.INVISIBLE);
-	}
+    }
 
-	void act()
-	{
+    void act()
+    {
         faceUpCard(dealerHand, faceDownCard);
         updateDealerSumlbl(dealerHand.getSoftBJValue(), dealerHand.getHardBJValue());
         waittime += 150;
@@ -701,8 +690,8 @@ public class Playing extends FragmentActivity implements OnClickListener
             }
         }
 
-		dealerHand.checkIfHasBJ();
-		dealerHand.checkIfBusted();
+        dealerHand.checkIfHasBJ();
+        dealerHand.checkIfBusted();
 
         if (player.tookInsurance()) {
             insurancePayout();
@@ -716,10 +705,10 @@ public class Playing extends FragmentActivity implements OnClickListener
             }
         }, waittime);
 
-	}
+    }
 
     private ArrayList<ImageView> betImages;
-	void setBet(LinearLayout playerBet, int betNum)
+    void setBet(LinearLayout playerBet, int betNum)
     {
         betImages=new ArrayList<ImageView>();
         while(betNum > 0 && betImages.size() < 5) {
@@ -774,24 +763,24 @@ public class Playing extends FragmentActivity implements OnClickListener
 
     }
 
-	void firstDeal()
-	{
-		dealCard(currentPlayerHand);
-		dealCard(dealerHand, true);
-		dealCard(currentPlayerHand);
+    void firstDeal()
+    {
+        dealCard(currentPlayerHand);
+        dealCard(dealerHand, true);
+        dealCard(currentPlayerHand);
         dealCard(dealerHand, true, true);
 
-		currentPlayerHand.checkIfHasBJ();
+        currentPlayerHand.checkIfHasBJ();
 
-		updatePlayerSumlbl(0);
+        updatePlayerSumlbl(0);
         updateDealerSumlbl(dealerHand.getSoftBJValue(), dealerHand.getHardBJValue());
 
-		handler.postDelayed(new Runnable() {
+        handler.postDelayed(new Runnable() {
             public void run() {
                 dealerSumView.setVisibility(RelativeLayout.VISIBLE);
             }
         }, waittime);
-		handler.postDelayed(new Runnable() {
+        handler.postDelayed(new Runnable() {
             public void run() {
                 currentPlayerSumView.setVisibility(RelativeLayout.VISIBLE);
             }
@@ -811,7 +800,7 @@ public class Playing extends FragmentActivity implements OnClickListener
                 }, waittime);
             }
         }
-	}
+    }
 
     boolean isInsurable()
     {
@@ -936,9 +925,9 @@ public class Playing extends FragmentActivity implements OnClickListener
     void dealCard(BJHand hand, boolean playerFlg) {
         dealCard(hand, playerFlg, false);
     }
-	void dealCard(BJHand hand, boolean dealerFlg, boolean faceDown)
-	{
-	    Card card=shoe.drawCard();
+    void dealCard(BJHand hand, boolean dealerFlg, boolean faceDown)
+    {
+        Card card=shoe.drawCard();
 
         if (faceDown) {
             card.flip();
@@ -949,37 +938,37 @@ public class Playing extends FragmentActivity implements OnClickListener
 
         ImageView cardImage=new ImageView(this);
         cardImage.setImageResource(card.getImage());
-		cardImage.setScaleType(ImageView.ScaleType.FIT_XY);
+        cardImage.setScaleType(ImageView.ScaleType.FIT_XY);
 
         int w_px = (int) (getResources().getInteger(R.integer.dp320_80) * getResources().getDisplayMetrics().density + 0.5f);
         int h_px = (int) (getResources().getInteger(R.integer.dp320_120) * getResources().getDisplayMetrics().density + 0.5f);
         int margin_w_px = (int) (getResources().getInteger(R.integer.dp320_12) * getResources().getDisplayMetrics().density + 0.5f) ;
 
-		if(hand.getCardCount() > 1) {
-			//マージンを設定
+        if(hand.getCardCount() > 1) {
+            //マージンを設定
             RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(w_px, h_px);
-			lp.setMargins(margin_w_px * (hand.getCardCount() - 1), 0, 0, 0);
-			cardImage.setLayoutParams(lp);
+            lp.setMargins(margin_w_px * (hand.getCardCount() - 1), 0, 0, 0);
+            cardImage.setLayoutParams(lp);
 
-		}else{
-			LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(w_px, h_px);
-			cardImage.setLayoutParams(lp);
-		}
+        }else{
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(w_px, h_px);
+            cardImage.setLayoutParams(lp);
+        }
 
         int w_anim_start_px = (int) (getResources().getInteger(R.integer.dp320_350) * getResources().getDisplayMetrics().density + 0.5f);
         int h_anim_start_px = (int) (getResources().getInteger(R.integer.dp320_200) * getResources().getDisplayMetrics().density + 0.5f);
 
-		if(!dealerFlg) {
-			TranslateAnimation translate = new TranslateAnimation(w_anim_start_px, 0, -h_anim_start_px, 0);
-			translate.setDuration(500);
-			translate.setStartOffset(waittime);
-			cardImage.startAnimation(translate);
-		}else{
-			TranslateAnimation translate = new TranslateAnimation(w_anim_start_px, 0, 0, 0);
-			translate.setDuration(500);
-			translate.setStartOffset(waittime);
-			cardImage.startAnimation(translate);
-		}
+        if(!dealerFlg) {
+            TranslateAnimation translate = new TranslateAnimation(w_anim_start_px, 0, -h_anim_start_px, 0);
+            translate.setDuration(500);
+            translate.setStartOffset(waittime);
+            cardImage.startAnimation(translate);
+        }else{
+            TranslateAnimation translate = new TranslateAnimation(w_anim_start_px, 0, 0, 0);
+            translate.setDuration(500);
+            translate.setStartOffset(waittime);
+            cardImage.startAnimation(translate);
+        }
 
         RelativeLayout handView=(RelativeLayout)(hands.get(hand).getChildAt(0));
         handView.addView(cardImage);
@@ -1016,29 +1005,29 @@ public class Playing extends FragmentActivity implements OnClickListener
         hand.addCard(null);
     }
 
-	void updatePlayerSumlbl(int handIndex)
+    void updatePlayerSumlbl(int handIndex)
     {
-		BJHand hand = player.getHand((byte) handIndex);
-		byte soft = hand.getSoftBJValue();
-		String softString = "";
+        BJHand hand = player.getHand((byte) handIndex);
+        byte soft = hand.getSoftBJValue();
+        String softString = "";
 
-		if (soft > 0) softString = "/" + String.valueOf(soft);
+        if (soft > 0) softString = "/" + String.valueOf(soft);
 
         RelativeLayout playerSumView = playerSumViews.get(handIndex);
-		playerSum = (TextView) playerSumView.getChildAt(1);
-		playerSum.setText(String.valueOf(hand.getHardBJValue()) + softString);
-	}
+        playerSum = (TextView) playerSumView.getChildAt(1);
+        playerSum.setText(String.valueOf(hand.getHardBJValue()) + softString);
+    }
 
-	void updateDealerSumlbl(byte soft, byte hard)
-	{
-		String softString = "";
+    void updateDealerSumlbl(byte soft, byte hard)
+    {
+        String softString = "";
 
-		if (soft > 0)    softString = "/"+ String.valueOf(soft);
+        if (soft > 0)    softString = "/"+ String.valueOf(soft);
 
         dealerSum.setText(String.valueOf(hard)  + softString );
-	}
+    }
 
-	void updatePlayerBetlbl()
+    void updatePlayerBetlbl()
     {playerBet.setText(String.valueOf(player.getInitBet()));}
 
     void updatePlayerBetlblForPlaying()
@@ -1145,10 +1134,10 @@ public class Playing extends FragmentActivity implements OnClickListener
             if(player.getHand(global_b).finished()){
                 continue;
             }
-			switch (player.getHand(global_b).getStatus()) {
-    			case PLAYING:break;
-    			case SURRENDERED:
-    			{
+            switch (player.getHand(global_b).getStatus()) {
+                case PLAYING:break;
+                case SURRENDERED:
+                {
                     handler.postDelayed(new Runnable() {
                         byte index = global_b;
 
@@ -1159,9 +1148,9 @@ public class Playing extends FragmentActivity implements OnClickListener
                     }, waittime);
                     player.getHand(global_b).setFinished(true);
                     break;
-    			}
-				case BLACKJACK:
-				{
+                }
+                case BLACKJACK:
+                {
                     handler.postDelayed(new Runnable() {
                         public void run() {
                             findViewById(R.id.playerBlackjack).setVisibility(ImageView.VISIBLE);
@@ -1178,9 +1167,9 @@ public class Playing extends FragmentActivity implements OnClickListener
                     soundWaittime += 1000;
                     player.getHand(global_b).setFinished(true);
                     break;
-				}
-				case WON:
-    			{
+                }
+                case WON:
+                {
                     handler.postDelayed(new Runnable() {
                         byte index = global_b;
                         public void run() {
@@ -1198,10 +1187,10 @@ public class Playing extends FragmentActivity implements OnClickListener
                         winSoundFlg = true;
                     }
                     player.getHand(global_b).setFinished(true);
-    				break;
-    			}
-    			case PUSH:
-    			{
+                    break;
+                }
+                case PUSH:
+                {
                     handler.postDelayed(new Runnable() {
                         byte index = global_b;
 
@@ -1220,9 +1209,9 @@ public class Playing extends FragmentActivity implements OnClickListener
                         pushSoundFlg = true;
                     }
                     player.getHand(global_b).setFinished(true);
-    				break;
-    			}
-    			case LOST: {
+                    break;
+                }
+                case LOST: {
                     handler.postDelayed(new Runnable() {
                         byte index = global_b;
 
@@ -1241,16 +1230,16 @@ public class Playing extends FragmentActivity implements OnClickListener
                         loseSoundFlg = true;
                     }
                     player.getHand(global_b).setFinished(true);
-					break;
-				}
-    		}
-    	}
+                    break;
+                }
+            }
+        }
         if(animWaittime != soundWaittime){
             waittime += 300;
         }
     }
     
-	public void onClick(final View view)
+    public void onClick(final View view)
     {
         if(clickable != true){
             return;
@@ -1258,20 +1247,20 @@ public class Playing extends FragmentActivity implements OnClickListener
         clickable = false;
         waittime = 0;
 
-       	final Action action = buttons.get(view.getId());
+           final Action action = buttons.get(view.getId());
         
         if (betting)
         {
-        	switch (action) 
-        	{
-        		case DEAL:
-        		{
-					if (player.getInitBet()>=settings.tableMin && player.getInitBet() <= player.getMaxBet()) {
+            switch (action) 
+            {
+                case DEAL:
+                {
+                    if (player.getInitBet()>=settings.tableMin && player.getInitBet() <= player.getMaxBet()) {
                         player.setData("plays");
                         player.experience(1);
                         playCount++;
                         game.setHeaderNextLevel(player,(RelativeLayout) findViewById(R.id.header));
-        				betting= false;
+                        betting= false;
                         // dealer view reset
                         RelativeLayout handView = (RelativeLayout) (dealerHandView.getChildAt(0));
                         handView.removeAllViews();
@@ -1292,18 +1281,18 @@ public class Playing extends FragmentActivity implements OnClickListener
                         ((LinearLayout)(findViewById(R.id.insuranceBet))).removeAllViews();
                         initUI();
                         firstDeal();
-						findViewById(R.id.betting).setVisibility(LinearLayout.INVISIBLE);
+                        findViewById(R.id.betting).setVisibility(LinearLayout.INVISIBLE);
                         setPlayerCoin(RelativeLayout.INVISIBLE);
-					}
-        			break;
-        		}
-        		case CLEAR:
-        		{
-	        		clearBet();
-        			break;
-        		}
+                    }
+                    break;
+                }
+                case CLEAR:
+                {
+                    clearBet();
+                    break;
+                }
                 case ALL:
-				{
+                {
                     int maxbet;
                     if(player.getBalance() > player.getMaxBet()){
                         maxbet = player.getMaxBet() - currentPlayerHand.getBet().getValue();
@@ -1312,45 +1301,45 @@ public class Playing extends FragmentActivity implements OnClickListener
                     }
                     maxbet = maxbet - (maxbet % (int)settings.tableMin);
                     collectBet(maxbet);
-					break;
-				}
-				case REBET:
-        		{
-        			collectBet(currentPlayerHand.getBet().getValue());
-        			break;
-        		}
-				case TEN:
-        		{
-	        		collectBet(10);
-        			break;
-        		}
-        		case FIFTY:
-	        	{
-        			collectBet(50);
-        			break;
-        		}
-	        	case ONEHUNDRED:
-        		{
-        			collectBet(100);
-        			break;
-	        	}
-        		case FIVEHUNDRED:
-        		{
-        			collectBet(500);
-        			break;
-	        	}
+                    break;
+                }
+                case REBET:
+                {
+                    collectBet(currentPlayerHand.getBet().getValue());
+                    break;
+                }
+                case TEN:
+                {
+                    collectBet(10);
+                    break;
+                }
+                case FIFTY:
+                {
+                    collectBet(50);
+                    break;
+                }
+                case ONEHUNDRED:
+                {
+                    collectBet(100);
+                    break;
+                }
+                case FIVEHUNDRED:
+                {
+                    collectBet(500);
+                    break;
+                }
             }
 
             vibrator.vibrate(40);
-		}
+        }
         else
         {
-        	switch (action)
-        	{
-    			case HIT:
-    			{
-    				dealCard(currentPlayerHand);
-					handler.postDelayed(new Runnable() {
+            switch (action)
+            {
+                case HIT:
+                {
+                    dealCard(currentPlayerHand);
+                    handler.postDelayed(new Runnable() {
                         int NowIndex = currentPlayerIndex;
 
                         public void run() {
@@ -1368,13 +1357,13 @@ public class Playing extends FragmentActivity implements OnClickListener
                 case DOUBLEDOWN: {
                     dd(currentPlayerHand);
                     checkActionButton();
-					break;
+                    break;
                 }
                 case SPLIT: {
                     split(currentPlayerHand);
                     checkActionButton();
                     break;
-    			}
+                }
                 case SURRENDER: {
                     surrender(currentPlayerHand);
                     break;
@@ -1388,13 +1377,13 @@ public class Playing extends FragmentActivity implements OnClickListener
                     endInsurance();
                     break;
                 }
-        	}
-        	
-        	vibrator.vibrate(40);
+            }
+            
+            vibrator.vibrate(40);
 
-       	}
+           }
 
-        if (getNextAction)	getNextAction(action);
+        if (getNextAction)    getNextAction(action);
 
         handler.postDelayed(new Runnable() {
             public void run() {
@@ -1405,38 +1394,38 @@ public class Playing extends FragmentActivity implements OnClickListener
 
     void getNextAction(Action action)
     {
-    	nextHandtoPlay=(byte)-1;
-    	
-    	for ( byte b=0 ; b < player.howManyHands() ; b++ )
-    		if (player.getHand(b).isPlaying())
-    		{
-    			nextHandtoPlay=b;
-    			break;
-    		}
-    	
-		if (nextHandtoPlay == -1)
-    	{
-			byte nextHandtoPay=(byte) -1;
-    		
-    		for ( byte b=0 ; b < player.howManyHands() ; b++ )
-        		if (player.getHand(b).toBePayed())
-        		{
-        			nextHandtoPay=b;
-        			break;
-        		}
-    	
-    		if (nextHandtoPay == -1 && !player.tookInsurance())
-    		{
+        nextHandtoPlay=(byte)-1;
+        
+        for ( byte b=0 ; b < player.howManyHands() ; b++ )
+            if (player.getHand(b).isPlaying())
+            {
+                nextHandtoPlay=b;
+                break;
+            }
+        
+        if (nextHandtoPlay == -1)
+        {
+            byte nextHandtoPay=(byte) -1;
+            
+            for ( byte b=0 ; b < player.howManyHands() ; b++ )
+                if (player.getHand(b).toBePayed())
+                {
+                    nextHandtoPay=b;
+                    break;
+                }
+        
+            if (nextHandtoPay == -1 && !player.tookInsurance())
+            {
                 handler.postDelayed(new Runnable() {
-					public void run() {
+                    public void run() {
                         playerOverViews.get(currentPlayerIndex).setBackgroundResource(0);
                         disableButtons();
                         newGame();
-					}
-				}, waittime);
+                    }
+                }, waittime);
 
-	    	}
-    		else {
+            }
+            else {
                 if(currentPlayerHand.hasBJ() || currentPlayerHand.has21() ||
                         action == action.SPLIT || action == action.DOUBLEDOWN){
                     waittime+=300;
@@ -1467,8 +1456,8 @@ public class Playing extends FragmentActivity implements OnClickListener
                         currentPlayerIndex = nextHandtoPlay;
                     }
                 }, waittime);
-			}
-    	}
+            }
+        }
     }
 
     public Long getTimeLefOfFreeChips(){

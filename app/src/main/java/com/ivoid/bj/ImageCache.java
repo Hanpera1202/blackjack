@@ -4,7 +4,7 @@ import android.graphics.Bitmap;
 import java.util.HashMap;
 
 /**
- * Created by nakazato on 2015/10/31.
+ * Created on 2015/10/31.
  */
 public class ImageCache {
     private static HashMap cache = new HashMap();

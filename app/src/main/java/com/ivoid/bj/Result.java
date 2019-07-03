@@ -31,7 +31,7 @@ import java.util.TimeZone;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
- * Created by nakazato on 2015/10/27.
+ * Created on 2015/10/27.
  */
 public class Result extends Activity {
 

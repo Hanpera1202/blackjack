@@ -5,30 +5,30 @@ import java.util.Map;
 
 class GameSettings
 {
-	byte decks, splits, burns, shuffleTimes; 
-	int startCash, tableMin;
-	float bjPay, surrenderPay, insurancePay, winPay;
-	boolean ddPostSplit, surrender, insurance, stand17soft, aceResplit, dd1011;
+    byte decks, splits, burns, shuffleTimes; 
+    int startCash, tableMin;
+    float bjPay, surrenderPay, insurancePay, winPay;
+    boolean ddPostSplit, surrender, insurance, stand17soft, aceResplit, dd1011;
     int loginBonusSeconds;
-	int loginBonusCoins;
-	int coinBonusCount;
+    int loginBonusCoins;
+    int coinBonusCount;
     int ticketExchangePoint;
     int freeChipsSeconds;
     int freeChipsFlips;
     int playCountUpAds;
-	
-	private boolean[] bools={true,false};
-	private byte[] bytes={6,8};
+    
+    private boolean[] bools={true,false};
+    private byte[] bytes={6,8};
 
     int pointDivisor;
     Map<Integer, LevelInfo> levels;
 
-	GameSettings()
-	{
-		bjPay=1.5f; surrenderPay=-0.5f; insurancePay=2f; winPay=1f;
-		decks=1; splits=1; burns=(byte)(5.0*Math.random()); shuffleTimes = 3;
-		startCash=1500; tableMin=10;
-		ddPostSplit=true; surrender=true; insurance=true; stand17soft=true; aceResplit=true; dd1011=true;
+    GameSettings()
+    {
+        bjPay=1.5f; surrenderPay=-0.5f; insurancePay=2f; winPay=1f;
+        decks=1; splits=1; burns=(byte)(5.0*Math.random()); shuffleTimes = 3;
+        startCash=1500; tableMin=10;
+        ddPostSplit=true; surrender=true; insurance=true; stand17soft=true; aceResplit=true; dd1011=true;
         loginBonusSeconds=28800;freeChipsSeconds=3600;loginBonusCoins=3;coinBonusCount=3;
         freeChipsFlips = 3;
         playCountUpAds = 30;
@@ -87,50 +87,50 @@ class GameSettings
         levels.put( 49,new LevelInfo( 49,833 ,19275,5900,3,2950));
         levels.put( 50,new LevelInfo( 50,850 ,20125,6000,3,3000));
     }
-	
-	private boolean sometimes(boolean[] choices)
-	{
-		short i=(short)Math.round(Math.random());
-		if (i==1){ return choices[0]; }
-		else{ return choices[1]; }	
-	}
-	
-	private byte sometimes(byte[] choices)
-	{
-		short s=(short)Math.round(Math.random());
-		if (s==1){ return choices[0]; }
-		else{ return choices[1]; }
-	}
-	
-	void vegasStrip()
-	{
-		insurance=false;
-		decks=4;
-		stand17soft=false;
-		dd1011=false;
-	}
-	
-	void downtownVegas()
-	{
-		dd1011=false;
-		surrender=false;
-		ddPostSplit=sometimes(bools);
-		aceResplit=sometimes(bools);
-	}
-	
-	void rino()
-	{	
-		insurance=sometimes(bools);
-		surrender=false;
-		aceResplit=false;	
-	}
-	
-	void atlanticCity()
-	{
-		decks=sometimes(bytes);
-		stand17soft=false;
-		dd1011=false;
-		surrender=false;
-		aceResplit=sometimes(bools);	
-	}
+    
+    private boolean sometimes(boolean[] choices)
+    {
+        short i=(short)Math.round(Math.random());
+        if (i==1){ return choices[0]; }
+        else{ return choices[1]; }    
+    }
+    
+    private byte sometimes(byte[] choices)
+    {
+        short s=(short)Math.round(Math.random());
+        if (s==1){ return choices[0]; }
+        else{ return choices[1]; }
+    }
+    
+    void vegasStrip()
+    {
+        insurance=false;
+        decks=4;
+        stand17soft=false;
+        dd1011=false;
+    }
+    
+    void downtownVegas()
+    {
+        dd1011=false;
+        surrender=false;
+        ddPostSplit=sometimes(bools);
+        aceResplit=sometimes(bools);
+    }
+    
+    void rino()
+    {    
+        insurance=sometimes(bools);
+        surrender=false;
+        aceResplit=false;    
+    }
+    
+    void atlanticCity()
+    {
+        decks=sometimes(bytes);
+        stand17soft=false;
+        dd1011=false;
+        surrender=false;
+        aceResplit=sometimes(bools);    
+    }
 }

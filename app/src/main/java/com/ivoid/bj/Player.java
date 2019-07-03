@@ -14,49 +14,49 @@ class Player
 
     private final String name;
     private Wallet wallet;
-	private Wallet coinWallet;
+    private Wallet coinWallet;
     private Wallet pointWallet;
     private Wallet ticketWallet;
 
-	private ArrayList<BJHand> hands=new ArrayList<BJHand>();
+    private ArrayList<BJHand> hands=new ArrayList<BJHand>();
 
     private boolean insurance = false; //did the player make an insurance bet?
-	private int insuranceBetValue = 0; //did the player make an insurance bet?
-	private boolean playing; // all players are either playing or not (if not, they are removed from the Game list of players)
-	private int rebet=0; // Saved last bet
+    private int insuranceBetValue = 0; //did the player make an insurance bet?
+    private boolean playing; // all players are either playing or not (if not, they are removed from the Game list of players)
+    private int rebet=0; // Saved last bet
 
-	Player(Context context, String name)
-	{
+    Player(Context context, String name)
+    {
         preference = context.getSharedPreferences("user_data", context.MODE_PRIVATE);
         editor = preference.edit();
 
         settings = new GameSettings();
 
-		this.name=name;
-		wallet=new Wallet(context, "Balance");
+        this.name=name;
+        wallet=new Wallet(context, "Balance");
         coinWallet=new Wallet(context, "CoinBalance");
         pointWallet=new Wallet(context, "PointBalance");
         ticketWallet=new Wallet(context, "TicketBalance");
-		playing = true;
-		addHand(new BJHand(name));
-	}
+        playing = true;
+        addHand(new BJHand(name));
+    }
 
-	void setPlaying(boolean b)
-	{ playing = b; }
+    void setPlaying(boolean b)
+    { playing = b; }
 
-	void update()
-	{
-		insurance = false;
+    void update()
+    {
+        insurance = false;
         insuranceBetValue = 0;
         BJHand firstHand = hands.get(0);
         rebet = firstHand.getBet().getValue();
-		 
+         
         if (firstHand.didDD()) rebet/=2f;
-		 
+         
         clearHands();
         addHand(new BJHand(name));
-	}
-	 
+    }
+     
     void clearHands()
     { hands.clear(); }
 
@@ -68,7 +68,7 @@ class Player
 
     void deposit(int amount)
     { wallet.deposit(amount); }
-	
+    
     void withdraw(int amount)
     { wallet.withdraw(amount); }
 
@@ -98,11 +98,11 @@ class Player
         insuranceBetValue = amount;
         insurance=true;
     }
-	
+    
     //Accessors
     String getName()
     { return name; }
-	
+    
     int getBalance()
     { return wallet.getBalance(); }
 
@@ -123,19 +123,19 @@ class Player
 
     int getRebet()
     { return rebet; }
-	 
+     
     int getInitBet()
     { return hands.get(0).getBet().getValue(); }
-	
+    
     boolean getPlaying()
     { return playing; }
-	
+    
     byte howManyHands()
     { return (byte) hands.size(); }
-	
+    
     ArrayList<BJHand> getHands()
     { return hands; }
-	
+    
     BJHand getHand(byte b)
     { return hands.get(b); }
 

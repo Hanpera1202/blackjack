@@ -1,7 +1,7 @@
 package com.ivoid.bj;
 
 /**
- * Created by nakazato on 2015/12/12.
+ * Created on 2015/12/12.
  */
 public class LevelInfo {
     public int level;

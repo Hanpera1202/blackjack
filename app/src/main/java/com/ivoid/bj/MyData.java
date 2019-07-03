@@ -18,18 +18,18 @@ public class MyData extends Activity {
 
     Game game;
 
-	private SharedPreferences preference;
+    private SharedPreferences preference;
     private Player player;
 
-	@Override
-	public void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
+    @Override
+    public void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
         game = (Game) this.getApplication();
 
         setContentView(R.layout.mydata);
 
-		preference = getSharedPreferences("user_data", MODE_PRIVATE);
+        preference = getSharedPreferences("user_data", MODE_PRIVATE);
 
         player = new Player(getApplicationContext(), "God");
         game.setHeaderData(player, (RelativeLayout) findViewById(R.id.header));
@@ -48,14 +48,14 @@ public class MyData extends Activity {
         ((TextView)findViewById(R.id.doubles)).setText(String.valueOf((int) doubles + "(" + (int)(doubles/plays*100) + "%)"));
         ((TextView)findViewById(R.id.doublewins)).setText(String.valueOf((int)doublewins + "(" + (int)(doublewins/plays*100) + "%)"));
 
-	}
+    }
 
     @Override
     public void onResume(){
         super.onResume();
     }
 
-	public void onClickHeader(View view) {
+    public void onClickHeader(View view) {
         switch (view.getId()) {
             case R.id.game: {
                 Intent intent = new Intent(this, Playing.class);
@@ -86,7 +86,7 @@ public class MyData extends Activity {
                 break;
             }
         }
-	}
+    }
 
     @Override
     protected void onPause() {

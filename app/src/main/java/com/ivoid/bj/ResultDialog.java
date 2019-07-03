@@ -24,7 +24,7 @@ import java.io.UnsupportedEncodingException;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
- * Created by nakazato on 2015/10/27.
+ * Created on 2015/10/27.
  */
 public class ResultDialog extends FragmentActivity implements View.OnClickListener {
 

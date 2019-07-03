@@ -34,66 +34,66 @@ public class FreeChips extends Activity implements OnClickListener
 
     private Player player;
 
-	private int flipCnt;
-	private int gotPoint;
-	private FreeChipsDeck shoe;
-	private Card card;
+    private int flipCnt;
+    private int gotPoint;
+    private FreeChipsDeck shoe;
+    private Card card;
 
-	private Map<Integer, Button> flipCards;
+    private Map<Integer, Button> flipCards;
 
-	private SharedPreferences preference;
-	private SharedPreferences.Editor editor;
+    private SharedPreferences preference;
+    private SharedPreferences.Editor editor;
 
-	private final Handler handler = new Handler();
+    private final Handler handler = new Handler();
 
-	@Override
-	public void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
+    @Override
+    public void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
         game = (Game) this.getApplication();
 
-		setContentView(R.layout.free_chips);
+        setContentView(R.layout.free_chips);
 
         player = new Player(getApplicationContext(), "God");
 
-		preference = getSharedPreferences("user_data", MODE_PRIVATE);
-		editor = preference.edit();
+        preference = getSharedPreferences("user_data", MODE_PRIVATE);
+        editor = preference.edit();
         settings = new GameSettings();
-		shoe = new FreeChipsDeck(player.getLevel());
+        shoe = new FreeChipsDeck(player.getLevel());
 
-		flipCards = new HashMap<Integer, Button>();
-		flipCards.put((R.id.card1), (Button)findViewById(R.id.card1));
-		flipCards.put((R.id.card2), (Button)findViewById(R.id.card2));
-		flipCards.put((R.id.card3), (Button)findViewById(R.id.card3));
-		flipCards.put((R.id.card4), (Button)findViewById(R.id.card4));
-		flipCards.put((R.id.card5), (Button)findViewById(R.id.card5));
-		flipCards.put((R.id.card6), (Button)findViewById(R.id.card6));
-		flipCards.put((R.id.card7), (Button)findViewById(R.id.card7));
-		flipCards.put((R.id.card8), (Button)findViewById(R.id.card8));
-		flipCards.put((R.id.card9), (Button)findViewById(R.id.card9));
-		flipCards.put((R.id.card10), (Button)findViewById(R.id.card10));
-		flipCards.put((R.id.card11), (Button)findViewById(R.id.card11));
-		flipCards.put((R.id.card12), (Button)findViewById(R.id.card12));
-		flipCards.put((R.id.card13), (Button)findViewById(R.id.card13));
-		flipCards.put((R.id.card14), (Button)findViewById(R.id.card14));
-		flipCards.put((R.id.card15), (Button)findViewById(R.id.card15));
-		flipCards.put((R.id.card16), (Button)findViewById(R.id.card16));
-		flipCards.put((R.id.card17), (Button)findViewById(R.id.card17));
-		flipCards.put((R.id.card18), (Button)findViewById(R.id.card18));
-		flipCards.put((R.id.card19), (Button)findViewById(R.id.card19));
-		flipCards.put((R.id.card20), (Button)findViewById(R.id.card20));
+        flipCards = new HashMap<Integer, Button>();
+        flipCards.put((R.id.card1), (Button)findViewById(R.id.card1));
+        flipCards.put((R.id.card2), (Button)findViewById(R.id.card2));
+        flipCards.put((R.id.card3), (Button)findViewById(R.id.card3));
+        flipCards.put((R.id.card4), (Button)findViewById(R.id.card4));
+        flipCards.put((R.id.card5), (Button)findViewById(R.id.card5));
+        flipCards.put((R.id.card6), (Button)findViewById(R.id.card6));
+        flipCards.put((R.id.card7), (Button)findViewById(R.id.card7));
+        flipCards.put((R.id.card8), (Button)findViewById(R.id.card8));
+        flipCards.put((R.id.card9), (Button)findViewById(R.id.card9));
+        flipCards.put((R.id.card10), (Button)findViewById(R.id.card10));
+        flipCards.put((R.id.card11), (Button)findViewById(R.id.card11));
+        flipCards.put((R.id.card12), (Button)findViewById(R.id.card12));
+        flipCards.put((R.id.card13), (Button)findViewById(R.id.card13));
+        flipCards.put((R.id.card14), (Button)findViewById(R.id.card14));
+        flipCards.put((R.id.card15), (Button)findViewById(R.id.card15));
+        flipCards.put((R.id.card16), (Button)findViewById(R.id.card16));
+        flipCards.put((R.id.card17), (Button)findViewById(R.id.card17));
+        flipCards.put((R.id.card18), (Button)findViewById(R.id.card18));
+        flipCards.put((R.id.card19), (Button)findViewById(R.id.card19));
+        flipCards.put((R.id.card20), (Button)findViewById(R.id.card20));
 
-		for (final Integer entry : flipCards.keySet()) {
-			((Button) findViewById(entry)).setOnClickListener(this);
-		}
-	}
+        for (final Integer entry : flipCards.keySet()) {
+            ((Button) findViewById(entry)).setOnClickListener(this);
+        }
+    }
 
     @Override
     protected void onResume(){
         super.onResume();
 
-		flipCnt = 0;
-		gotPoint = 0;
+        flipCnt = 0;
+        gotPoint = 0;
 
         // 予め音声データを読み込む
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
@@ -115,7 +115,7 @@ public class FreeChips extends Activity implements OnClickListener
 
 
     @Override
-	public void onClick(View v) {
+    public void onClick(View v) {
         if(flipCnt < settings.freeChipsFlips) {
             flipCnt++;
             flip((Button) findViewById(v.getId()));
@@ -146,33 +146,33 @@ public class FreeChips extends Activity implements OnClickListener
             }, 1000);
         }
 
-	}
+    }
 
-	public void flip(Button button){
-		if(flipCnt == settings.freeChipsFlips && gotPoint < 10) {
-			do{
-				card = shoe.drawCard();
-			}while(gotPoint * card.getValue() < 10);
-		}else{
-			card = shoe.drawCard();
+    public void flip(Button button){
+        if(flipCnt == settings.freeChipsFlips && gotPoint < 10) {
+            do{
+                card = shoe.drawCard();
+            }while(gotPoint * card.getValue() < 10);
+        }else{
+            card = shoe.drawCard();
         }
         button.setBackgroundResource(card.getImage());
 
-		if(gotPoint == 0) {
-			gotPoint = card.getValue();
-		}else{
-			gotPoint *= card.getValue();
+        if(gotPoint == 0) {
+            gotPoint = card.getValue();
+        }else{
+            gotPoint *= card.getValue();
         }
-		editor.putLong("freeChipsGetTime", System.currentTimeMillis());
-		editor.commit();
-		button.setOnClickListener(null);
+        editor.putLong("freeChipsGetTime", System.currentTimeMillis());
+        editor.commit();
+        button.setOnClickListener(null);
 
         mSoundPool.play(mCardfall, game.getSoundVol(), game.getSoundVol(), 0, 0, 1.0F);
-	}
+    }
 
-	@Override
-	protected void attachBaseContext(Context newBase) {
-		super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-	}
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
 }

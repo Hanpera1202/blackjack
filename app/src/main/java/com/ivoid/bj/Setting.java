@@ -20,7 +20,7 @@ import com.parse.SaveCallback;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
- * Created by nakazato on 2015/10/27.
+ * Created on 2015/10/27.
  */
 public class Setting extends Activity implements CompoundButton.OnCheckedChangeListener {
 
